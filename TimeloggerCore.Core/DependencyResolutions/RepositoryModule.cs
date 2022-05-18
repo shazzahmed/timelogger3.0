@@ -25,8 +25,8 @@ namespace TimeloggerCore.Core.DependencyResolutions
             var componentOptions = services.BuildServiceProvider().GetService<Microsoft.Extensions.Options.IOptionsSnapshot<ComponentOptions>>();
             if (componentOptions.Value.Security.SecurityService == "AspnetIdentity")
             {
-               services.BuildServiceProvider().GetService<UserManager<ApplicationUser>>();
-                //services.AddTransient<ISqlServerDbContext, SqlServerDbContext>();
+                services.BuildServiceProvider().GetService<UserManager<ApplicationUser>>();
+                services.AddTransient<ISqlServerDbContext, SqlServerDbContext>();
             }
 
             services.AddScoped<ISqlServerDbContext, SqlServerDbContext>();

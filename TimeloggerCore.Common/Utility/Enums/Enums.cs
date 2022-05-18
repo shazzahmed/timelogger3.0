@@ -19,6 +19,81 @@ namespace TimeloggerCore.Common.Utility
             NotificationStatus = 2
         }
 
+        public enum WorkerType
+        {
+            IndividualWorker = 1,
+            ClientWorker = 2,
+            AgencyWorker = 3,
+            WorkerClient = 4
+        }
+
+        public enum MemberStatus
+        {
+            Invited,
+            Active,
+            Inactive
+        }
+
+        public enum ProjectOwner
+        {
+            Client = 1,
+            TeamMember = 2
+        }
+
+        public enum InvitationType
+        {
+            Worker = 1,
+            Client = 2,
+            Agency = 3,
+            ClientToAgency = 4,
+            AgencyToClient = 5,
+            ClientToWorker = 6,
+            WorkerToClient = 7,
+            WorkerToAgency = 8,
+            AgencyToWorker = 9
+        }
+
+        public enum PackageType
+        {
+            Mini = 1,
+            Small = 2,
+            Medium = 3,
+            Large = 4,
+            Customize = 5,
+        }
+
+        public enum PaymentStatus
+        {
+            Approved = 1,
+            Pending = 2,
+            Enquiry = 3,
+            Rejected = 4,
+        }
+
+        public enum CardType
+        {
+            Visa = 1,
+            MasterCard = 2
+        }
+
+        public enum PaymentDuration
+        {
+            Monthly = 1,
+            Yearly = 2
+        }
+        public enum PaymentType
+        {
+            PayPal = 1,
+            Cheque = 2,
+            Cash = 3
+        }
+
+        public enum TrackType
+        {
+            AutoTrack,
+            ManualTrack
+        }
+
         public enum UserStatus
         {
             Preactive,

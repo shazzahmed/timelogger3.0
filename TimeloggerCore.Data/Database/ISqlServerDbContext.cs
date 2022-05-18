@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using TimeZone = TimeloggerCore.Data.Entities.TimeZone;
 
 namespace TimeloggerCore.Data.Database
 {
@@ -21,7 +22,6 @@ namespace TimeloggerCore.Data.Database
 
         DbSet<ApplicationUser> User { get; set; }
         DbSet<TwoFactorType> TwoFactorTypes { get; set; }
-        // DbSet<Permission> Permissions { get; set; }
         DbSet<Addresses> Addresses { get; set; }
         DbSet<Country> Countries { get; set; }
         DbSet<City> Cities { get; set; }
@@ -33,6 +33,23 @@ namespace TimeloggerCore.Data.Database
         DbSet<Notification> Notifications { get; set; }
         DbSet<NotificationTemplate> NotificationTemplates { get; set; }
         DbSet<NotificationType> NotificationTypes { get; set; }
+
+        DbSet<Project> Project { get; set; }
+        DbSet<TimeZone> TimeZone { get; set; }
+        DbSet<Invitation> Invitations { get; set; }
+        DbSet<InvitationRequest> InvitationRequest { get; set; }
+        DbSet<ProjectInvitations> ProjectInvitations { get; set; }
+        DbSet<TimeLog> TimeLog { get; set; }
+        DbSet<Feedback> Feedback { get; set; }
+        DbSet<WorkSession> WorkSession { get; set; }
+        DbSet<Meeting> Meetings { get; set; }
+        DbSet<CountryCode> CountryCodes { get; set; }
+        DbSet<Payment> Payment { get; set; }
+        DbSet<Package> Package { get; set; }
+        DbSet<ClientAgency> ClientAgency { get; set; }
+        DbSet<ProjectsInvitation> ProjectsInvitations { get; set; }
+        DbSet<ClientWorker> ClientWorker { get; set; }
+        DbSet<ProjectWorkers> ProjectWorkers { get; set; }
     }
 }
 

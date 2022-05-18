@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using TimeZone = TimeloggerCore.Data.Entities.TimeZone;
 
 namespace TimeloggerCore.Data.Database
 {
@@ -21,7 +22,7 @@ namespace TimeloggerCore.Data.Database
             this.configuration = configuration;
         }
 
-        public SqlServerDbContext()
+        public SqlServerDbContext() : base()
         {
             ChangeTracker.LazyLoadingEnabled = false;
         }
@@ -33,11 +34,12 @@ namespace TimeloggerCore.Data.Database
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.ApplyConfigurationsFromAssembly(typeof(SqlServerDbContext).Assembly);
             base.OnModelCreating(builder);
 
-            builder.Entity<ApplicationUser>()
-                   .HasIndex(u => u.NicNumber)
-                   .IsUnique();
+            //builder.Entity<ApplicationUser>()
+            //       .HasIndex(u => u.NicNumber)
+            //       .IsUnique();
 
             // NOTE: This piece of code is used for changing the table creation scripts. If we want to make all of PG
             // tables/columns in lower case - this can be uncommented and migration deleted.
@@ -129,5 +131,24 @@ namespace TimeloggerCore.Data.Database
         public virtual DbSet<Notification> Notifications { get; set; }
         public virtual DbSet<NotificationTemplate> NotificationTemplates { get; set; }
         public virtual DbSet<NotificationType> NotificationTypes { get; set; }
+
+
+
+        public virtual DbSet<Project> Project { get; set; }
+        public virtual DbSet<TimeZone> TimeZone { get; set; }
+        public virtual DbSet<Invitation> Invitations { get; set; }
+        public virtual DbSet<InvitationRequest> InvitationRequest { get; set; }
+        public virtual DbSet<ProjectInvitations> ProjectInvitations { get; set; }
+        public virtual DbSet<TimeLog> TimeLog { get; set; }
+        public virtual DbSet<Feedback> Feedback { get; set; }
+        public virtual DbSet<WorkSession> WorkSession { get; set; }
+        public virtual DbSet<Meeting> Meetings { get; set; }
+        public virtual DbSet<CountryCode> CountryCodes { get; set; }
+        public virtual DbSet<Payment> Payment { get; set; }
+        public virtual DbSet<Package> Package { get; set; }
+        public virtual DbSet<ClientAgency> ClientAgency { get; set; }
+        public virtual DbSet<ProjectsInvitation> ProjectsInvitations { get; set; }
+        public virtual DbSet<ClientWorker> ClientWorker { get; set; }
+        public virtual DbSet<ProjectWorkers> ProjectWorkers { get; set; }
     }
 }
