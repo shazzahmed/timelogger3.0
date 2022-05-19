@@ -33,6 +33,7 @@ namespace TimeloggerCore.Data.Database
         DbSet<Notification> Notifications { get; set; }
         DbSet<NotificationTemplate> NotificationTemplates { get; set; }
         DbSet<NotificationType> NotificationTypes { get; set; }
+        DbSet<PreviousPassword> PreviousPasswords { get; set; }
 
         DbSet<Project> Project { get; set; }
         DbSet<TimeZone> TimeZone { get; set; }

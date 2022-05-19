@@ -195,7 +195,7 @@ namespace TimeloggerCore.Core.Security
 
         private static void AddIdentity(IServiceCollection services, ApplicationType applicationType)
         {
-            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
             {
                 options.User.RequireUniqueEmail = false;
             })

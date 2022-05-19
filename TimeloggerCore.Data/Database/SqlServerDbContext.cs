@@ -148,6 +148,7 @@ namespace TimeloggerCore.Data.Database
         public virtual DbSet<Notification> Notifications { get; set; }
         public virtual DbSet<NotificationTemplate> NotificationTemplates { get; set; }
         public virtual DbSet<NotificationType> NotificationTypes { get; set; }
+        public virtual DbSet<PreviousPassword> PreviousPasswords { get; set; }
 
 
 

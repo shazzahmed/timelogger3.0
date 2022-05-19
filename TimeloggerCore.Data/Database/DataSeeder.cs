@@ -158,7 +158,7 @@ namespace TimeloggerCore.Data.Database
                 if (componentOptions.Value.Security.SecurityService == "AspnetIdentity")
                 {
                     var roles = Enum.GetValues(typeof(UserRoles));
-                    var roleStore = new RoleStore<IdentityRole>(context);
+                    var roleStore = new RoleStore<ApplicationRole>(context);
                     foreach (var role in roles)
                     {
                         if (!context.Roles.Any(r => r.Name.ToLower() == role.ToString()))
@@ -224,7 +224,7 @@ namespace TimeloggerCore.Data.Database
                     };
                     if (!context.Users.Any(u => u.Email == user.Email))
                     {
-                        var result = _userManager.CreateAsync(user, "Azizullah1@345").Result;
+                        var result = _userManager.CreateAsync(user, "ItSolution1@345").Result;
 
                         var ro = _userManager.AddToRoleAsync(user, UserRoles.SuperAdmin.ToString()).Result;
 
@@ -287,13 +287,13 @@ namespace TimeloggerCore.Data.Database
                     {
                         throw new Exception($"{nameof(compny)} is not found, seeds are malfunctioned.");
                     }
-                    var merchant = new ApplicationUser
+                    var agency = new ApplicationUser
                     {
-                        Email = "itsolution.merchant@yopmail.com",
-                        UserName = "itsolution.merchant@yopmail.com",
+                        Email = "itsolution.agency@yopmail.com",
+                        UserName = "itsolution.agency@yopmail.com",
                         EmailConfirmed = true,
-                        NormalizedEmail = "itsolution.merchant@yopmail.com",
-                        NormalizedUserName = "itsolution.merchant@yopmail.com",
+                        NormalizedEmail = "itsolution.agency@yopmail.com",
+                        NormalizedUserName = "itsolution.agency@yopmail.com",
                         SecurityStamp = Guid.NewGuid().ToString("D"),
                         TwoFactorTypeId = twoFactorType.Id,
                         PhoneNumber = "03213828130",
@@ -301,11 +301,11 @@ namespace TimeloggerCore.Data.Database
                         StatusId = status.Id,
                         TimeZoneId = timeZone.Id
                     };
-                    if (!context.Users.Any(u => u.Email == merchant.Email))
+                    if (!context.Users.Any(u => u.Email == agency.Email))
                     {
-                        var result = _userManager.CreateAsync(merchant, "ItSolution1@345").Result;
+                        var result = _userManager.CreateAsync(agency, "ItSolution1@345").Result;
                         
-                        var ro = _userManager.AddToRoleAsync(merchant, UserRoles.Merchant.ToString()).Result;
+                        var ro = _userManager.AddToRoleAsync(agency, UserRoles.Agency.ToString()).Result;
                         var city = context.Cities.FirstOrDefault(c => c.Name.Equals("Peshawar"));
                         if (city == null)
                         {
@@ -313,7 +313,7 @@ namespace TimeloggerCore.Data.Database
                         }
                         var address = new Addresses
                         {
-                            UserId = merchant.Id,
+                            UserId = agency.Id,
                             Address = "Saddar",
                             CountryId = country.Id,
                             CityId = city.Id,

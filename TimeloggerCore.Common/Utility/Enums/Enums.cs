@@ -136,8 +136,8 @@ namespace TimeloggerCore.Common.Utility
             Admin,
             User,
             Customer,
-            Merchant,
-            Guest
+            Guest,
+            Agency
         }
 
         public enum UserStatusType

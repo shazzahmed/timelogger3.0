@@ -8,8 +8,9 @@ namespace TimeloggerCore.Data.Entities
 {
     public class PreviousPassword
     {
-        // [Key, Column(Order = 0)] Created using fluent API
-        [DataType(DataType.Password)]
+        [Key, Column(Order = 0)] 
+        //Created using fluent API
+       [DataType(DataType.Password)]
         public string PasswordHash { get; set; }
 
         //[Key, Column(Order = 1)]  Created using fluent API

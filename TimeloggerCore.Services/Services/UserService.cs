@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -12,23 +13,17 @@ using TimeloggerCore.Common.Options;
 using TimeloggerCore.Data.Entities;
 using TimeloggerCore.Data.IRepository;
 using TimeloggerCore.Services.IService;
+using static TimeloggerCore.Common.Utility.Enums;
 
 namespace TimeloggerCore.Services.Services
 {
     public class UserService : BaseService<UserModel, ApplicationUser, string>, IUserService
     {
         private readonly IUserRepository _userRepository;
-        protected readonly RoleManager<IdentityRole> _roleManager;
+        protected readonly RoleManager<ApplicationRole> _roleManager;
         protected readonly UserManager<ApplicationUser> _applicationUserManager;
 
         private readonly TimeloggerCoreOptions _timeloggerCoreOptions;
-
-        //private readonly ISecurityService _securityService;
-        //private readonly IStatusService _statusService;
-        //private readonly ICompanyService _companyService;
-        //private readonly IAddressService _addressService;
-        //private readonly INotificationTemplateService _notificationTemplateService;
-        //private readonly ICommunicationService _communicationService;
 
         public UserService(
             IMapper mapper,
@@ -36,15 +31,8 @@ namespace TimeloggerCore.Services.Services
             IUnitOfWork unitOfWork,
 
             IOptionsSnapshot<TimeloggerCoreOptions> timeloggerCoreOptions,
-            RoleManager<IdentityRole> roleManager,
+            RoleManager<ApplicationRole> roleManager,
             UserManager<ApplicationUser> applicationUserManager
-
-            //ISecurityService securityService,
-            //IStatusService statusService,
-            //ICompanyService companyService,
-            //IAddressService addressService,
-            //INotificationTemplateService notificationTemplateService,
-            //ICommunicationService communicationService
             ) : base(mapper, userRepository, unitOfWork)
         {
             _userRepository = userRepository;
@@ -52,23 +40,15 @@ namespace TimeloggerCore.Services.Services
             _applicationUserManager = applicationUserManager;
 
             _timeloggerCoreOptions = timeloggerCoreOptions.Value;
-
-            //_securityService = securityService;
-            //_statusService = statusService;
-            //_companyService = companyService;
-            //_addressService = addressService;
-            //_notificationTemplateService = notificationTemplateService;
-            //_communicationService = communicationService;
         }
 
 
         public async Task<BaseModel> GetAllAgency()
         {
-            //_applicationUserManager.Users.Include(u => u.role).ThenInclude(ur => ur.Role).ToList();
-            //_applicationUserManager.Users.Include
-            var a = _applicationUserManager.GetUsersInRoleAsync("Admin");
-            return BaseModel.Succeed(data: a);
-            //_userRepository.GetAsync(x=> x.)
+           //var userwithrole= _applicationUserManager.Users.Include(u => u.UserRoles).ThenInclude(ur => ur.Role).ToList();
+            var agency = await _applicationUserManager.GetUsersInRoleAsync(UserRoles.Agency.ToString());
+            return new BaseModel { Success = true, Data = agency };
+            //return BaseModel.Succeed(data: aaa);
         }
         //public async Task<BaseModel> CreateUser(RegisterUserModel model)
         //{
