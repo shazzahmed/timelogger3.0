@@ -14,6 +14,7 @@ using TimeloggerCore.Common.Models;
 using TimeloggerCore.Common.Options;
 using static TimeloggerCore.Common.Utility.Enums;
 using LoginResponse = TimeloggerCore.Common.Models.LoginResponse;
+using TimeloggerCore.Services.IService;
 
 namespace TimeloggerCore.RestApi.Controllers
 {
@@ -22,6 +23,7 @@ namespace TimeloggerCore.RestApi.Controllers
     public class AccountController : BaseController
     {
         private readonly ISecurityService _securityService;
+        private readonly IUserService _userService;
         private readonly IHttpContextAccessor httpContextAccessor;
         private readonly SecurityOptions securityOptions;
         private readonly CurrentUser currentUser;
@@ -29,13 +31,16 @@ namespace TimeloggerCore.RestApi.Controllers
                 ISecurityService securityService,
                 IHttpContextAccessor httpContextAccessor,
                 IOptionsSnapshot<SecurityOptions> securityOptions,
-                CurrentUser currentUser
+                CurrentUser currentUser,
+                IUserService userService
             )
         {
             _securityService = securityService;
             this.httpContextAccessor = httpContextAccessor;
             this.securityOptions = securityOptions.Value;
             this.currentUser = currentUser;
+            _userService = userService;
+
         }
 
 
@@ -84,6 +89,7 @@ namespace TimeloggerCore.RestApi.Controllers
         {
             try
             {
+                var aa = _userService.GetAllAgency();
                 var result = await _securityService.Login(model.Email, model.Password, model.RememberMe);
 
                 if (result.Status == LoginStatus.Failed)

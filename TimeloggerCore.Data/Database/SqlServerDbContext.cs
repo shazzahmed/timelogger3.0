@@ -12,7 +12,9 @@ using TimeZone = TimeloggerCore.Data.Entities.TimeZone;
 
 namespace TimeloggerCore.Data.Database
 {
-    public class SqlServerDbContext : IdentityDbContext<ApplicationUser, IdentityRole, string>, ISqlServerDbContext
+    public class SqlServerDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string, IdentityUserClaim<string>,
+    ApplicationUserRole, IdentityUserLogin<string>,
+    IdentityRoleClaim<string>, IdentityUserToken<string>>, ISqlServerDbContext
     {
         private readonly IConfiguration configuration;
         public SqlServerDbContext(DbContextOptions<SqlServerDbContext> options, IConfiguration configuration) 
@@ -36,6 +38,21 @@ namespace TimeloggerCore.Data.Database
         {
             builder.ApplyConfigurationsFromAssembly(typeof(SqlServerDbContext).Assembly);
             base.OnModelCreating(builder);
+
+            builder.Entity<ApplicationUserRole>(userRole =>
+            {
+                userRole.HasKey(ur => new { ur.UserId, ur.RoleId });
+
+                userRole.HasOne(ur => ur.Role)
+                    .WithMany(r => r.UserRoles)
+                    .HasForeignKey(ur => ur.RoleId)
+                    .IsRequired();
+
+                userRole.HasOne(ur => ur.User)
+                    .WithMany(r => r.UserRoles)
+                    .HasForeignKey(ur => ur.UserId)
+                    .IsRequired();
+            });
 
             //builder.Entity<ApplicationUser>()
             //       .HasIndex(u => u.NicNumber)

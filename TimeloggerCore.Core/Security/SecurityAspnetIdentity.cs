@@ -277,7 +277,7 @@ namespace TimeloggerCore.Core.Security
             foreach (var role in roles)
                 claims.Add(new Claim(JwtClaimTypes.Role, role.ToString()));
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Core.Secret@Boilerplate"));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Core.Secret@Timelogger"));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var token = new JwtSecurityToken(
                             issuer: apiUrl,

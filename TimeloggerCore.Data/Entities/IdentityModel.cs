@@ -64,5 +64,17 @@ namespace TimeloggerCore.Data.Entities
 
         [ForeignKey("TimeZoneId")]
         public virtual TimeZone TimeZone { get; set; }
+
+        public ICollection<ApplicationUserRole> UserRoles { get; set; }
+    }
+
+    public class ApplicationUserRole : IdentityUserRole<string>
+    {
+        public virtual ApplicationUser User { get; set; }
+        public virtual ApplicationRole Role { get; set; }
+    }
+    public class ApplicationRole : IdentityRole
+    {
+        public ICollection<ApplicationUserRole> UserRoles { get; set; }
     }
 }

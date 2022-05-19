@@ -14,6 +14,7 @@ using TimeloggerCore.Common.Utility;
 using TimeloggerCore.Common.Utility.Constants;
 using static TimeloggerCore.Common.Utility.Enums;
 using StatusType = TimeloggerCore.Data.Entities.StatusType;
+using TimeZone = TimeloggerCore.Data.Entities.TimeZone;
 
 namespace TimeloggerCore.Data.Database
 {
@@ -162,7 +163,7 @@ namespace TimeloggerCore.Data.Database
                     {
                         if (!context.Roles.Any(r => r.Name.ToLower() == role.ToString()))
                         {
-                            context.Roles.Add(new IdentityRole { Name = role.ToString(), NormalizedName = role.ToString().ToUpper() });
+                            context.Roles.Add(new ApplicationRole { Name = role.ToString(), NormalizedName = role.ToString().ToUpper() });
                             context.SaveChanges();
                         }
                     }
@@ -180,8 +181,21 @@ namespace TimeloggerCore.Data.Database
                         context.TwoFactorTypes.AddRange(newTwoFactorType);
                         context.SaveChanges();
                     }
-
+                    var timeZones = new List<TimeZone>()
+                    {
+                        new TimeZone() { Id = "Afghanistan Standard Time", DisplayName = "(UTC+04:30) Kabul", StandardName = "Afghanistan Standard Time" },
+                        new TimeZone() { Id = "Alaskan Standard Time", DisplayName = "(UTC-09:00) Alaska", StandardName = "Alaskan Standard Time" },
+                        new TimeZone() { Id = "Aleutian Standard Time", DisplayName = "(UTC-10:00) Aleutian Islands", StandardName = "Aleutian Standard Time" },
+                        new TimeZone() { Id = "Pakistan Standard Time", DisplayName = "(UTC+05:00) Islamabad, Karachi", StandardName = "Pakistan Standard Time" },
+                    };
+                    var newtimeZones = timeZones.Where(t => !context.TimeZone.Select(tf => tf.StandardName).Contains(t.StandardName));
+                    if (newtimeZones.Any())
+                    {
+                        context.TimeZone.AddRange(newtimeZones);
+                        context.SaveChanges();
+                    }
                     var twoFactorType = context.TwoFactorTypes.FirstOrDefault(t => t.Id == Enums.TwoFactorTypes.None);
+                    var timeZone = context.TimeZone.FirstOrDefault(t => t.StandardName == "Pakistan Standard Time");
                     if (twoFactorType == null)
                     {
                         throw new Exception($"{nameof(twoFactorType)} is not found, seeds are malfunctioned.");
@@ -205,7 +219,8 @@ namespace TimeloggerCore.Data.Database
                         TwoFactorTypeId = twoFactorType.Id,
                         PhoneNumber = "03213828130",
                         PhoneNumberConfirmed = true,
-                        StatusId = status.Id
+                        StatusId = status.Id,
+                        TimeZoneId = timeZone.Id
                     };
                     if (!context.Users.Any(u => u.Email == user.Email))
                     {
@@ -241,7 +256,8 @@ namespace TimeloggerCore.Data.Database
                         TwoFactorTypeId = twoFactorType.Id,
                         PhoneNumber = "03213828130",
                         PhoneNumberConfirmed = true,
-                        StatusId = status.Id
+                        StatusId = status.Id,
+                        TimeZoneId = timeZone.Id
                     };
                     if (!context.Users.Any(u => u.Email == customer.Email))
                     {
@@ -282,7 +298,8 @@ namespace TimeloggerCore.Data.Database
                         TwoFactorTypeId = twoFactorType.Id,
                         PhoneNumber = "03213828130",
                         PhoneNumberConfirmed = true,
-                        StatusId = status.Id
+                        StatusId = status.Id,
+                        TimeZoneId = timeZone.Id
                     };
                     if (!context.Users.Any(u => u.Email == merchant.Email))
                     {
