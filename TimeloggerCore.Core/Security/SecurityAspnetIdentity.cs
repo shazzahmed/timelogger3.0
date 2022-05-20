@@ -28,6 +28,8 @@ using AuthenticationResponse = TimeloggerCore.Common.Models.AuthenticationRespon
 using LoginResponse = TimeloggerCore.Common.Models.LoginResponse;
 using UserClaims = TimeloggerCore.Common.Models.UserClaims;
 using TwoFactorTypes = TimeloggerCore.Common.Utility.Enums.TwoFactorTypes;
+using ApplicationUser = TimeloggerCore.Data.Entities.ApplicationUser;
+using ApplicationRole = TimeloggerCore.Data.Entities.ApplicationRole;
 using TimeloggerCore.Data.IRepository;
 
 namespace TimeloggerCore.Core.Security
@@ -90,11 +92,24 @@ namespace TimeloggerCore.Core.Security
                 EmailConfirmed = model.CreateActivated,
                 TwoFactorTypeId = TwoFactorTypes.None,
             };
+            if (model.UserRole == "Agency" || model.UserRole == "Client" || model.WorkerType == "Individual")
+            {
+                //ModelState["model.AgencyId"].Errors.Clear();
+            }
+            if (model.UserRole == "Freelancer")
+            {
+                if (model.WorkerType == "Agency")
+                {
+                    user.IsWorkerHasAgency = true;
+                    user.AgencyId = model.AgencyId;
+                }
+            }
             var result = await _userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
                 await AddPreviousPassword(user, model.Password);
-                await _userManager.AddToRoleAsync(user, UserRoles.User.ToString());
+                //await _userManager.AddToRoleAsync(user, UserRoles.User.ToString());
+                await _userManager.AddToRoleAsync(user, model.UserRole);
 
                 if (!string.IsNullOrWhiteSpace(model.FirstName))
                     await AddUserClaim(user.Id, JwtClaimTypes.GivenName.ToString(), model.FirstName);
@@ -103,7 +118,40 @@ namespace TimeloggerCore.Core.Security
                 await AddUserClaim(user.Id, JwtClaimTypes.Name, user.UserName);
                 await AddUserClaim(user.Id, JwtClaimTypes.Email, user.Email);
                 await AddUserClaim(user.Id, JwtClaimTypes.Role, UserRoles.User.ToString());
+                //await SendActivationEmail(user, model.ConfirmEmailURL);
+                if (model.UserRole == "Freelancer")
+                {
+                    if (model.WorkerType == "Agency")
+                    {
+                        var agencyUser = _userManager.Users.Where(x => x.Id == model.AgencyId).FirstOrDefault();
+                        //await SendAgencyWorkerActivationEmail(user, agencyUser, model.WorkerEmailURL);
+                    }
+                }
+                else if (model.UserRole == "Client")
+                {
+                    Package package = new Package();
+                    package.CreatedOn = DateTime.Now;
+                    package.PackageTypeId = PackageType.Mini;
+                    package.MemberAllowed = (int)MemberCount.Mini;
+                    package.UserId = user.Id;
+                    package.IsActive = true;
+                    //_packageRepository.Insert(package);
+                    //await _packageRepository.Save();
 
+                    Payment payment = new Payment();
+                    payment.CreatedOn = DateTime.Now;
+                    payment.PaymentDate = DateTime.Now;
+                    payment.UserId = user.Id;
+
+                    payment.IsPaid = true;
+                    payment.PackageTypeId = package.Id;
+                    payment.PaymentStatus = PaymentStatus.Approved;
+                    payment.PaymentAmount = 0;
+                    payment.PaymentDuration = PaymentDuration.Monthly;
+                    payment.IsRecurring = payment.IsActive = true;
+                    //_paymentRepository.Insert(payment);
+                    //await _paymentRepository.Save();
+                }
                 if (!model.CreateActivated)
                 {
                     var emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -516,22 +564,16 @@ namespace TimeloggerCore.Core.Security
         }
         public async Task<BaseModel> ForgotPassword(string email)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
 
             //// ToDo: Check how it works in SingleSignOn
-            //var user = await _userManager.FindByEmailAsync(email);
-            //if (user == null)
-            //    return new BaseModel { IsSuccess = false, Message = "No user exists with the specified email." };
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+                return new BaseModel { Success = false, Message = "No user exists with the specified email." };
 
-            //var resetCode = await _userManager.GeneratePasswordResetTokenAsync(user);
-            //var link = webUrl + "Account/ResetPassword?code=" + HttpUtility.UrlEncode(resetCode);
-            //var template = await _notificationTemplateService.GetNotificationTemplate(NotificationTemplates.EmailForgotPassword, NotificationTypes.Email);
-            //var emailMessage = template.MessageBody.Replace("#Name", $"{ user.FirstName} { user.LastName}")
-            //                                       .Replace("#Link", $"{link}");
-
-            //var sent = await _communicationService.SendEmail(template.Subject, emailMessage, user.Email);
-
-            //return new BaseModel { IsSuccess = true, Message = "Your password reset code has been sent to your specified email address, follow the link to reset your password." };
+            var resetCode = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var link = _timeloggerCoreOptions.WebUrl + "Account/ResetPassword?code=" + HttpUtility.UrlEncode(resetCode);
+            return new BaseModel { Success = true,Data = new ForgotPasswordModel { Link = link, FirstName = user.FirstName, LastName = user.LastName, Email = user.Email  }, Message = "Your password reset code has been sent to your specified email address, follow the link to reset your password." };
         }
         public async Task<AuthenticationResponse> ResetPassword(string email, string code, string password)
         {

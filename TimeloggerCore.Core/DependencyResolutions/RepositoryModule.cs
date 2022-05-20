@@ -45,6 +45,7 @@ namespace TimeloggerCore.Core.DependencyResolutions
             services.AddTransient<INotificationTemplateRepository, NotificationTemplateRepository>();
             services.AddTransient<INotificationTypeRepository, NotificationTypeRepository>();
             services.AddTransient<IPreviousPasswordsRepository, PreviousPasswordsRepository>();
+            services.AddTransient<IPaymentRepository, PaymentRepository>();
         }
 
         public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)

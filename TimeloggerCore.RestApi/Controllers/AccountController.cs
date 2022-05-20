@@ -15,6 +15,7 @@ using TimeloggerCore.Common.Options;
 using static TimeloggerCore.Common.Utility.Enums;
 using LoginResponse = TimeloggerCore.Common.Models.LoginResponse;
 using TimeloggerCore.Services.IService;
+using TimeloggerCore.Core.ICommunication;
 
 namespace TimeloggerCore.RestApi.Controllers
 {
@@ -24,6 +25,8 @@ namespace TimeloggerCore.RestApi.Controllers
     {
         private readonly ISecurityService _securityService;
         private readonly IUserService _userService;
+        private readonly ICommunicationService _communicationService;
+        private readonly INotificationTemplateService _notificationTemplateService;
         private readonly IHttpContextAccessor httpContextAccessor;
         private readonly SecurityOptions securityOptions;
         private readonly CurrentUser currentUser;
@@ -32,7 +35,9 @@ namespace TimeloggerCore.RestApi.Controllers
                 IHttpContextAccessor httpContextAccessor,
                 IOptionsSnapshot<SecurityOptions> securityOptions,
                 CurrentUser currentUser,
-                IUserService userService
+                IUserService userService,
+                INotificationTemplateService notificationTemplateService,
+                ICommunicationService communicationService
             )
         {
             _securityService = securityService;
@@ -40,6 +45,8 @@ namespace TimeloggerCore.RestApi.Controllers
             this.securityOptions = securityOptions.Value;
             this.currentUser = currentUser;
             _userService = userService;
+            _notificationTemplateService = notificationTemplateService;
+            _communicationService = communicationService;
 
         }
 
@@ -370,6 +377,106 @@ namespace TimeloggerCore.RestApi.Controllers
         }
 
         //
+        // GET: Api/Account/Users
+        [HttpGet]
+        [Authorize]
+        [ActionName("GetUsers")]
+        [Route("Api/Account/Users")]
+        [Produces("application/json", Type = typeof(BaseModel))]
+        public async Task<IActionResult> GetUsers()
+        {
+            try
+            {
+                var result = await _securityService.GetUsers();
+                return new OkObjectResult(result);
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestObjectResult(BaseModel.Failed(message: "There was an error processing your request, please try again."));
+            }
+        }
+
+        //
+        // GET: Api/Account/Freelancers
+        [HttpGet]
+        [Authorize]
+        [ActionName("GetFreelancers")]
+        [Route("Api/Account/Freelancers")]
+        [Produces("application/json", Type = typeof(BaseModel))]
+        public async Task<IActionResult> GetFreelancers()
+        {
+            try
+            {
+                var result = await _userService.GetAllFreelancers();
+                return new OkObjectResult(result);
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestObjectResult(BaseModel.Failed(message: "There was an error processing your request, please try again."));
+            }
+        }
+
+        //
+        // GET: Api/Account/Clients
+        [HttpGet]
+        [Authorize]
+        [ActionName("GetClients")]
+        [Route("Api/Account/Clients")]
+        [Produces("application/json", Type = typeof(BaseModel))]
+        public async Task<IActionResult> GetClients()
+        {
+            try
+            {
+                var result = await _userService.GetClients();
+                return new OkObjectResult(result);
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestObjectResult(BaseModel.Failed(message: "There was an error processing your request, please try again."));
+            }
+        }
+
+        //
+        // GET: Api/Account/Agency
+        [HttpGet]
+        [Authorize]
+        [ActionName("GetAgency")]
+        [Route("Api/Account/Agency")]
+        [Produces("application/json", Type = typeof(BaseModel))]
+        public async Task<IActionResult> GetAgency()
+        {
+            try
+            {
+                var result = await _userService.GetAgency();
+                return new OkObjectResult(result);
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestObjectResult(BaseModel.Failed(message: "There was an error processing your request, please try again."));
+            }
+        }
+
+        //
+        // GET: Api/Account/Worker
+        [HttpGet]
+        [Authorize]
+        [ActionName("GetAllWorker")]
+        [Route("Api/Account/GetAllWorker")]
+        [Produces("application/json", Type = typeof(BaseModel))]
+        public async Task<IActionResult> GetAllWorker()
+        {
+            try
+            {
+                var result = await _userService.GetAllWorker();
+                return new OkObjectResult(result);
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestObjectResult(BaseModel.Failed(message: "There was an error processing your request, please try again."));
+            }
+        }
+
+        //
         // GET: Api/Account/GetUserDetail
         [HttpGet]
         [Authorize]
@@ -511,8 +618,18 @@ namespace TimeloggerCore.RestApi.Controllers
                 var response = await _securityService.ForgotPassword(model.Email);
                 if (!response.Success)
                     return new OkObjectResult(BaseModel.Failed(response.Message));
-
-                //var baseModel = JsonSerializer.Deserialize<BaseModel>(response.Data);
+                
+                ForgotPasswordModel forgotPasswordModel = (ForgotPasswordModel)response.Data;
+                var template = await _notificationTemplateService.GetNotificationTemplate(NotificationTemplates.EmailForgotPassword, NotificationTypes.Email);
+                var emailMessage = template.MessageBody.Replace("#Name", $"{forgotPasswordModel.FirstName} { forgotPasswordModel.LastName}")
+                                                       .Replace("#Link", $"{forgotPasswordModel.Link}");
+                var sent = await _communicationService.SendEmail(template.Subject, emailMessage, forgotPasswordModel.Email);
+                response.Success = sent;
+                var baseModel = JsonSerializer.Deserialize<BaseModel>(response);
+                if (!baseModel.Success)
+                {
+                    return new BadRequestObjectResult(BaseModel.Failed(message: "An errro occured while processing your request, please try again."));
+                }
                 //if (baseModel.success)
                 //{
                 //    var info = JToken.Parse(response.Data);

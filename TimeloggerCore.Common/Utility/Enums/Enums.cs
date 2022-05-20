@@ -39,6 +39,33 @@ namespace TimeloggerCore.Common.Utility
             Client = 1,
             TeamMember = 2
         }
+        public enum ClientWorkerStatus
+        {
+            Success = 1,
+            AlreadySentInvitation = 2,
+            PackageUpdate = 3
+        }
+
+        public enum AddWorkerClientStatus
+        {
+            Success = 1,
+            AlreadySentInvitation = 2,
+            UserNotExit = 3
+        }
+        public enum MessageType
+        {
+            Error,
+            Info,
+            Success,
+            Warning
+        }
+        public enum MemberCount
+        {
+            Mini = 2,
+            Small = 5,
+            Medium = 7,
+            Large = 10,
+        }
 
         public enum InvitationType
         {
@@ -137,7 +164,10 @@ namespace TimeloggerCore.Common.Utility
             User,
             Customer,
             Guest,
-            Agency
+            Agency,
+            Freelancer,
+            Client,
+            Worker,
         }
 
         public enum UserStatusType

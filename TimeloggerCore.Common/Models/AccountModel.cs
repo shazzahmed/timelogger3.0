@@ -1,12 +1,86 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
+using TimeloggerCore.Common.Utility;
+using static TimeloggerCore.Common.Utility.Enums;
 
 namespace TimeloggerCore.Common.Models
 {
+    public class ApplicationUser
+    {
+        [MaxLength(60)]
+        public string FirstName { get; set; }
+        [MaxLength(60)]
+        public string LastName { get; set; }
+        public string FullName => $"{FirstName} {LastName}";
+        [Column(TypeName = "DateTime2")]
+        public DateTime BirthDate { get; set; }
+        public Enums.Gender Gender { get; set; }
+        [MaxLength(500)]
+        public string Picture { get; set; }
+
+        [MaxLength(100)]
+        public string Address { get; set; }
+
+        [MaxLength(60)]
+        public string Language { get; set; }
+
+        [Column(TypeName = "DateTime2")]
+        public DateTime? CreatedAt { get; set; }
+
+        [Column(TypeName = "DateTime2")]
+        public DateTime? CreatedAtUtc { get; set; }
+
+        [Column(TypeName = "datetime2")]
+        public DateTime DisabledDate { get; set; }
+        [Required]
+        public string TimeZoneId { get; set; }
+
+        public bool IsWorkerHasAgency { get; set; }
+        public string AgencyId { get; set; }
+        public bool IsAgencyApproved { get; set; }
+        public int? CompanyId { get; set; }
+        public int? StatusId { get; set; }
+        public TwoFactorTypes TwoFactorTypeId { get; set; }
+
+
+
+        public TwoFactorType TwoFactorType { get; set; }
+        public CompanyModel Company { get; set; }
+
+        public StatusModel Status { get; set; }
+
+        public ICollection<AddressModel> Addresses { get; set; }
+        public ICollection<TimeLogModel> TimeLogs { get; set; }
+
+        public virtual ICollection<InvitationModel> ClientInvitations { get; set; }
+        public virtual ICollection<InvitationModel> UserInvitations { get; set; }
+
+        [ForeignKey("TimeZoneId")]
+        public virtual TimeZoneModel TimeZone { get; set; }
+
+        public ICollection<ApplicationUserRole> UserRoles { get; set; }
+    }
+
+    public class ApplicationUserRole
+    {
+        public virtual ApplicationUser User { get; set; }
+        public virtual ApplicationRole Role { get; set; }
+    }
+    public class ApplicationRole
+    {
+        public ICollection<ApplicationUserRole> UserRoles { get; set; }
+    }
+    public class TwoFactorType
+    {
+        public TwoFactorTypes Id { get; set; }
+        public string Name { get; set; }
+    }
     public class UserClaimResponse
     {
         public string name { get; set; }
@@ -43,7 +117,9 @@ namespace TimeloggerCore.Common.Models
 
     public class ExternalLoginListViewModel
     {
+        public string Name { get; set; }
         public string ReturnUrl { get; set; }
+        public string State { get; set; }
     }
 
     public class SendCodeViewModel
@@ -624,8 +700,17 @@ namespace TimeloggerCore.Common.Models
 
         [Display(Name = "Email")]
         [DataType(DataType.EmailAddress)]
+        //[Remote("IsUserExists", "Account", ErrorMessage = "Email address is already in use.")]
+        [RegularExpression("[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})", ErrorMessage = "Please enter a valid email address.")]
         [Required]
         public string Email { get; set; }
+
+        public TimeZoneModel TimeZone { get; set; }
+        [Required]
+        [Display(Name = "Time Zone")]
+        public string TimeZoneId { get; set; }
+
+        public List<TimeZoneModel> TimeZones { get; set; }
 
         [DataType(DataType.PhoneNumber)]
         [RegularExpression("^[0-9]*$", ErrorMessage = "Invalid phone number.")]
@@ -643,8 +728,10 @@ namespace TimeloggerCore.Common.Models
         public string ZipCode { get; set; }
 
         [Required]
-        [StringLength(14, ErrorMessage = "The password must be between {2} and {1} characters long.", MinimumLength = 8)]
+        [StringLength(25, ErrorMessage = "The password must be between {2} and {1} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
+        [RegularExpression("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{6,15}$",
+        ErrorMessage = "At least 6 characters, one uppercase and lowercase")]
         [Display(Name = "Password")]
         public string Password { get; set; }
 
@@ -652,8 +739,22 @@ namespace TimeloggerCore.Common.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
-
         public bool CreateActivated { get; set; }
+        public List<RoleModel> UserRoles { get; set; }
+        [Required(ErrorMessage = "Please select one of the above")]
+        [Display(Name = "User Role")]
+        public string UserRole { get; set; }
+        public string Picture { get; set; }
+        public bool IsWorkerHasAgency { get; set; }
+        [Required(ErrorMessage = "Worker agency is requied.")]
+        public string AgencyId { get; set; }
+        public string WorkerType { get; set; }
+        [Range(typeof(bool), "true", "true", ErrorMessage = "The field Agree Terms must be checked.")]
+        public bool AgreeTerms { get; set; }
+        public CompanyModel Company { get; set; }
+        public string ConfirmEmailURL { get; set; }
+        public string WorkerEmailURL { get; set; }
+        public List<ExternalLoginListViewModel> ExternalLoginURLs { get; set; }
     }
 
     public class RegisterMerchantModel

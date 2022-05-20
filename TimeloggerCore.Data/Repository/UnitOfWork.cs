@@ -9,16 +9,18 @@ namespace TimeloggerCore.Data.Repository
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly ISqlServerDbContext dbContext;
+        private readonly ISqlServerDbContext _dbContext;
 
         public UnitOfWork(ISqlServerDbContext context)
         {
-            dbContext = context;
+            _dbContext = context;
         }
+
+        public IPaymentRepository PaymentRepository => new PaymentRepository(_dbContext);
 
         public async Task<int> SaveChangesAsync()
         {
-            return await dbContext.SaveChangesAsync();
+            return await _dbContext.SaveChangesAsync();
         }
     }
 }

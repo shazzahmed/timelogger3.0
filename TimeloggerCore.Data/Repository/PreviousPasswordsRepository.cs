@@ -8,8 +8,9 @@ using TimeloggerCore.Common.Models;
 using System.Threading.Tasks;
 using System.Linq;
 using TimeloggerCore.Common.Options;
-using System.Data.Entity;
 using Microsoft.AspNetCore.Identity;
+using ApplicationUser = TimeloggerCore.Data.Entities.ApplicationUser;
+using ApplicationRole = TimeloggerCore.Data.Entities.ApplicationRole;
 
 namespace TimeloggerCore.Data.Repository
 {

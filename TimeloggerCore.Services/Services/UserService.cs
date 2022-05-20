@@ -14,6 +14,8 @@ using TimeloggerCore.Data.Entities;
 using TimeloggerCore.Data.IRepository;
 using TimeloggerCore.Services.IService;
 using static TimeloggerCore.Common.Utility.Enums;
+using ApplicationUser = TimeloggerCore.Data.Entities.ApplicationUser;
+using ApplicationRole = TimeloggerCore.Data.Entities.ApplicationRole;
 
 namespace TimeloggerCore.Services.Services
 {
@@ -46,9 +48,29 @@ namespace TimeloggerCore.Services.Services
         public async Task<BaseModel> GetAllAgency()
         {
            //var userwithrole= _applicationUserManager.Users.Include(u => u.UserRoles).ThenInclude(ur => ur.Role).ToList();
-            var agency = await _applicationUserManager.GetUsersInRoleAsync(UserRoles.Agency.ToString());
-            return new BaseModel { Success = true, Data = agency };
+            var result = await _applicationUserManager.GetUsersInRoleAsync(UserRoles.Agency.ToString());
+            return new BaseModel { Success = true, Data = result };
             //return BaseModel.Succeed(data: aaa);
+        }
+        public async Task<BaseModel> GetAllFreelancers()
+        {
+            var result = await _applicationUserManager.GetUsersInRoleAsync(UserRoles.Freelancer.ToString());
+            return new BaseModel { Success = true, Data = result };
+        }
+        public async Task<BaseModel> GetClients()
+        {
+            var result = await _applicationUserManager.GetUsersInRoleAsync(UserRoles.Client.ToString());
+            return new BaseModel { Success = true, Data = result };
+        }
+        public async Task<BaseModel> GetAgency()
+        {
+            var result = await _applicationUserManager.GetUsersInRoleAsync(UserRoles.Agency.ToString());
+            return new BaseModel { Success = true, Data = result };
+        }
+        public async Task<BaseModel> GetAllWorker()
+        {
+            var result = await _applicationUserManager.GetUsersInRoleAsync(UserRoles.Worker.ToString());
+            return new BaseModel { Success = true, Data = result };
         }
         //public async Task<BaseModel> CreateUser(RegisterUserModel model)
         //{
