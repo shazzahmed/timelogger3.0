@@ -33,7 +33,7 @@ namespace TimeloggerCore.Common.Models
 
         public ProjectModel Project { get; set; }
         public ApplicationUser Worker { get; set; }
-        public ProjectsInvitation ProjectsInvitation { get; set; }
+        public ProjectsInvitationModel ProjectsInvitation { get; set; }
     }
     public class ClientWorkersModel
     {

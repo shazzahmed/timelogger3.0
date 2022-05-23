@@ -72,6 +72,35 @@ namespace TimeloggerCore.Services.Services
             var result = await _applicationUserManager.GetUsersInRoleAsync(UserRoles.Worker.ToString());
             return new BaseModel { Success = true, Data = result };
         }
+        public async Task<List<string>> GetAdminUserRoles()
+        {
+            return await _userRepository.GetAdminUserRoles();
+        }
+        public async Task<List<UserDetailsModel>> GetUsersByRoles(List<string> roles)
+        {
+            return await _userRepository.GetUsersByRoles(roles);
+        }
+
+        public async Task<List<UserDetailsModel>> GetUsersByRole(string role)
+        {
+            return await _userRepository.GetUsersByRole(role);
+        }
+        public async Task<bool> IsEmailAlreadyExist(string email)
+        {
+            return await _userRepository.IsEmailAlreadyExists(email);
+        }
+        public async Task<bool> IsPhoneAlreadyExist(string phone)
+        {
+            return await _userRepository.IsPhoneAlreadyExists(phone);
+        }
+        public string GetRolesForUserById(string userId)
+        {
+            return _userRepository.GetRolesForUserById(userId);
+        }
+        public string GetRolesForUserByEmail(string email)
+        {
+            return _userRepository.GetRolesForUserByEmail(email);
+        }
         //public async Task<BaseModel> CreateUser(RegisterUserModel model)
         //{
         //    var preactiveStats = await _statusService.FirstOrDefaultAsync(s => s.Name.Equals(UserStatusType.Preactive.ToString()));

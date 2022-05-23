@@ -17,5 +17,12 @@ namespace TimeloggerCore.Services.IService
         Task<BaseModel> GetClients();
         Task<BaseModel> GetAgency();
         Task<BaseModel> GetAllWorker();
+        Task<List<string>> GetAdminUserRoles();
+        Task<List<UserDetailsModel>> GetUsersByRoles(List<string> roles);
+        Task<List<UserDetailsModel>> GetUsersByRole(string role);
+        Task<bool> IsEmailAlreadyExist(string email);
+        Task<bool> IsPhoneAlreadyExist(string phone);
+        string GetRolesForUserById(string userId);
+        string GetRolesForUserByEmail(string email);
     }
 }
