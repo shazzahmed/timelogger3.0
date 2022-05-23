@@ -4,7 +4,7 @@ using System.Text;
 
 namespace TimeloggerCore.Data.Entities
 {
-    class BaseEntity
+    public class BaseEntity
     {
         public DateTime? CreatedAt { get; set; }
 

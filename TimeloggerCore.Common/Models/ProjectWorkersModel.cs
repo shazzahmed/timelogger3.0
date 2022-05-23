@@ -6,7 +6,7 @@ using static TimeloggerCore.Common.Utility.Enums;
 
 namespace TimeloggerCore.Common.Models
 {
-    public class ProjectWorkersModel
+    public class ProjectWorkersModel : BaseClass
     {
         public int Id { get; set; }
         [ForeignKey("Worker")]

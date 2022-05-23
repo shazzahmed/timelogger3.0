@@ -8,7 +8,7 @@ using static TimeloggerCore.Common.Utility.Enums;
 
 namespace TimeloggerCore.Data.Entities
 {
-    public class Project
+    public class Project : BaseEntity
     {
         [Key]
         public int Id { get; set; }

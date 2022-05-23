@@ -16,11 +16,28 @@ namespace TimeloggerCore.Data.Repository
             _dbContext = context;
         }
 
-        public IPaymentRepository PaymentRepository => new PaymentRepository(_dbContext);
-
         public async Task<int> SaveChangesAsync()
         {
             return await _dbContext.SaveChangesAsync();
+        }
+        private bool _disposed;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    _dbContext.Dispose();
+                }
+            }
+            _disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }
