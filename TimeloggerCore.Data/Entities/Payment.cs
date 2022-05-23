@@ -7,7 +7,7 @@ using static TimeloggerCore.Common.Utility.Enums;
 
 namespace TimeloggerCore.Data.Entities
 {
-    public class Payment
+    public class Payment : BaseEntity
     {
         public static string[] PlanName =
             {
@@ -53,8 +53,6 @@ namespace TimeloggerCore.Data.Entities
         public PaymentStatus ExtraPaymentStatus { get; set; }
 
         public bool IsCancel { get; set; }
-        public bool IsDeleted { get; set; }
-        public bool IsActive { get; set; }
         public DateTime CreatedOn { get; set; }
     }
 

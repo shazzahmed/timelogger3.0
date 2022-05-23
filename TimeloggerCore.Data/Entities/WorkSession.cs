@@ -6,7 +6,7 @@ using System.Text;
 
 namespace TimeloggerCore.Data.Entities
 {
-	public class WorkSession
+	public class WorkSession : BaseEntity
 	{
 		public int Id { get; set; }
 		public string ScreenShot { get; set; }

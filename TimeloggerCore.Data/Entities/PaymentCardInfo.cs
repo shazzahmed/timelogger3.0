@@ -7,7 +7,7 @@ using static TimeloggerCore.Common.Utility.Enums;
 
 namespace TimeloggerCore.Data.Entities
 {
-    public class PaymentCardInfo
+    public class PaymentCardInfo : BaseEntity
     {
         public int Id { get; set; }
         public string CardNumber { get; set; }

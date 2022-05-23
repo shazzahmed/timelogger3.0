@@ -5,7 +5,7 @@ using System.Text;
 
 namespace TimeloggerCore.Data.Entities
 {
-    public class Addresses
+    public class Addresses  : BaseEntity
     {
         public int Id { get; set; }
         public string UserId { get; set; }

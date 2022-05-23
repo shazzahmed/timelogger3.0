@@ -7,7 +7,7 @@ using static TimeloggerCore.Common.Utility.Enums;
 
 namespace TimeloggerCore.Data.Entities
 {
-    public class Notification
+    public class Notification : BaseEntity
     {
         public int Id { get; set; }
         public NotificationTypes NotificationTypeId { get; set; }

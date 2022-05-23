@@ -6,7 +6,7 @@ using System.Text;
 
 namespace TimeloggerCore.Data.Entities
 {
-    public class Feedback
+    public class Feedback : BaseEntity
     {
         public int Id { get; set; }
         public string FullName { get; set; }
