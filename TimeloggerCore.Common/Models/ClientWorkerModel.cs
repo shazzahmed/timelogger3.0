@@ -32,7 +32,7 @@ namespace TimeloggerCore.Common.Models
         public int ProjectHours { get; set; }
 
         public ProjectModel Project { get; set; }
-        public ApplicationUser Worker { get; set; }
+        public ApplicationUserModel Worker { get; set; }
         public ProjectsInvitationModel ProjectsInvitation { get; set; }
     }
     public class ClientWorkersModel
@@ -57,7 +57,7 @@ namespace TimeloggerCore.Common.Models
         public string Message { get; set; }
         public AddWorkerClientStatus WorkerResponse { get; set; }
         public ProjectModel Project { get; set; }
-        public ApplicationUser User { get; set; }
+        public ApplicationUserModel User { get; set; }
         public ClientWorkerModel ClientWorker { get; set; }
         public List<ClientWorkerModel> ClientWorkerList { get; set; }
     }

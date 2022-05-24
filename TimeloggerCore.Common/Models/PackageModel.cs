@@ -11,6 +11,6 @@ namespace TimeloggerCore.Common.Models
         public PackageType PackageTypeId { get; set; }
         public int MemberAllowed { get; set; }
         public string UserId { get; set; }
-        public ApplicationUser User { get; set; }
+        public ApplicationUserModel User { get; set; }
     }
 }

@@ -7,10 +7,10 @@ namespace TimeloggerCore.Common.Models
 {
     public class TeamMembersProjectsBaseModel
     {
-        public List<ApplicationUser> Users { get; set; }
+        public List<ApplicationUserModel> Users { get; set; }
         public List<ProjectModel> Projects { get; set; }
 
-        public List<ApplicationUser> Agency { get; set; }
+        public List<ApplicationUserModel> Agency { get; set; }
     }
     public class TeamMembersProjectsViewModel : TeamMembersProjectsBaseModel
     {

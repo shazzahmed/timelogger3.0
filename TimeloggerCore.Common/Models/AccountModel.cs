@@ -11,7 +11,7 @@ using static TimeloggerCore.Common.Utility.Enums;
 
 namespace TimeloggerCore.Common.Models
 {
-    public class ApplicationUser
+    public class ApplicationUserModel
     {
         [MaxLength(60)]
         public string FirstName { get; set; }
@@ -69,7 +69,7 @@ namespace TimeloggerCore.Common.Models
 
     public class ApplicationUserRole
     {
-        public virtual ApplicationUser User { get; set; }
+        public virtual ApplicationUserModel User { get; set; }
         public virtual ApplicationRole Role { get; set; }
     }
     public class ApplicationRole

@@ -18,6 +18,6 @@ namespace TimeloggerCore.Common.Models
         public DateTime CreatedOn { get; set; }
         public bool IsDeleted { get; set; }
         public bool IsActive { get; set; }
-        public ApplicationUser User { get; set; }
+        public ApplicationUserModel User { get; set; }
     }
 }

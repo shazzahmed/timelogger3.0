@@ -28,7 +28,7 @@ namespace TimeloggerCore.Common.Models
         public int ProjectHours { get; set; }
 
         public ProjectModel Project { get; set; }
-        public ApplicationUser Worker { get; set; }
+        public ApplicationUserModel Worker { get; set; }
         public ProjectModel ProjectsInvitation { get; set; }
     }
 }

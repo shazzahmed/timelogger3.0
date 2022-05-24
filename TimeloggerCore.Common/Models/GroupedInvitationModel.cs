@@ -6,7 +6,7 @@ namespace TimeloggerCore.Common.Models
 {
     public class GroupedInvitationModel
     {
-        public ApplicationUser User { get; set; }
+        public ApplicationUserModel User { get; set; }
         public List<TimeLogModel> TimeLogs { get; set; }
         public string TimeLog { get; set; }
     }

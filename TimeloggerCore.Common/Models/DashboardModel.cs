@@ -15,7 +15,7 @@ namespace TimeloggerCore.Common.Models
     }
     public class DashboardBaseModel
     {
-        public List<ApplicationUser> Users { get; set; }
+        public List<ApplicationUserModel> Users { get; set; }
         public List<TimeLogModel> TimeLogs { get; set; }
         public List<ProjectModel> Projects { get; set; }
         public List<InvitationModel> Invitations { get; set; }

@@ -7,7 +7,7 @@ namespace TimeloggerCore.Common.Models
 {
     public class WorkDiaryTeamMembersModel
     {
-        public List<ApplicationUser> Users { get; set; }
+        public List<ApplicationUserModel> Users { get; set; }
         [Display(Name = "Team Member")]
         public string UserId { get; set; }
         public List<ProjectModel> Projects { get; set; }

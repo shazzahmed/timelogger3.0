@@ -17,7 +17,7 @@ namespace TimeloggerCore.Common.Models
         public string EmailAddress { get; set; }
         public bool IsAccepted { get; set; }
         public bool ExistingUser { get; set; }
-        public ApplicationUser Agency { get; set; }
+        public ApplicationUserModel Agency { get; set; }
         public ProjectModel Project { get; set; }
     }
     public class ProjectInvitationModel
@@ -25,6 +25,6 @@ namespace TimeloggerCore.Common.Models
         public List<ProjectModel> Projects { get; set; }
         public List<InvitationModel> Invitations { get; set; }
         public List<ClientWorkerModel> WorkerInvitation { get; set; }
-        public ApplicationUser CurrentUser { get; set; }
+        public ApplicationUserModel CurrentUser { get; set; }
     }
 }

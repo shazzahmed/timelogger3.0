@@ -23,11 +23,11 @@ namespace TimeloggerCore.Common.Models
         //public List<CompanyViewModel> Companies { get; set; }
         public string UserId { get; set; }
         public string Color { get; set; }
-        public ApplicationUser ApplicationUser { get; set; }
+        public ApplicationUserModel ApplicationUser { get; set; }
         public bool IsActive { get; set; } = false;
         public double Percentage { get; set; }
         public ProjectInvitationModel ProjectInvitationModel { get; set; }
-        public List<ApplicationUser> ApplicationUserList { get; set; }
+        public List<ApplicationUserModel> ApplicationUserList { get; set; }
 
         //   public List<TimeLogViewModel> TimeLogs { get; set; }
         public List<InvitationModel> Invitations { get; set; }

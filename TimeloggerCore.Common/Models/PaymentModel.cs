@@ -42,7 +42,7 @@ namespace TimeloggerCore.Common.Models
         public bool IsRecurring { get; set; }
         public bool IsEnquiry { get; set; }
         public PaymentStatus PaymentStatus { get; set; }
-        public ApplicationUser User { get; set; }
+        public ApplicationUserModel User { get; set; }
         public PackageModel Package { get; set; }
 
         public bool ispaidOther { get; set; }

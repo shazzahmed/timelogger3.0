@@ -7,7 +7,7 @@ namespace TimeloggerCore.Common.Models
 {
     public class PackageUserInfoModel
     {
-        public ApplicationUser BuyerInfo { get; set; }
+        public ApplicationUserModel BuyerInfo { get; set; }
         public PackageModel Package { get; set; }
         public PaymentModel Payment { get; set; }
     }

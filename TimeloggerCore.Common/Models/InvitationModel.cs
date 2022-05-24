@@ -11,9 +11,9 @@ namespace TimeloggerCore.Common.Models
         public int ID { get; set; }
         public ProjectModel Project { get; set; }
         public bool ExistingUser { get; set; }
-        public List<ApplicationUser> Users { get; set; }
-        public ApplicationUser Client { get; set; }
-        public ApplicationUser User { get; set; }
+        public List<ApplicationUserModel> Users { get; set; }
+        public ApplicationUserModel Client { get; set; }
+        public ApplicationUserModel User { get; set; }
         public string UserID { get; set; }
         public string ClientID { get; set; }
         public int ProjectID { get; set; }
@@ -44,9 +44,9 @@ namespace TimeloggerCore.Common.Models
         public bool IsAccepted { get; set; }
         public bool ExistingUser { get; set; }
         public InvitationType InvitationType { get; set; }
-        public ApplicationUser InvitationSentFrom { get; set; }
-        public ApplicationUser InvitationSentTo { get; set; }
-        public string Role { get; set; }
+        public ApplicationUserModel InvitationSentFrom { get; set; }
+        public ApplicationUserModel InvitationSentTo { get; set; }
+        //public IList<string> Roles { get; set; }
     }
     public class InvitationsModel
     {

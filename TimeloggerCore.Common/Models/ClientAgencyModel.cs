@@ -13,14 +13,14 @@ namespace TimeloggerCore.Common.Models
         [ForeignKey("Agency")]
         public string AgencyId { get; set; }
         public bool IsAgencyAccepted { get; set; }
-        virtual public ApplicationUser Client { get; set; }
-        public ApplicationUser Agency { get; set; }
+        virtual public ApplicationUserModel Client { get; set; }
+        public ApplicationUserModel Agency { get; set; }
     }
     public class ClientAgenciesModel
     {
         public List<ClientAgencyModel> ClientAgencies { get; set; }
         public List<InvitationRequestModel> InvitationRequest { get; set; }
-        public ApplicationUser CurrentUser { get; set; }
+        public ApplicationUserModel CurrentUser { get; set; }
     }
     public class AgencyAlreadyExitModel
     {
