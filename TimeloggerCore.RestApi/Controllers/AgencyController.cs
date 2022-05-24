@@ -9,6 +9,8 @@ using TimeloggerCore.Services.IService;
 
 namespace TimeloggerCore.RestApi.Controllers
 {
+    [Route("Api/[controller]")]
+    [ApiController]
     public class AgencyController : BaseController
     {
         private readonly IUserService _userService;
@@ -25,7 +27,7 @@ namespace TimeloggerCore.RestApi.Controllers
         [HttpGet]
         [Authorize]
         [ActionName("GetAllAgency")]
-        [Route("Api/Agency/GetAllAgency")]
+        [Route("GetAllAgency")]
         [Produces("application/json", Type = typeof(BaseModel))]
         public async Task<IActionResult> GetAllAgency()
         {
@@ -38,7 +40,7 @@ namespace TimeloggerCore.RestApi.Controllers
         [HttpGet]
         [Authorize]
         [ActionName("ManageInfo")]
-        [Route("Agency/ManageInfo")]
+        [Route("ManageInfo")]
         [Produces("application/json", Type = typeof(BaseModel))]
         public async Task<IActionResult> ManageInfo()
         {

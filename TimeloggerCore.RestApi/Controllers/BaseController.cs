@@ -9,9 +9,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace TimeloggerCore.RestApi.Controllers
 {
-    public class BaseController : Controller
+    public class BaseController : ControllerBase
     {
-
+        [NonAction]
         public string GetUserId()
         {
             var identity = User;
@@ -20,7 +20,7 @@ namespace TimeloggerCore.RestApi.Controllers
                            .Select(c => c.Value)
                            .SingleOrDefault();
         }
-
+        [NonAction]
         public string GetUserName()
         {
             var identity = User;
@@ -29,7 +29,7 @@ namespace TimeloggerCore.RestApi.Controllers
                            .Select(c => c.Value)
                            .SingleOrDefault();
         }
-
+        [NonAction]
         public string GetUserEmail()
         {
             var identity = User;
@@ -38,7 +38,7 @@ namespace TimeloggerCore.RestApi.Controllers
                            .Select(c => c.Value)
                            .SingleOrDefault();
         }
-
+        [NonAction]
         public string GetUserFullName()
         {
             var identity = User;
@@ -54,7 +54,7 @@ namespace TimeloggerCore.RestApi.Controllers
 
             return  $"{firstName} {lastName}";
         }
-
+        [NonAction]
         public string GetUserFistName()
         {
             var identity = User;
@@ -63,7 +63,7 @@ namespace TimeloggerCore.RestApi.Controllers
                            .Select(c => c.Value)
                            .SingleOrDefault();
         }
-
+        [NonAction]
         public string GetUserLastName()
         {
             var identity = User;
@@ -72,7 +72,7 @@ namespace TimeloggerCore.RestApi.Controllers
                            .Select(c => c.Value)
                            .SingleOrDefault();
         }
-
+        [NonAction]
         public bool UserIsInRole(string role)
         {
             var identity = User;

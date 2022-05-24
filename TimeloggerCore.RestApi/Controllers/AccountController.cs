@@ -19,8 +19,8 @@ using TimeloggerCore.Core.ICommunication;
 
 namespace TimeloggerCore.RestApi.Controllers
 {
-    //[Route("api/Account")]
-    //[ApiController]
+    [Route("Api/[controller]")]
+    [ApiController]
     public class AccountController : BaseController
     {
         private readonly ISecurityService _securityService;
@@ -58,7 +58,7 @@ namespace TimeloggerCore.RestApi.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ActionName("Register")]
-        [Route("Api/Account/Register")]
+        [Route("Register")]
         [ServiceFilter(typeof(ValidateModelState))]
         [Produces("application/json", Type = typeof(BaseModel))]
         public async Task<IActionResult> Register(RegisterUserModel model)
@@ -89,7 +89,7 @@ namespace TimeloggerCore.RestApi.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ActionName("Login")]
-        [Route("Api/Account/Login")]
+        [Route("Login")]
         [ServiceFilter(typeof(ValidateModelState))]
         [Produces("application/json", Type = typeof(LoginResponse))]
         public async Task<IActionResult> Login(LoginModel model)
@@ -113,7 +113,7 @@ namespace TimeloggerCore.RestApi.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ActionName("RegisterExternal")]
-        [Route("Api/Account/RegisterExternal")]
+        [Route("RegisterExternal")]
         [ServiceFilter(typeof(ValidateModelState))]
         [Produces("application/json", Type = typeof(LoginResponse))]
         public async Task<IActionResult> RegisterExternal(RegisterExternalModel model)
@@ -139,7 +139,7 @@ namespace TimeloggerCore.RestApi.Controllers
         //[AllowAnonymous]
         //[Authorize(Policy = "Claim.DoB")]
         [ActionName("ExternalLogin")]
-        [Route("Api/Account/ExternalLogin")]
+        [Route("ExternalLogin")]
         [ServiceFilter(typeof(ValidateModelState))]
         [Produces("application/json", Type = typeof(LoginResponse))]
         public async Task<IActionResult> ExternalLogin(ExternalLoginModel model)
@@ -164,7 +164,7 @@ namespace TimeloggerCore.RestApi.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ActionName("Activation")]
-        [Route("Api/Account/Activation")]
+        [Route("Activation")]
         [ServiceFilter(typeof(ValidateModelState))]
         [Produces("application/json", Type = typeof(BaseModel))]
         public async Task<IActionResult> Activation(ConfirmEmailModel model)
@@ -188,7 +188,7 @@ namespace TimeloggerCore.RestApi.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ActionName("TwoFactorLogin")]
-        [Route("Api/Account/TwoFactorLogin")]
+        [Route("TwoFactorLogin")]
         [ServiceFilter(typeof(ValidateModelState))]
         [Produces("application/json", Type = typeof(LoginResponse))]
         public async Task<IActionResult> TwoFactorLogin(VerifyCodeModel model)
@@ -213,7 +213,7 @@ namespace TimeloggerCore.RestApi.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ActionName("RecoveryCodeLogin")]
-        [Route("Api/Account/RecoveryCodeLogin")]
+        [Route("RecoveryCodeLogin")]
         [ServiceFilter(typeof(ValidateModelState))]
         [Produces("application/json", Type = typeof(LoginResponse))]
         public async Task<IActionResult> RecoveryCodeLogin(VerifyCodeModel model)
@@ -238,7 +238,7 @@ namespace TimeloggerCore.RestApi.Controllers
         [HttpGet]
         [AllowAnonymous]
         [ActionName("GetLoginProviders")]
-        [Route("Api/Account/GetLoginProviders")]
+        [Route("GetLoginProviders")]
         [Produces("application/json", Type = typeof(BaseModel))]
         public async Task<IActionResult> GetLoginProviders()
         {
@@ -258,7 +258,7 @@ namespace TimeloggerCore.RestApi.Controllers
         [HttpGet]
         [AllowAnonymous]
         [ActionName("GetLoginProperties")]
-        [Route("Api/Account/GetLoginProperties")]
+        [Route("GetLoginProperties")]
         [Produces("application/json", Type = typeof(BaseModel))]
         public async Task<IActionResult> GetLoginProperties(string provider, string redirectUrl, string userId = null)
         {
@@ -278,7 +278,7 @@ namespace TimeloggerCore.RestApi.Controllers
         [HttpPost]
         [Authorize]
         [ActionName("AddLogin")]
-        [Route("Api/Account/AddLogin")]
+        [Route("AddLogin")]
         [Produces("application/json", Type = typeof(BaseModel))]
         public async Task<ActionResult> AddLogin(AddLoginModel model)
         {
@@ -299,7 +299,7 @@ namespace TimeloggerCore.RestApi.Controllers
         [HttpPost]
         [Authorize]
         [ActionName("RemoveLogin")]
-        [Route("Api/Account/RemoveLogin")]
+        [Route("RemoveLogin")]
         [Produces("application/json", Type = typeof(BaseModel))]
         public async Task<ActionResult> RemoveLogin(RemoveLoginModel model)
         {
@@ -319,7 +319,7 @@ namespace TimeloggerCore.RestApi.Controllers
         // GET: Api/Account/GetAuthenticationDetail
         [HttpGet]
         [ActionName("GetAuthenticationDetail")]
-        [Route("Api/Account/GetAuthenticationDetail")]
+        [Route("GetAuthenticationDetail")]
         [Produces("application/json", Type = typeof(BaseModel))]
         public async Task<IActionResult> GetAuthenticationDetail()
         {
@@ -340,7 +340,7 @@ namespace TimeloggerCore.RestApi.Controllers
         [HttpGet]
         [Authorize]
         [ActionName("GetUser")]
-        [Route("Api/Account/GetUser")]
+        [Route("GetUser")]
         [Produces("application/json", Type = typeof(BaseModel))]
         public async Task<IActionResult> GetUser()
         {
@@ -361,7 +361,7 @@ namespace TimeloggerCore.RestApi.Controllers
         [HttpGet]
         [Authorize]
         [ActionName("GetExternalUser")]
-        [Route("Api/Account/GetExternalUser")]
+        [Route("GetExternalUser")]
         [Produces("application/json", Type = typeof(BaseModel))]
         public async Task<IActionResult> GetExternalUser(string loginProvider, string providerKey)
         {
@@ -381,7 +381,7 @@ namespace TimeloggerCore.RestApi.Controllers
         [HttpGet]
         [Authorize]
         [ActionName("GetUsers")]
-        [Route("Api/Account/Users")]
+        [Route("Users")]
         [Produces("application/json", Type = typeof(BaseModel))]
         public async Task<IActionResult> GetUsers()
         {
@@ -401,7 +401,7 @@ namespace TimeloggerCore.RestApi.Controllers
         [HttpGet]
         [Authorize]
         [ActionName("GetFreelancers")]
-        [Route("Api/Account/Freelancers")]
+        [Route("Freelancers")]
         [Produces("application/json", Type = typeof(BaseModel))]
         public async Task<IActionResult> GetFreelancers()
         {
@@ -421,7 +421,7 @@ namespace TimeloggerCore.RestApi.Controllers
         [HttpGet]
         [Authorize]
         [ActionName("GetClients")]
-        [Route("Api/Account/Clients")]
+        [Route("Clients")]
         [Produces("application/json", Type = typeof(BaseModel))]
         public async Task<IActionResult> GetClients()
         {
@@ -441,7 +441,7 @@ namespace TimeloggerCore.RestApi.Controllers
         [HttpGet]
         [Authorize]
         [ActionName("GetAgency")]
-        [Route("Api/Account/Agency")]
+        [Route("Agency")]
         [Produces("application/json", Type = typeof(BaseModel))]
         public async Task<IActionResult> GetAgency()
         {
@@ -461,7 +461,7 @@ namespace TimeloggerCore.RestApi.Controllers
         [HttpGet]
         [Authorize]
         [ActionName("GetAllWorker")]
-        [Route("Api/Account/GetAllWorker")]
+        [Route("GetAllWorker")]
         [Produces("application/json", Type = typeof(BaseModel))]
         public async Task<IActionResult> GetAllWorker()
         {
@@ -481,7 +481,7 @@ namespace TimeloggerCore.RestApi.Controllers
         [HttpGet]
         [Authorize]
         [ActionName("GetUserDetail")]
-        [Route("Api/Account/GetUserDetail")]
+        [Route("GetUserDetail")]
         [Produces("application/json", Type = typeof(BaseModel))]
         public async Task<IActionResult> GetUserDetail()
         {
@@ -502,7 +502,7 @@ namespace TimeloggerCore.RestApi.Controllers
         [HttpPost]
         [Authorize]
         [ActionName("UpdateUserDetail")]
-        [Route("Api/Account/UpdateUserDetail")]
+        [Route("UpdateUserDetail")]
         [Produces("application/json", Type = typeof(BaseModel))]
         public async Task<IActionResult> UpdateUserDetail(UserModel userInfo)
         {
@@ -529,7 +529,7 @@ namespace TimeloggerCore.RestApi.Controllers
         [HttpPost]
         [Authorize]
         [ActionName("AddUserClaim")]
-        [Route("Api/Account/AddUserClaim")]
+        [Route("AddUserClaim")]
         [Produces("application/json", Type = typeof(BaseModel))]
         public async Task<BaseModel> AddUserClaim(string claimType, string claimValue)
         {
@@ -558,7 +558,7 @@ namespace TimeloggerCore.RestApi.Controllers
         [HttpGet]
         [Authorize]
         [ActionName("GetUserClaim")]
-        [Route("Api/Account/GetUserClaim")]
+        [Route("GetUserClaim")]
         [Produces("application/json", Type = typeof(BaseModel))]
         public async Task<IActionResult> GetUserClaim()
         {
@@ -579,7 +579,7 @@ namespace TimeloggerCore.RestApi.Controllers
         [HttpPost]
         [Authorize]
         [ActionName("RemoveUserClaim")]
-        [Route("Api/Account/RemoveUserClaim")]
+        [Route("RemoveUserClaim")]
         [Produces("application/json", Type = typeof(BaseModel))]
         private async Task<BaseModel> RemoveUserClaim(string claimType, string claimValue)
         {
@@ -608,7 +608,7 @@ namespace TimeloggerCore.RestApi.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ActionName("ForgotPassword")]
-        [Route("Api/Account/ForgotPassword")]
+        [Route("ForgotPassword")]
         [ServiceFilter(typeof(ValidateModelState))]
         [Produces("application/json", Type = typeof(BaseModel))]
         public async Task<IActionResult> ForgotPassword(ResetModel model)
@@ -650,7 +650,7 @@ namespace TimeloggerCore.RestApi.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ActionName("ResetPassword")]
-        [Route("Api/Account/ResetPassword")]
+        [Route("ResetPassword")]
         [ServiceFilter(typeof(ValidateModelState))]
         [Produces("application/json", Type = typeof(BaseModel))]
         public async Task<IActionResult> ResetPassword(PasswordResetModel model)
@@ -674,7 +674,7 @@ namespace TimeloggerCore.RestApi.Controllers
         [HttpPost]
         [Authorize]
         [ActionName("ChangePassword")]
-        [Route("Api/Account/ChangePassword")]
+        [Route("ChangePassword")]
         [ServiceFilter(typeof(ValidateModelState))]
         [Produces("application/json", Type = typeof(BaseModel))]
         public async Task<IActionResult> ChangePassword(PasswordChangeModel model)
@@ -699,7 +699,7 @@ namespace TimeloggerCore.RestApi.Controllers
         [HttpPost]
         [Authorize]
         [ActionName("SetPassword")]
-        [Route("Api/Account/SetPassword")]
+        [Route("SetPassword")]
         [ServiceFilter(typeof(ValidateModelState))]
         [Produces("application/json", Type = typeof(BaseModel))]
         public async Task<IActionResult> SetPassword(SetPasswordModel model)
@@ -759,7 +759,7 @@ namespace TimeloggerCore.RestApi.Controllers
         [HttpPost]
         [Authorize]
         [ActionName("ChangeEmail")]
-        [Route("Api/Account/ChangeEmail")]
+        [Route("ChangeEmail")]
         [ServiceFilter(typeof(ValidateModelState))]
         [Produces("application/json", Type = typeof(BaseModel))]
         public async Task<IActionResult> ChangeEmail(ConfirmEmailModel model)
@@ -806,7 +806,7 @@ namespace TimeloggerCore.RestApi.Controllers
         [HttpPost]
         [Authorize]
         [ActionName("VerifyPhoneNumber")]
-        [Route("Api/Account/VerifyPhoneNumber")]
+        [Route("VerifyPhoneNumber")]
         [ServiceFilter(typeof(ValidateModelState))]
         [Produces("application/json", Type = typeof(BaseModel))]
         public async Task<ActionResult> VerifyPhoneNumber(VerifyPhoneNumberModel model)
@@ -831,7 +831,7 @@ namespace TimeloggerCore.RestApi.Controllers
         [HttpPut]
         [Authorize]
         [ActionName("ChangePhoneNumber")]
-        [Route("Api/Account/ChangePhoneNumber")]
+        [Route("ChangePhoneNumber")]
         [ServiceFilter(typeof(ValidateModelState))]
         [Produces("application/json", Type = typeof(BaseModel))]
         public async Task<ActionResult> ChangePhoneNumber(VerifyPhoneNumberModel model)
@@ -853,7 +853,7 @@ namespace TimeloggerCore.RestApi.Controllers
         [HttpDelete]
         [Authorize]
         [ActionName("RemovePhoneNumber")]
-        [Route("Api/Account/RemovePhoneNumber")]
+        [Route("RemovePhoneNumber")]
         [Produces("application/json", Type = typeof(BaseModel))]
         public async Task<ActionResult> RemovePhoneNumber()
         {
@@ -874,7 +874,7 @@ namespace TimeloggerCore.RestApi.Controllers
         [HttpGet]
         [Authorize]
         [ActionName("GetSharedKeyAndQrCodeUri")]
-        [Route("Api/Account/GetSharedKeyAndQrCodeUri")]
+        [Route("GetSharedKeyAndQrCodeUri")]
         [Produces("application/json", Type = typeof(BaseModel))]
         public async Task<ActionResult> GetSharedKeyAndQrCodeUri()
         {
@@ -895,7 +895,7 @@ namespace TimeloggerCore.RestApi.Controllers
         [HttpGet]
         [Authorize]
         [ActionName("GenerateTwoFactorRecoveryCodes")]
-        [Route("Api/Account/GenerateTwoFactorRecoveryCodes")]
+        [Route("GenerateTwoFactorRecoveryCodes")]
         [Produces("application/json", Type = typeof(BaseModel))]
         public async Task<ActionResult> GenerateTwoFactorRecoveryCodes(int numberOfCodes = 0)
         {
@@ -916,7 +916,7 @@ namespace TimeloggerCore.RestApi.Controllers
         [HttpPost]
         [Authorize]
         [ActionName("EnableTwoFactorAuthentication")]
-        [Route("Api/Account/EnableTwoFactorAuthentication")]
+        [Route("EnableTwoFactorAuthentication")]
         [Produces("application/json", Type = typeof(BaseModel))]
         public async Task<ActionResult> EnableTwoFactorAuthentication(VerifyCodeModel model)
         {
@@ -937,7 +937,7 @@ namespace TimeloggerCore.RestApi.Controllers
         [HttpGet]
         [Authorize]
         [ActionName("ResetAuthenticator")]
-        [Route("Api/Account/ResetAuthenticator")]
+        [Route("ResetAuthenticator")]
         [Produces("application/json", Type = typeof(BaseModel))]
         public async Task<ActionResult> ResetAuthenticator()
         {
@@ -958,7 +958,7 @@ namespace TimeloggerCore.RestApi.Controllers
         [HttpGet]
         [Authorize]
         [ActionName("DisableTwoFactorAuthentication")]
-        [Route("Api/Account/DisableTwoFactorAuthentication")]
+        [Route("DisableTwoFactorAuthentication")]
         [Produces("application/json", Type = typeof(BaseModel))]
         public async Task<ActionResult> DisableTwoFactorAuthentication()
         {
@@ -978,7 +978,7 @@ namespace TimeloggerCore.RestApi.Controllers
         // POST: Api/Account/SendCode
         [HttpPost]
         [ActionName("SendCode")]
-        [Route("Api/Account/SendCode")]
+        [Route("SendCode")]
         [Produces("application/json", Type = typeof(BaseModel))]
         public async Task<ActionResult> SendCode(SendCodeModel model)
         {
@@ -998,7 +998,7 @@ namespace TimeloggerCore.RestApi.Controllers
         // POST: Api/Account/VerifyCode
         [HttpPost]
         [ActionName("VerifyCode")]
-        [Route("Api/Account/VerifyCode")]
+        [Route("VerifyCode")]
         [Produces("application/json", Type = typeof(BaseModel))]
         public async Task<ActionResult> VerifyCode(VerifyCodeModel model)
         {
@@ -1018,7 +1018,7 @@ namespace TimeloggerCore.RestApi.Controllers
         [HttpPost]
         [Authorize]
         [ActionName("Logout")]
-        [Route("Api/Account/Logout")]
+        [Route("Logout")]
         [Produces("application/json", Type = typeof(BaseModel))]
         public async Task<IActionResult> Logout()
         {
