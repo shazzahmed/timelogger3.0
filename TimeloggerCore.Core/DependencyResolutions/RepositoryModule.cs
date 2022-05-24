@@ -45,7 +45,24 @@ namespace TimeloggerCore.Core.DependencyResolutions
             services.AddTransient<INotificationTemplateRepository, NotificationTemplateRepository>();
             services.AddTransient<INotificationTypeRepository, NotificationTypeRepository>();
             services.AddTransient<IPreviousPasswordsRepository, PreviousPasswordsRepository>();
+
+            services.AddTransient<IClientAgencyRepository, ClientAgencyRepository>();
+            services.AddTransient<IClientWorkerRepository, ClientWorkerRepository>();
+            services.AddTransient<IFeedbackRepository, FeedbackRepository>();
+            services.AddTransient<IInvitationRepository, InvitationRepository>();
+            services.AddTransient<IInvitationRequestRepository, InvitationRequestRepository>();
+            services.AddTransient<IMeetingRepository, MeetingRepository>();
+            services.AddTransient<IPackageRepository, PackageRepository>();
             services.AddTransient<IPaymentRepository, PaymentRepository>();
+            services.AddTransient<IPermissionRepository, PermissionRepository>();
+            services.AddTransient<IPricingRepository, PricingRepository>();
+            services.AddTransient<IProjectInvitationRepository, ProjectInvitationRepository>();
+
+            services.AddTransient<IProjectRepository, ProjectRepository>();
+            services.AddTransient<IProjectWorkersRepository, ProjectWorkersRepository>();
+            services.AddTransient<ITimeLogRepository, TimeLogRepository>();
+            services.AddTransient<ITimeZoneRepository, TimeZoneRepository>();
+            services.AddTransient<IWorkSessionRepository, WorkSessionRepository>();
         }
 
         public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)

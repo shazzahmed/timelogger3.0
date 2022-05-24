@@ -27,6 +27,18 @@ namespace TimeloggerCore.Services.ServicesDependencyResolutions
             services.AddScoped<INotificationService, NotificationService>();
             services.AddScoped<INotificationTemplateService, NotificationTemplateService>();
             services.AddScoped<INotificationTypeService, NotificationTypeService>();
+
+            services.AddScoped<IAgencyService, AgencyService>();
+            services.AddScoped<IInvitationRequestService, InvitationRequestService>();
+            services.AddScoped<IMeetingService, MeetingService>();
+            services.AddScoped<IPackageService, PackageService>();
+            services.AddScoped<IPaymentService, PaymentService>();
+            services.AddScoped<IPricingService, PricingService>();
+            services.AddScoped<IProjectInvitationService, ProjectInvitationService>();
+            services.AddScoped<IProjectService, ProjectService>();
+            services.AddScoped<ITimeLogService, TimeLogService>();
+            services.AddScoped<IWorkerService, WorkerService>();
+            services.AddScoped<IWorkSessionService, WorkSessionService>();
         }
     }
 }
