@@ -21,14 +21,16 @@ namespace TimeloggerCore.Core.DependencyResolutions
         {
             // Todo: we have to change to Interfaces in some of following:
             Communications.RegisterServices(services);
-            var config = ModelMapper.Configure();
-            IMapper mapper = config.CreateMapper();
-
+            //var config = ModelMapper.Configure();
+            //IMapper mapper = config.CreateMapper();
+            //services.AddSingleton(mapper);
+            //services.AddAutoMapper(typeof(Startup));
+            
+            services.AddAutoMapper();
             services.AddTransient<IHttpClient, HttpClientHelper>();
 
             services.AddScoped<ValidateModelState>();
 
-            services.AddSingleton(mapper);
             services.AddScoped<IAuthorizationHandler, CustomRequireClaimHandler>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
