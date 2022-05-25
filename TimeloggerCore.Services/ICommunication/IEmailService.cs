@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TimeloggerCore.Core.ICommunication
+namespace TimeloggerCore.Services.ICommunication
 {
     public interface IEmailService
     {

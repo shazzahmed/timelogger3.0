@@ -15,7 +15,7 @@ using TimeloggerCore.Common.Options;
 using static TimeloggerCore.Common.Utility.Enums;
 using LoginResponse = TimeloggerCore.Common.Models.LoginResponse;
 using TimeloggerCore.Services.IService;
-using TimeloggerCore.Core.ICommunication;
+using TimeloggerCore.Services.ICommunication;
 
 namespace TimeloggerCore.RestApi.Controllers
 {

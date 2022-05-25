@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using TimeloggerCore.Core.Authorization;
-using TimeloggerCore.Core.Communication;
 using TimeloggerCore.Data.Mapping;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -20,7 +19,7 @@ namespace TimeloggerCore.Core.DependencyResolutions
         public static void RegisterLifetime(IServiceCollection services)
         {
             // Todo: we have to change to Interfaces in some of following:
-            Communications.RegisterServices(services);
+            
             //var config = ModelMapper.Configure();
             //IMapper mapper = config.CreateMapper();
             //services.AddSingleton(mapper);
