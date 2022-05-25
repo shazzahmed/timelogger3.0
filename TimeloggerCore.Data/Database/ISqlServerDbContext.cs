@@ -14,9 +14,11 @@ namespace TimeloggerCore.Data.Database
     {
         DbSet<TEntity> Set<TEntity>() where TEntity : class;
 
-        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
-
+        int SaveChanges();
         int SaveChanges(CancellationToken cancellationToken = default(CancellationToken));
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
+        Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default(CancellationToken));
+
 
         EntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class;
 

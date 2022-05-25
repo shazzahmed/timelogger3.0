@@ -94,7 +94,22 @@ namespace TimeloggerCore.Data.Database
             OnBeforeSaving();
             return base.SaveChanges();
         }
+        public override int SaveChanges(bool acceptAllChangesOnSuccess)
+        {
+            OnBeforeSaving();
+            return base.SaveChanges();
+        }
+        public override int SaveChanges()
+        {
+            OnBeforeSaving();
+            return base.SaveChanges();
+        }
 
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            OnBeforeSaving();
+            return base.SaveChangesAsync(cancellationToken);
+        }
         public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default(CancellationToken))
         {
             OnBeforeSaving();
@@ -168,5 +183,7 @@ namespace TimeloggerCore.Data.Database
         public virtual DbSet<ProjectsInvitation> ProjectsInvitations { get; set; }
         public virtual DbSet<ClientWorker> ClientWorker { get; set; }
         public virtual DbSet<ProjectWorkers> ProjectWorkers { get; set; }
+        //private string GetCurrentUser() => $"{GetContextClaims(Roles1) ?? string.Empty} : {GetContextClaims(Roles1) ?? "<unknown>"}";
+        //private string GetContextClaims(string typeName) => httpContextAccessor?.HttpContext?.User?.Claims?.FirstOrDefault(c => c?.Type == typeName)?.Value;
     }
 }
