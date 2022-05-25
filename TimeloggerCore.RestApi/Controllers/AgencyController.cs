@@ -31,8 +31,16 @@ namespace TimeloggerCore.RestApi.Controllers
         [Produces("application/json", Type = typeof(BaseModel))]
         public async Task<IActionResult> GetAllAgency()
         {
-            var result = await _userService.GetAllAgency();
-            return new OkObjectResult(result);
+            try
+            {
+                var result = await _userService.GetAllAgency();
+                return new OkObjectResult(result);
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestObjectResult(BaseModel.Failed(message: "There was an error processing your request, please try again. " + ex.Message));
+                throw;
+            }
         }
 
 
@@ -44,8 +52,16 @@ namespace TimeloggerCore.RestApi.Controllers
         [Produces("application/json", Type = typeof(BaseModel))]
         public async Task<IActionResult> ManageInfo()
         {
-            var result = await _userService.GetAllAgency();
-            return new OkObjectResult(result);
+            try
+            {
+                var result = await _userService.GetAllAgency();
+                return new OkObjectResult(result);
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestObjectResult(BaseModel.Failed(message: "There was an error processing your request, please try again. " + ex.Message));
+                throw;
+            }
         }
     }
 }
