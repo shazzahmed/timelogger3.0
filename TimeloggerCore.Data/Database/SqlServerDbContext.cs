@@ -53,7 +53,9 @@ namespace TimeloggerCore.Data.Database
                     .HasForeignKey(ur => ur.UserId)
                     .IsRequired();
             });
-
+            builder.Entity<ClientAgency>()
+           .HasIndex(ps => new { ps.AgencyId, ps.ClientId })
+           .IsUnique();
             //builder.Entity<ApplicationUser>()
             //       .HasIndex(u => u.NicNumber)
             //       .IsUnique();
@@ -107,7 +109,7 @@ namespace TimeloggerCore.Data.Database
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            OnBeforeSaving();
+            //OnBeforeSaving();
             return base.SaveChangesAsync(cancellationToken);
         }
         public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default(CancellationToken))
