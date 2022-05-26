@@ -34,8 +34,8 @@ namespace TimeloggerCore.RestApi
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddServices(Configuration);
             services.Configure(Configuration, ApplicationType.CoreApi);
+            services.AddServices(Configuration);
 
             //Local dependencies
             services.AddScoped<CurrentUser>();

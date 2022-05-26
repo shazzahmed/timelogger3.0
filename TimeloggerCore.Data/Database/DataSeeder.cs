@@ -473,17 +473,17 @@ namespace TimeloggerCore.Data.Database
                         Subject = string.Empty,
                         MessageBody = "Todo"
                     },
-                    new NotificationTemplate()
-                    {
-                        Id = NotificationTemplates.ConfirmClientAgency,
-                        NotificationTypeId = NotificationTypes.Email,
-                        Description = "Email Invitiation from Client.",
-                        Subject = "Invitiation from Client #AgencyName",
-                        MessageBody = "Dear #Name </br></br>"
-                                        + "You are invited to join client #ClientName (#ClientEmail). "
-                                        + "Please click <a href=\"#Link\">here</a> to accept the invitation.<br/>."
-                                        + "<br /><br />Thanks"
-                    },
+                    //new NotificationTemplate()
+                    //{
+                    //    Id = NotificationTemplates.ConfirmClientAgency,
+                    //    NotificationTypeId = NotificationTypes.Email,
+                    //    Description = "Email Invitiation from Client.",
+                    //    Subject = "Invitiation from Client #AgencyName",
+                    //    MessageBody = "Dear #Name </br></br>"
+                    //                    + "You are invited to join client #ClientName (#ClientEmail). "
+                    //                    + "Please click <a href=\"#Link\">here</a> to accept the invitation.<br/>."
+                    //                    + "<br /><br />Thanks"
+                    //},
                 };
                 var newNotificationTemplates = notificationTemplates.Where(n => !context.NotificationTemplates.Select(nt => nt.Id).Contains(n.Id));
                 if (newNotificationTemplates.Any())
