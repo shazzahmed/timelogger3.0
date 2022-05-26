@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TimeloggerCore.Services.Services;
+using TimeloggerCore.Services.Communication;
 
 namespace TimeloggerCore.Services.ServicesDependencyResolutions
 {
@@ -15,6 +16,7 @@ namespace TimeloggerCore.Services.ServicesDependencyResolutions
     {
         public static void AddServices(this IServiceCollection services, IConfiguration configuration)
         {
+            Communications.RegisterServices(services);
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ICompanyService, CompanyService>();
             services.AddScoped<IAddressService, AddressService>();

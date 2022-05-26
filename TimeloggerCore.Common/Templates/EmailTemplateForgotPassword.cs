@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TimeloggerCore.Services.Templates
+namespace TimeloggerCore.Common.Templates
 {
     public static class EmailTemplateForgotPassword
     {

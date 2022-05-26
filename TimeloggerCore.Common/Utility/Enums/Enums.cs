@@ -215,7 +215,8 @@ namespace TimeloggerCore.Common.Utility
             EmailTwoFactorToken = 9,
             SmsTwoFactorToken = 10,
             EmailUserStatusChange = 11,
-            SmsUserStatusChange = 12
+            SmsUserStatusChange = 12,
+            ConfirmClientAgency = 13,
         }
 
         public enum Module

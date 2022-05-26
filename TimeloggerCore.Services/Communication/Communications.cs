@@ -1,4 +1,4 @@
-﻿using TimeloggerCore.Core.ICommunication;
+﻿using TimeloggerCore.Services.ICommunication;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using TimeloggerCore.Common.Options;
 
-namespace TimeloggerCore.Core.Communication
+namespace TimeloggerCore.Services.Communication
 {
     public static class Communications
     {

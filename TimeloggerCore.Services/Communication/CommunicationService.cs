@@ -1,11 +1,11 @@
-﻿using TimeloggerCore.Core.ICommunication;
+﻿using TimeloggerCore.Services.ICommunication;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TimeloggerCore.Core.Communication
+namespace TimeloggerCore.Services.Communication
 {
     public class CommunicationService : ICommunicationService
     {

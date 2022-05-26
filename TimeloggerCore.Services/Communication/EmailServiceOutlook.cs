@@ -1,11 +1,11 @@
-﻿using TimeloggerCore.Core.ICommunication;
+﻿using TimeloggerCore.Services.ICommunication;
 using Microsoft.Extensions.Options;
 using System;
 using System.Net.Mail;
 using System.Threading.Tasks;
 using TimeloggerCore.Common.Options;
 
-namespace TimeloggerCore.Core.Communication
+namespace TimeloggerCore.Services.Communication
 {
     public class EmailServiceOutlook : IEmailService
     {
