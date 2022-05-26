@@ -13,6 +13,7 @@ namespace TimeloggerCore.Common.Models
         [ForeignKey("Agency")]
         public string AgencyId { get; set; }
         public bool IsAgencyAccepted { get; set; }
+        public bool IsActive { get; set; }
         virtual public ApplicationUserModel Client { get; set; }
         public ApplicationUserModel Agency { get; set; }
     }

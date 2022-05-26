@@ -18,7 +18,16 @@ namespace TimeloggerCore.Data.Repository
 
         public async Task<int> SaveChangesAsync()
         {
-            return await _dbContext.SaveChangesAsync();
+            try
+            {
+                var result = await _dbContext.SaveChangesAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return 0;
+                throw;
+            }
         }
         private bool _disposed;
 

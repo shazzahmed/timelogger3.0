@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using TimeloggerCore.Core.Security;
-using TimeloggerCore.Core.Communication;
-using AutoMapper.Configuration;
 using static TimeloggerCore.Common.Utility.Enums;
 using Microsoft.AspNetCore.Mvc;
 using System;
