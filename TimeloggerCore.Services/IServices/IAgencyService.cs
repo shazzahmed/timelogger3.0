@@ -10,12 +10,11 @@ namespace TimeloggerCore.Services.IService
 {
     public interface IAgencyService : IBaseService<ClientAgencyModel, ClientAgency, int>
     {
-        Task<BaseModel> GetClientAgencies(string userId);
-        Task<BaseModel> GetAgencyClients(string userId);
-        Task<BaseModel> GetSingleClientAgencies(int Id);
-        Task<BaseModel> GetClientAgency(ClientAgencyModel clientAgencyModel);
-        Task<BaseModel> GetAgencyEmployee(string AgencyId);
-        Task<BaseModel> GetAllWorker();
-        Task<BaseModel> AddClientAgency(ClientAgencyModel clientAgencyModel);
+        Task<List<ClientAgency>> GetClientAgencies(string userId);
+        Task<List<ClientAgency>> GetAgencyClients(string userId);
+        Task<ClientAgency> GetSingleClientAgencies(int Id);
+        Task<ClientAgency> GetClientAgency(AgencyAlreadyExitModel agencyAlreadyExit);
+        Task<List<ApplicationUser>> GetAgencyEmployee(string AgencyId);
+        Task<List<ApplicationUser>> GetAllWorker();
     }
 }

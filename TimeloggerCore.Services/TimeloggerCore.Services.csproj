@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TimeloggerCore.Common\TimeloggerCore.Common.csproj" />
-    <ProjectReference Include="..\TimeloggerCore.Core\TimeloggerCore.Core.csproj" />
     <ProjectReference Include="..\TimeloggerCore.Data\TimeloggerCore.Data.csproj" />
   </ItemGroup>
 

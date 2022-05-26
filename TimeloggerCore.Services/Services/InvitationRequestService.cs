@@ -13,52 +13,42 @@ namespace TimeloggerCore.Services
     public class InvitationRequestService : BaseService<InvitationRequestModel, InvitationRequest, int>, IInvitationRequestService
     {
         private readonly IInvitationRequestRepository _invitationRequestRepository;
-        private readonly IAgencyService _agencyService;
 
-        public InvitationRequestService(
-            IMapper mapper, IInvitationRequestRepository invitationRequestRepository, IUnitOfWork unitOfWork, IAgencyService agencyService
-            ) : base(mapper, invitationRequestRepository, unitOfWork)
+        public InvitationRequestService(IMapper mapper, IInvitationRequestRepository invitationRequestRepository, IUnitOfWork unitOfWork) : base(mapper, invitationRequestRepository, unitOfWork)
         {
             _invitationRequestRepository = invitationRequestRepository;
-            _agencyService = agencyService;
         }
-        public Task<BaseModel> AddInvitation(InvitationRequestModel dd, string transactionCode)
+        public Task<bool> AddInvitation(InvitationRequest dd, string transactionCode)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<BaseModel> GetClientAgency(InvitationRequestModel invitationRequest)
+        public async Task<InvitationRequest> GetClientAgency(InvitationRequest invitationRequest)
         {
             var userFound = await _invitationRequestRepository.GetClientAgency(new AgencyAlreadyExitModel() { AgencyEmail = invitationRequest.ToUserId, UserId = invitationRequest.FromUserId });
-            return new BaseModel
-            {
-                Success = true,
-                Data = mapper.Map<InvitationRequest, InvitationRequestModel>(userFound)
-            };
+            return userFound;
         }
-        public async Task<BaseModel> GetClientAgencies(InvitationRequestModel invitationRequest)
+        public async Task<List<InvitationRequest>> GetClientAgencies(InvitationRequest invitationRequest)
         {
             var userFound = await _invitationRequestRepository.GetClientAgencies(new AgencyAlreadyExitModel() { AgencyEmail = invitationRequest.ToUserId, UserId = invitationRequest.FromUserId });
-            return new BaseModel
-            {
-                Success = true,
-                Data = mapper.Map<List<InvitationRequest>, List<InvitationRequestModel>>(userFound)
-            };
+            return userFound;
         }
-        public async Task<BaseModel> GetOnlyClientAgencies(string userId)
+        public async Task<List<InvitationRequest>> GetOnlyClientAgencies(string userId)
         {
-            var invitationRequest = await _invitationRequestRepository.GetOnlyClientAgencies(userId);
-            var ClientAgencies = await _agencyService.GetClientAgencies(userId);
-
-            return new BaseModel
+            try
             {
-                Success = true,
-                Data = new ClientAgenciesModel
-                {
-                    ClientAgencies = mapper.Map<List<ClientAgency>, List<ClientAgencyModel>>((List<ClientAgency>)ClientAgencies.Data),
-                    InvitationRequest = mapper.Map<List<InvitationRequest>, List<InvitationRequestModel>>(invitationRequest)
-                }
-            };
+                var userFound = await _invitationRequestRepository.GetOnlyClientAgencies(userId);
+                //userFound.ForEach(x =>
+                //{
+                //    x.Role = _userRepository.GetRolesForUserById(userId);
+                //}); 
+                return userFound;
+            }
+            catch (Exception ex)
+            {
+                return new List<InvitationRequest>();
+            }
+            //return new List<InvitationRequest>();
         }
     }
 }

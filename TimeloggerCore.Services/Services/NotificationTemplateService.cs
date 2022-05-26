@@ -24,7 +24,7 @@ namespace TimeloggerCore.Services
         public async Task<NotificationTemplateModel> GetNotificationTemplate(NotificationTemplates notificationTemplates, NotificationTypes notificationTypes)
         {
             var template = await _notificationTemplateRepository.FirstOrDefaultAsync(x => x.Id == notificationTemplates && x.NotificationTypeId == notificationTypes);
-            return mapper.Map<NotificationTemplate, NotificationTemplateModel>(template);
+            return mapper.Map<NotificationTemplate, NotificationTemplateModel>(template); ;
         }
     }
 }

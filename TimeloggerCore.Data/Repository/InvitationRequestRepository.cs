@@ -32,13 +32,13 @@ namespace TimeloggerCore.Data.Repository
         }
         public async Task<List<InvitationRequest>> GetOnlyClientAgencies(string userId)
         {
-            var clientAgency = await DbContext.InvitationRequest
-                .Where(x => (x.FromUserId == userId || x.ToUserId == userId) && (x.InvitationType == InvitationType.ClientToAgency || x.InvitationType == InvitationType.AgencyToClient))
-                .Include(x => x.InvitationSentFrom)
-                .Include(x => x.InvitationSentTo)
-                .Include(x => x.InvitationSentTo.UserRoles)
-                .Include(x => x.InvitationSentFrom.UserRoles)
-                .ToListAsync();
+            var clientAgency = await DbContext.InvitationRequest.Where(x => (x.FromUserId == userId || x.ToUserId == userId) && (x.InvitationType == InvitationType.ClientToAgency || x.InvitationType == InvitationType.AgencyToClient)).Include(x => x.InvitationSentFrom).Include(x => x.InvitationSentTo).ToListAsync();
+            //var config = new MapperConfiguration(cfg =>
+            //        cfg.CreateMap<InvitationRequest, InvitationRequestViewModel>()
+            //        .ReverseMap()
+            //    );
+            //var mapper = new Mapper(config);
+            //return mapper.Map<List<InvitationRequestViewModel>>(clientAgency);
             return clientAgency;
         }
     }
