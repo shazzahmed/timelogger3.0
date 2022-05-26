@@ -1115,6 +1115,7 @@ namespace TimeloggerCore.Core.Security
             List<Claim> claims = new List<Claim>();
             claims.AddRange(new List<Claim>
             {
+                new Claim(ClaimTypes.Name, user.Email),
                 new Claim(JwtClaimTypes.Id, user.Id),
                 new Claim(JwtClaimTypes.Name, user.UserName),
                 new Claim(JwtClaimTypes.Email, user.Email),

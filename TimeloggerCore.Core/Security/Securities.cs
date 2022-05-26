@@ -20,6 +20,7 @@ using System.Threading.Tasks;
 using TimeloggerCore.Common.Encryption;
 using TimeloggerCore.Common.Options;
 using static TimeloggerCore.Common.Utility.Enums;
+using TimeloggerCore.Common.Models;
 
 namespace TimeloggerCore.Core.Security
 {
@@ -88,25 +89,35 @@ namespace TimeloggerCore.Core.Security
                     {
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(key),
-                        //ValidateIssuer = false,
-                        //ValidateAudience = false,
-                        //ValidateIssuer = true,
-                        //ValidateAudience = true,
-                        //ValidateLifetime = true,
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ValidateLifetime = true,
                         ValidIssuer = TimeloggerCoreOptions.Value.ApiUrl,
                         ValidAudience = TimeloggerCoreOptions.Value.ApiUrl,
                     };
-                    //options.Events = new JwtBearerEvents()
-                    //{
-                    //    OnMessageReceived = context =>
-                    //    {
-                    //        if (context.Request.Query.ContainsKey("Bearer"))
-                    //        {
-                    //            context.Token = context.Request.Query["Bearer"];
-                    //        }
-                    //        return Task.CompletedTask;
-                    //    }
-                    //};
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnTokenValidated = async context =>
+                        {
+                            var userService = context.HttpContext.RequestServices.GetRequiredService<ISecurityService>();
+                            var email = context.Principal.Identity.Name;
+                            var user = (UserClaims)(await userService.GetUser(email)).Data;
+                            if (user == null)
+                            {
+                                // return unauthorized if user no longer exists
+                                context.Fail("Unauthorized");
+                            }
+                            await Task.CompletedTask;
+                        },
+                        OnMessageReceived = context =>
+                        {
+                            if (context.Request.Query.ContainsKey("Bearer"))
+                            {
+                                context.Token = context.Request.Query["Bearer"];
+                            }
+                            return Task.CompletedTask;
+                        }
+                    };
                 });
 
                 /// Todo:

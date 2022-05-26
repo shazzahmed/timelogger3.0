@@ -64,17 +64,17 @@ namespace TimeloggerCore.Common.Models
         [ForeignKey("TimeZoneId")]
         public virtual TimeZoneModel TimeZone { get; set; }
 
-        public ICollection<ApplicationUserRole> UserRoles { get; set; }
+        public ICollection<ApplicationUserRoleModel> UserRoles { get; set; }
     }
 
-    public class ApplicationUserRole
+    public class ApplicationUserRoleModel
     {
         public virtual ApplicationUserModel User { get; set; }
-        public virtual ApplicationRole Role { get; set; }
+        public virtual ApplicationRoleModel Role { get; set; }
     }
-    public class ApplicationRole
+    public class ApplicationRoleModel
     {
-        public ICollection<ApplicationUserRole> UserRoles { get; set; }
+        public ICollection<ApplicationUserRoleModel> UserRoles { get; set; }
     }
     public class TwoFactorType
     {
