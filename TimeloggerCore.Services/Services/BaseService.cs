@@ -33,7 +33,10 @@ namespace TimeloggerCore.Services
                 query = query.Where(where);
             return query.Any();
         }
-        public virtual async Task<TBusinessModel> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> where = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, params Expression<Func<TEntity, object>>[] includeProperties)
+        public virtual async Task<TBusinessModel> FirstOrDefaultAsync(
+            Expression<Func<TEntity, bool>> where = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            params Expression<Func<TEntity, object>>[] includeProperties)
         {
             var dataEntity = await repository.FirstOrDefaultAsync(where, orderBy, includeProperties);
             return mapper.Map<TEntity, TBusinessModel>(dataEntity);
@@ -49,18 +52,31 @@ namespace TimeloggerCore.Services
             var dataEntity = await repository.GetAsync(id);
             return mapper.Map<TEntity, TBusinessModel>(dataEntity);
         }
-        public async virtual Task<List<TBusinessModel>> Get(Expression<Func<TEntity, bool>> where = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, params Expression<Func<TEntity, object>>[] includeProperties)
+        public async virtual Task<List<TBusinessModel>> Get(
+            Expression<Func<TEntity, bool>> where = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            params Expression<Func<TEntity, object>>[] includeProperties)
         {
             var _entities = await repository.GetAsync(where, orderBy, includeProperties);
             return mapper.Map<List<TEntity>, List<TBusinessModel>>(_entities);
         }
-        public virtual List<TBusinessModel> Get(out int count, Expression<Func<TEntity, bool>> where = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, params Expression<Func<TEntity, object>>[] includeProperties)
+        public virtual List<TBusinessModel> Get(
+            out int count,
+            Expression<Func<TEntity, bool>> where = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            params Expression<Func<TEntity, object>>[] includeProperties)
         {
             var _entities = repository.GetAsync(where, orderBy, includeProperties).GetAwaiter().GetResult();
             count = _entities.Count();
             return mapper.Map<List<TEntity>, List<TBusinessModel>>(_entities);
         }
-        public virtual List<TBusinessModel> Get(out int count, int pageNumber = 1, int pageSize = 20, Expression<Func<TEntity, bool>> where = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, params Expression<Func<TEntity, object>>[] includeProperties)
+        public virtual List<TBusinessModel> Get(
+            out int count,
+            int pageNumber = 1,
+            int pageSize = 20,
+            Expression<Func<TEntity, bool>> where = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            params Expression<Func<TEntity, object>>[] includeProperties)
         {
             IQueryable<TEntity> query = repository.GetAsync(where, orderBy, includeProperties).GetAwaiter().GetResult().AsQueryable();
             count = query.Count();

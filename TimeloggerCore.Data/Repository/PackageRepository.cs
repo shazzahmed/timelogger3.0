@@ -15,14 +15,16 @@ namespace TimeloggerCore.Data.Repository
         public PackageRepository(ISqlServerDbContext context) : base(context)
         {
         }
-        public Task<Package> GetAllNonPackage(string userId)
+        public async Task<Package> GetAllNonPackage(string userId)
         {
             throw new NotImplementedException();
         }
 
         public async Task<Package> GetAllPackage(string userId)
         {
-            var package = await DbContext.Package.Where(x => !x.IsDeleted && x.UserId == userId && x.IsActive).FirstOrDefaultAsync();
+            var package = await FirstOrDefaultAsync(
+                 x =>
+                 !x.IsDeleted && x.UserId == userId && x.IsActive);
             return package;
         }
 

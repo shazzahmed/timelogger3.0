@@ -12,6 +12,8 @@ namespace TimeloggerCore.Common.Models
         public string LastName { get; set; }
         public int? CompanyId { get; set; }
         public int StatusId { get; set; }
+        public string WorkerId { get; set; }
+        public string AgencyId { get; set; }
 
 
         public virtual CompanyModel Company { get; set; }

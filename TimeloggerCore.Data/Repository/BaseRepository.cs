@@ -33,7 +33,8 @@ namespace TimeloggerCore.Data.Repository
             dbSet = dbContext.Set<TEntity>();
         }
 
-        public virtual async Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> where = null,
+        public virtual async Task<TEntity> FirstOrDefaultAsync(
+            Expression<Func<TEntity, bool>> where = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             params Expression<Func<TEntity, object>>[] includeProperties)
         {
@@ -65,7 +66,10 @@ namespace TimeloggerCore.Data.Repository
         }
 
 
-        public virtual async Task<List<TEntity>> GetAsync(Expression<Func<TEntity, bool>> where = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, params Expression<Func<TEntity, object>>[] includeProperties)
+        public virtual async Task<List<TEntity>> GetAsync(
+            Expression<Func<TEntity, bool>> where = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            params Expression<Func<TEntity, object>>[] includeProperties)
         {
             IQueryable<TEntity> query = dbSet;
 

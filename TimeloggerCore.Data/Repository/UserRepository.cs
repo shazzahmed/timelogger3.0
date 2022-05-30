@@ -1,5 +1,4 @@
 ﻿using TimeloggerCore.Data.Database;
-using TimeloggerCore.Core.Entities;
 using TimeloggerCore.Data.IRepository;
 using System;
 using System.Collections.Generic;
@@ -12,7 +11,7 @@ using System.Linq;
 
 namespace TimeloggerCore.Data.Repository
 {
-    public class UserRepository : BaseRepository<Entities.ApplicationUser, string>, IUserRepository
+    public class UserRepository : BaseRepository<ApplicationUser, string>, IUserRepository
     {
         public UserRepository(ISqlServerDbContext context) : base(context)
         {
@@ -79,6 +78,27 @@ namespace TimeloggerCore.Data.Repository
         public async Task<bool> IsPhoneAlreadyExists(string phone)
         {
             return await DbContext.User.AnyAsync(x => x.PhoneNumber.Equals(phone));
+        }
+        public async Task<List<ApplicationUser>> GetAgencyEmployee(string AgencyId)
+        {
+            var agencyWorker = await GetAsync(x => x.AgencyId == AgencyId && x.IsWorkerHasAgency && x.IsAgencyApproved);
+            //&& x.IsWorkerHasAgency&&x.IsAgencyApproved
+            return agencyWorker;
+
+        }
+        public async Task<List<ApplicationUser>> GetAllWorker()
+        {
+            var worker = await GetAsync(x => !x.IsWorkerHasAgency);
+            return worker;
+        }
+        public async Task<bool> AgencyApproved(string workerId, string agencyId)
+        {
+            var user = await FirstOrDefaultAsync(
+                x => 
+                x.Id == workerId && x.AgencyId == agencyId);
+            user.IsAgencyApproved = true;
+            await UpdateAsync(user);
+            return true;
         }
     }
 }

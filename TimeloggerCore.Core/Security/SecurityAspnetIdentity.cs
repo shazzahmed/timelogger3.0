@@ -1,5 +1,4 @@
-﻿using TimeloggerCore.Core.Entities;
-using TimeloggerCore.Core.ISecurity;
+﻿using TimeloggerCore.Core.ISecurity;
 using TimeloggerCore.Data.Database;
 using TimeloggerCore.Data.Entities;
 using IdentityModel;

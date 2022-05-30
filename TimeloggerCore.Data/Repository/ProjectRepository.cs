@@ -16,57 +16,65 @@ namespace TimeloggerCore.Data.Repository
         public ProjectRepository(ISqlServerDbContext context) : base(context)
         {
         }
+        public async Task<Project> GetProject(int projectId)
+        {
+            var project = await FirstOrDefaultAsync(x => x.Id == projectId);
+            return project;
+        }
         public async Task<List<Project>> FreelancerProjects(string userId)
         {
-            var projects = await DbContext.Project.Where(p => p.UserId == userId).ToListAsync();
+            var projects = await GetAsync(p => p.UserId == userId);
             return projects;
         }
 
         public async Task<List<Project>> AllProjects(string userRole)
         {
-            var projects = DbContext.Project.Include(x => x.Invitations);
+            var projects = Get().Include(x => x.Invitations);
             if (userRole.Equals("Client"))
-                //projects = projects.Include(p => p.Invitations.Select(i => i.User));
-                projects = (Microsoft.EntityFrameworkCore.Query.IIncludableQueryable<Project, List<Invitation>>)projects.Include(p => p.Invitations.Select(i => i.User));
-            else if (userRole.Equals("Freelancer"))
-                //projects = projects.Include(p => p.Invitations.Select(i => i.Client));
-                projects = (Microsoft.EntityFrameworkCore.Query.IIncludableQueryable<Project, List<Invitation>>)projects.Include(p => p.Invitations.Select(i => i.Client));
+                projects.Include(p => p.Invitations.Select(i => i.User));
+            if (userRole.Equals("Freelancer"))
+                projects.Include(p => p.Invitations.Select(i => i.Client));
+
+            //var projects = DbContext.Project.Include(x => x.Invitations);
+            //if (userRole.Equals("Client"))
+            //    //projects = projects.Include(p => p.Invitations.Select(i => i.User));
+            //    projects = (Microsoft.EntityFrameworkCore.Query.IIncludableQueryable<Project, List<Invitation>>)projects.Include(p => p.Invitations.Select(i => i.User));
+            //else if (userRole.Equals("Freelancer"))
+            //    //projects = projects.Include(p => p.Invitations.Select(i => i.Client));
+            //    projects = (Microsoft.EntityFrameworkCore.Query.IIncludableQueryable<Project, List<Invitation>>)projects.Include(p => p.Invitations.Select(i => i.Client));
             return await projects.ToListAsync();
         }
 
 
         public async Task<List<Project>> ProjectsWithCompanies()
         {
-            List<Project> project = new List<Project>();
-            try
-            {
-                //project= await context.Project.Include(p => p.Invitations).Include(x => x.ApplicationUser).ToListAsync();
-                project = await DbContext.Project.Include(p => p.Invitations).Include(x => x.ApplicationUser).ToListAsync();
-
-            }
-            catch (Exception ex)
-            {
-
-            }
+            var project = await GetAsync(null,null,i => i.Invitations,i => i.ApplicationUser);
             return project;
         }
         public async Task<Project> GetUserProjects(string Id)
         {
             int projectId = Convert.ToInt32(Id);
-            return await DbContext.Project.Where(x => x.Id == projectId).Include(x => x.ApplicationUser).FirstOrDefaultAsync();
+            return await FirstOrDefaultAsync(x => x.Id == projectId,
+                null,
+                i => i.ApplicationUser);
         }
         public async Task<Project> GetUserProjectList(string userId)
         {
-            var project = await DbContext.Project.Where(x => x.UserId == userId && !x.IsDeleted).Include(x => x.ApplicationUser).FirstOrDefaultAsync();
+            var project = await FirstOrDefaultAsync(x => x.UserId == userId && !x.IsDeleted, 
+                null, 
+                i => i.ApplicationUser);
             return project;
         }
 
         public async Task<List<Project>> GetUserProjecList(string userId)
         {
-            var project = await DbContext.Project.Where(x =>
+            var project = await GetAsync(
+            x =>
             x.UserId == userId
             || x.UserId == null
-            && !x.IsDeleted).Include(x => x.ApplicationUser).ToListAsync();
+            && !x.IsDeleted,
+            null,
+            x => x.ApplicationUser);
             return project;
         }
 
@@ -104,35 +112,6 @@ namespace TimeloggerCore.Data.Repository
                 return null;
 
             }
-        }
-        public async Task<List<ClientWorker>> GetProjectInvitation(string workerId, WorkerType workerType)
-        {
-            List<ClientWorker> projectInvitation = new List<ClientWorker>();
-            projectInvitation = await DbContext.ClientWorker.Where(x => x.WorkerId == workerId && x.WorkerType == workerType && x.IsAccepted)
-                                      .Include(x => x.Project).Include(x => x.Project.ApplicationUser).Include(x => x.Worker).Include(x => x.ProjectsInvitation).ToListAsync();
-            return projectInvitation;
-        }
-
-        public async Task<List<ClientWorker>> GetUserProjecInviationtList(string Id, WorkerType invitationType)
-        {
-            List<ClientWorker> projectInvitation = new List<ClientWorker>();
-            projectInvitation = await DbContext.ClientWorker.Where(x => x.ProjectsInvitation.AgencyId == Id && (x.WorkerType == invitationType
-            || x.WorkerType == WorkerType.AgencyWorker)
-            && x.IsAccepted).Include(x => x.ProjectsInvitation).Include(x => x.Worker).ToListAsync();
-            return projectInvitation;
-        }
-
-        public Task<int> PostProject(Project project)
-        {
-            //var config = new MapperConfiguration(cfg =>
-            //        cfg.CreateMap<Project, ProjectViewModel>()
-            //        .ReverseMap()
-            //    );
-            //var mapper = new Mapper(config);
-            //Insert(mapper.Map<Project>(project));
-            AddAsync(project);
-            return DbContext.SaveChangesAsync();
-            //return SaveChangesAsync();
         }
 
         //Task<List<Project>> IProjectRepository.GetAgencyProjecList(string userId)

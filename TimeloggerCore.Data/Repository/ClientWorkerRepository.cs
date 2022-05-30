@@ -19,205 +19,263 @@ namespace TimeloggerCore.Data.Repository
         public ClientWorkerRepository(ISqlServerDbContext context) : base(context)
         {
         }
-        public async Task<ProjectsInvitation> ProjectAssign(string ProjectId, string AgencyId, InvitationType invitationType)
-        {
-            int projectId = Convert.ToUInt16(ProjectId);
-            var projectInvitation = await DbContext.ProjectsInvitations.Where(x => x.AgencyId == AgencyId
-            && x.ProjectId == projectId
-            && x.InvitationType == invitationType
-            && !x.IsDeleted
-            ).Include(x => x.Agency).FirstOrDefaultAsync();
-            return projectInvitation;
-        }
-
         public async Task<ClientWorker> AlreadyInvitationExit(int ProjectId, int ProjectInvitationId, string userId, WorkerType workerType)
         {
-            var projectInvitation = await DbContext.ClientWorker.Where(x =>
-            x.ProjectId == ProjectId
-            && x.ProjectsInvitationId == ProjectInvitationId
-            && x.WorkerId == userId
-            && !x.IsDeleted
-          //  && x.WorkerType == WorkerType.WorkerClient
-          && x.WorkerType == workerType
-            ).FirstOrDefaultAsync();
+            var projectInvitation = await FirstOrDefaultAsync(
+                 x => 
+                 x.ProjectId == ProjectId
+                 && x.ProjectsInvitationId == ProjectInvitationId
+                 && x.WorkerId == userId
+                 && !x.IsDeleted
+                 && x.WorkerType == workerType
+                 );
             return projectInvitation;
         }
         public async Task<List<ClientWorker>> GetAllProjectWorker(string ProjectId, string clientId)
         {
             int projectId = Convert.ToInt32(ProjectId);
-            var clientWorker = await DbContext.ClientWorker.Where(x => x.ProjectId == projectId
-            && !x.IsDeleted
-            && x.ProjectsInvitation.AgencyId == clientId
-            && x.Worker.IsWorkerHasAgency
-            && x.WorkerType == WorkerType.AgencyWorker
-            ).Include(x => x.Worker).Include(x => x.Project).Include(x => x.ProjectsInvitation).Include(x => x.ProjectsInvitation.Agency).ToListAsync();
+            var clientWorker = await GetAsync(
+                 x => x.ProjectId == projectId
+                 && !x.IsDeleted
+                 && x.ProjectsInvitation.AgencyId == clientId
+                 && x.Worker.IsWorkerHasAgency
+                 && x.WorkerType == WorkerType.AgencyWorker,
+                 o => o.OrderBy(x=> x.Id),
+                 i => i.Worker, i => i.Project, i => i.ProjectsInvitation, i => i.ProjectsInvitation.Agency);
             return clientWorker;
         }
         public async Task<List<ClientWorker>> GetAllAgencyProjectWorker(ClientInviteModel clientInviteViewModel)
         {
             int projectId = Convert.ToInt32(clientInviteViewModel.ProjectId);
-            var agencyWorker = await DbContext.ClientWorker.Where(x =>
-            !x.IsDeleted
-            && x.ProjectId == projectId
-            && x.WorkerType == WorkerType.IndividualWorker
-            && x.ProjectsInvitation.AgencyId == clientInviteViewModel.UserId
-
-            // && ((!clientInviteViewModel.IsAgencyWorker) || x.ProjectsInvitation.AgencyId == clientInviteViewModel.UserId)
-            ).Include(x => x.Worker).Include(x => x.ProjectsInvitation).ToListAsync();
+            var agencyWorker = await GetAsync(
+                 x => !x.IsDeleted
+                 && x.ProjectId == projectId
+                 && x.WorkerType == WorkerType.IndividualWorker
+                 && x.ProjectsInvitation.AgencyId == clientInviteViewModel.UserId,
+                 null,
+                 i=>i.Worker, i=>i.ProjectsInvitation);
             return agencyWorker;
         }
         public async Task<ClientWorker> DeleteAgencyProjectWorker(DeleteClientWorker deleteClientWorker)
         {
             int projectId = Convert.ToInt32(deleteClientWorker.ProjectId);
-            var clientWorker = await DbContext.ClientWorker.Where(x => x.Id == deleteClientWorker.Id).FirstOrDefaultAsync();
+            var clientWorker = await FirstOrDefaultAsync(
+                 x =>
+                 x.Id == deleteClientWorker.Id
+                 );
             return clientWorker;
         }
-        public Task<List<ClientWorker>> GetProjectInvitation(string userId)
+        public async Task<List<ClientWorker>> GetProjectInvitation(string userId)
         {
-            var workerInvitation = DbContext.ClientWorker.Where(x => x.WorkerId == userId && x.WorkerType == WorkerType.ClientWorker).Include(x => x.ProjectsInvitation.Project).ToListAsync();
+            var workerInvitation = await GetAsync(
+                 x =>
+                 x.WorkerId == userId 
+                 && x.WorkerType == WorkerType.ClientWorker,
+                 null,
+                 i => i.ProjectsInvitation.Project);
             return workerInvitation;
-        }
-
-        public Task<Entities.ApplicationUser> GetCurrentUser(string userId)
-        {
-            var user = DbContext.User.Where(x => x.Id == userId).FirstOrDefaultAsync();
-            return user;
         }
         public async Task<List<ClientWorker>> GetClientInvitation(string userId, WorkerType workerType)
         {
-            var workerInvitation = await DbContext.ClientWorker.Where(x => !x.IsDeleted && x.WorkerId == userId && x.WorkerType == workerType).Include(x => x.Project.ApplicationUser).ToListAsync();
+            var workerInvitation = await GetAsync(
+                 x =>
+                 !x.IsDeleted && x.WorkerId == userId && x.WorkerType == workerType,
+                 null,
+                 i => i.Project.ApplicationUser);
             return workerInvitation;
         }
         public async Task<List<ClientWorker>> GetAgencyInvitation(string AgencyId, WorkerType workerType)
         {
-            var workerInvitation = await DbContext.ClientWorker.Where(x => x.WorkerId == AgencyId && !x.IsDeleted && x.WorkerType == workerType).Include(x => x.Project.ApplicationUser).ToListAsync();
+            var workerInvitation = await GetAsync(
+                 x =>
+                 x.WorkerId == AgencyId && !x.IsDeleted && x.WorkerType == workerType,
+                 null,
+                 i => i.Project.ApplicationUser);
             return workerInvitation;
         }
         public async Task<List<ClientWorker>> GetWorkerInvitation(string AgencyId, int ProjectId, InvitationType invitationType)
         {
-            var workerInvitation = await DbContext.ClientWorker.Where(x =>
-             x.ProjectsInvitation.AgencyId == AgencyId
-             && x.ProjectsInvitation.InvitationType == invitationType
-             && x.ProjectId == ProjectId
-             && !x.IsDeleted
-            ).Include(x => x.Project).Include(x => x.Worker).Include(x => x.ProjectsInvitation.Agency).ToListAsync();
+            var workerInvitation = await GetAsync(
+                 x =>
+                 x.ProjectsInvitation.AgencyId == AgencyId
+                 && x.ProjectsInvitation.InvitationType == invitationType
+                 && x.ProjectId == ProjectId
+                 && !x.IsDeleted,
+                 o => o.OrderBy(x => x.Id),
+                 i => i.Project, i => i.Worker, i => i.ProjectsInvitation.Agency);
             return workerInvitation;
-        }
-        public async Task<Entities.ApplicationUser> SearchUserByEmail(string email)
-        {
-            Entities.ApplicationUser userExit = await DbContext.User.Where(x => x.Email == email).FirstOrDefaultAsync();
-            return userExit;
-
-        }
-        public async Task<Project> GetProject(int projectId)
-        {
-            var project = await DbContext.Project.Where(x => x.Id == projectId).FirstOrDefaultAsync();
-            return project;
         }
         public async Task<ClientWorker> GetWorkerClientById(int Id)
         {
-            var clientWorker = await DbContext.ClientWorker.Where(x => x.Id == Id)
-                .Include(x => x.Project)
-                .Include(x => x.Worker)
-                .Include(x => x.ProjectsInvitation.Agency)
-                .FirstOrDefaultAsync();
+            var clientWorker = await FirstOrDefaultAsync(
+                 x =>
+                 x.Id == Id,
+                 null,
+                 i => i.Project, i => i.Worker, i => i.ProjectsInvitation.Agency);
             return clientWorker;
         }
-        public async Task<List<ApplicationUser>> GetClientAgencyWorker(ClientAgencyWorkerModel clientAgencyWorkerViewModel)
+        public async Task<List<ClientWorker>> GetClientAgencyWorker(ClientAgencyWorkerModel clientAgencyWorkerViewModel)
         {
-            var clientAgencyWorker = await DbContext.ClientWorker.Where(x => !x.IsDeleted && x.IsAccepted && x.ProjectsInvitation.AgencyId == clientAgencyWorkerViewModel.ClientId && x.Worker.AgencyId == clientAgencyWorkerViewModel.AgencyId).Select(x => x.Worker).ToListAsync();
+            var clientAgencyWorker = await GetAsync(
+                 x =>
+                 !x.IsDeleted 
+                 && x.IsAccepted 
+                 && x.ProjectsInvitation.AgencyId == clientAgencyWorkerViewModel.ClientId 
+                 && x.Worker.AgencyId == clientAgencyWorkerViewModel.AgencyId,
+                 o => o.OrderBy(x => x.Id),
+                 i => i.Project, i => i.Worker, i => i.ProjectsInvitation.Agency);
             return clientAgencyWorker;
         }
         public async Task<List<ClientWorker>> GetClientAgencyWorkerInvitation(ClientAgencyWorkerModel clientAgencyWorkerViewModel)
         {
-            var clientAgencyWorker = await DbContext.ClientWorker.Where(x => !x.IsDeleted && x.IsAccepted && x.ProjectsInvitation.AgencyId == clientAgencyWorkerViewModel.ClientId && x.Worker.AgencyId == clientAgencyWorkerViewModel.AgencyId).Include(x => x.Worker).Include(x => x.ProjectsInvitation).ToListAsync();
+            var clientAgencyWorker = await GetAsync(
+                 x =>
+                 !x.IsDeleted 
+                 && x.IsAccepted 
+                 && x.ProjectsInvitation.AgencyId == clientAgencyWorkerViewModel.ClientId 
+                 && x.Worker.AgencyId == clientAgencyWorkerViewModel.AgencyId,
+                 o => o.OrderBy(x => x.Id),
+                 i => i.Worker, i => i.ProjectsInvitation);
             return clientAgencyWorker;
         }
-        public async Task<List<Project>> GetClientProjects(ClientAgencyWorkerModel clientAgencyWorkerViewModel)
+        public async Task<List<ClientWorker>> GetClientProjects(ClientAgencyWorkerModel clientAgencyWorkerViewModel)
         {
-            var clientWorkerProject = await DbContext.ClientWorker.Where(x =>
-            x.ProjectsInvitationId == x.ProjectsInvitation.Id
-            && ((
-                 x.ProjectsInvitation.AgencyId == clientAgencyWorkerViewModel.ClientId
-                ) ||
-                (
-                x.WorkerId == clientAgencyWorkerViewModel.ClientId
-                )
-                )
-            && !x.IsDeleted
-            && x.IsAccepted
-            ).Select(x => x.Project).ToListAsync();
+            var clientWorkerProject = await GetAsync(
+                 x =>
+                 x.ProjectsInvitationId == x.ProjectsInvitation.Id
+                 && 
+                 ((x.ProjectsInvitation.AgencyId == clientAgencyWorkerViewModel.ClientId)
+                    || (x.WorkerId == clientAgencyWorkerViewModel.ClientId))
+                 && !x.IsDeleted
+                 && x.IsAccepted,
+                 o => o.OrderBy(x => x.Id)
+                 );
             return clientWorkerProject;
         }
-        public async Task<List<Project>> GetClientAgencyWorkerProject(ClientAgencyWorkerModel clientAgencyWorkerViewModel)
+        public async Task<List<ClientWorker>> GetClientAgencyWorkerProject(ClientAgencyWorkerModel clientAgencyWorkerViewModel)
         {
-            var clientWorkerProject = await DbContext.ClientWorker.Where(x =>
-            x.ProjectsInvitationId == x.ProjectsInvitation.Id
-            && ((x.WorkerId == clientAgencyWorkerViewModel.MemberId &&
-                 x.ProjectsInvitation.AgencyId == clientAgencyWorkerViewModel.ClientId
-                ) ||
-                (
-                x.WorkerId == clientAgencyWorkerViewModel.ClientId
-                && x.ProjectsInvitation.AgencyId == clientAgencyWorkerViewModel.MemberId)
-                )
-            && !x.IsDeleted
-            && x.IsAccepted
-            ).Select(x => x.Project).ToListAsync();
+            var clientWorkerProject = await GetAsync(
+                 x =>
+                 x.ProjectsInvitationId == x.ProjectsInvitation.Id
+                 && ((
+                    x.WorkerId == clientAgencyWorkerViewModel.MemberId 
+                    && x.ProjectsInvitation.AgencyId == clientAgencyWorkerViewModel.ClientId) 
+                    || (x.WorkerId == clientAgencyWorkerViewModel.ClientId && x.ProjectsInvitation.AgencyId == clientAgencyWorkerViewModel.MemberId))
+                 && !x.IsDeleted
+                 && x.IsAccepted,
+                 o => o.OrderBy(x => x.Id)
+                 );
             return clientWorkerProject;
         }
-        public async Task<List<ApplicationUser>> GetClientIndividualWorker(ClientAgencyWorkerModel clientAgencyWorkerViewModel)
+        public async Task<List<ClientWorker>> GetClientIndividualWorker(ClientAgencyWorkerModel clientAgencyWorkerViewModel)
         {
-            var clientIndividualWorker = await DbContext.ClientWorker.Where(x => x.ProjectsInvitation.AgencyId == clientAgencyWorkerViewModel.ClientId
-            && !x.Worker.IsWorkerHasAgency
-            && !x.IsDeleted
-            && x.WorkerType == WorkerType.IndividualWorker
-            ).Select(x => x.Worker).ToListAsync();
-
+            var clientIndividualWorker = await GetAsync(
+                 x =>
+                 x.ProjectsInvitation.AgencyId == clientAgencyWorkerViewModel.ClientId
+                 && !x.Worker.IsWorkerHasAgency
+                 && !x.IsDeleted
+                 && x.WorkerType == WorkerType.IndividualWorker,
+                 o => o.OrderBy(x => x.Id)
+                 );
             return clientIndividualWorker;
         }
         public async Task<List<ClientWorker>> GetClientWorkerInvitation(ClientAgencyWorkerModel clientAgencyWorkerViewModel)
         {
-            var clientIndividualWorker = await DbContext.ClientWorker.Where(x =>
-            x.ProjectsInvitation.AgencyId == clientAgencyWorkerViewModel.ClientId
-            && !x.Worker.IsWorkerHasAgency
-            && !x.IsDeleted
-            && x.WorkerType == WorkerType.IndividualWorker
-            ).Include(x => x.Worker).Include(x => x.ProjectsInvitation).ToListAsync();
-
+            var clientIndividualWorker = await GetAsync(
+                 x =>
+                 x.ProjectsInvitation.AgencyId == clientAgencyWorkerViewModel.ClientId
+                && !x.Worker.IsWorkerHasAgency
+                && !x.IsDeleted
+                && x.WorkerType == WorkerType.IndividualWorker,
+                 o => o.OrderBy(x => x.Id),
+                 i => i.Worker, i => i.ProjectsInvitation);
             return clientIndividualWorker;
         }
         public async Task<List<ClientWorker>> GetAllIndividualWorker(string ProjectId, string clientId)
         {
             int projectId = Convert.ToInt32(ProjectId);
-            var clientWorker = await DbContext.ClientWorker.Where(x => x.ProjectId == projectId
-            && !x.IsDeleted
-            && x.ProjectsInvitation.AgencyId == clientId
-            && !x.Worker.IsWorkerHasAgency
-            && x.WorkerType == WorkerType.IndividualWorker
-            ).Include(x => x.Worker).Include(x => x.Project).Include(x => x.ProjectsInvitation).Include(x => x.ProjectsInvitation.Agency).ToListAsync();
+            var clientWorker = await GetAsync(
+                 x =>
+                 x.ProjectId == projectId
+                 && !x.IsDeleted
+                 && x.ProjectsInvitation.AgencyId == clientId
+                 && !x.Worker.IsWorkerHasAgency
+                 && x.WorkerType == WorkerType.IndividualWorker,
+                 o => o.OrderBy(x => x.Id),
+                 i => i.Worker, i => i.Project, i => i.ProjectsInvitation, i => i.ProjectsInvitation.Agency);
             return clientWorker;
         }
         public async Task<ClientWorker> AlreadySendInvitation(string userId, int invationId, int projectId, string AgencyId)
         {
-            var clientWorker = await DbContext.ClientWorker.Where(x => x.WorkerId == userId && x.ProjectsInvitationId == invationId && x.ProjectId == projectId && !x.IsDeleted && x.ProjectsInvitation.AgencyId == AgencyId).Include(x => x.Worker).Include(x => x.ProjectsInvitation.Agency).FirstOrDefaultAsync();
+            var clientWorker = await FirstOrDefaultAsync(
+                 x =>
+                 x.WorkerId == userId 
+                 && x.ProjectsInvitationId == invationId 
+                 && x.ProjectId == projectId 
+                 && !x.IsDeleted 
+                 && x.ProjectsInvitation.AgencyId == AgencyId,
+                 null,
+                 i => i.Project, i => i.Worker, i => i.ProjectsInvitation.Agency);
             return clientWorker;
         }
         public async Task<ClientWorker> GetClientWorker(int Id)
         {
-            var clientWorker = await DbContext.ClientWorker.Where(x => x.Id == Id).Include(x => x.Worker).Include(x => x.ProjectsInvitation.Agency).FirstOrDefaultAsync();
+            var clientWorker = await FirstOrDefaultAsync(
+                 x =>
+                 x.Id == Id,
+                 null,
+                 i => i.Project, i => i.Worker, i => i.ProjectsInvitation.Agency);
             return clientWorker;
         }
         public async Task<List<ClientWorker>> GetAllInvitation(string SenderId)
         {
-            var clientWorker = await DbContext.ClientWorker.Where(x => x.ProjectsInvitation.AgencyId == SenderId && !x.IsDeleted && x.IsAccepted).Include(x => x.Worker).ToListAsync();
+            var clientWorker = await GetAsync(
+                 x =>
+                 x.ProjectsInvitation.AgencyId == SenderId 
+                 && !x.IsDeleted && x.IsAccepted,
+                 o => o.OrderBy(x => x.Id),
+                 i => i.Worker);
             return clientWorker;
         }
         public async Task<List<ClientWorker>> GetAllClientWorker(string ClientId)
         {
-            var clientWorker = await DbContext.ClientWorker.Where(x => x.ProjectsInvitation.AgencyId == ClientId
-            && !x.IsDeleted).ToListAsync();
+            var clientWorker = await GetAsync(
+                 x =>
+                 x.ProjectsInvitation.AgencyId == ClientId
+                 && !x.IsDeleted);
             return clientWorker;
 
+        }
+        public async Task<List<ClientWorker>> GetClientActiveProjects(string userId)
+        {
+            var invitations = await GetAsync(
+                 x =>
+                 x.ProjectsInvitation.AgencyId == userId && x.Status == MemberStatus.Active,
+                 null,
+                 i => i.Project, i => i.Worker, i => i.ProjectsInvitation);
+            //var invitations = context.Invitations.Include(x=>x.Project).Include(x => x.User).Where(i => i.ClientID == userId && i.Status == MemberStatus.Active).ToList();
+            return invitations;
+        }
+        public async Task<List<ClientWorker>> GetProjectInvitation(string workerId, WorkerType workerType)
+        {
+            var projectInvitation = await GetAsync(
+                x => x.WorkerId == workerId && x.WorkerType == workerType && x.IsAccepted,
+                null,
+                i => i.Project, i => i.Project.ApplicationUser, i => i.Worker, i => i.ProjectsInvitation);
+            return projectInvitation;
+        }
+
+        public async Task<List<ClientWorker>> GetUserProjecInviationtList(string Id, WorkerType invitationType)
+        {
+            //List<ClientWorker> projectInvitation = new List<ClientWorker>();
+            var projectInvitation = await GetAsync(
+                x => 
+                x.ProjectsInvitation.AgencyId == Id 
+                && (x.WorkerType == invitationType || x.WorkerType == WorkerType.AgencyWorker)
+                && x.IsAccepted,
+                null,
+                i => i.ProjectsInvitation, i => i.Worker);
+            return projectInvitation;
         }
     }
 }

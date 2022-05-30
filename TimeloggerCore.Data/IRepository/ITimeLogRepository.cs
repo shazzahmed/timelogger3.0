@@ -25,6 +25,5 @@ namespace TimeloggerCore.Data.IRepository
         Task<List<TimeLog>> GetTimelogReport(Expression<Func<TimeLog, bool>> dateSelect, Expression<Func<TimeLog, bool>> userSelect, Expression<Func<TimeLog, bool>> projectSelect);
         Task<List<TimeLog>> GetWorkSession(Expression<Func<TimeLog, bool>> workSession);
         Task<List<TimeLog>> GetTeamWorkerTime(string teamleadId);
-        Task<TimeLog> AddTimelog(TimeLog timeLog);
     }
 }

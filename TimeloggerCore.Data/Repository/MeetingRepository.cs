@@ -17,8 +17,12 @@ namespace TimeloggerCore.Data.Repository
         }
         public async Task<List<Meeting>> GetAllMeeting(string userId)
         {
-            var meeting = DbContext.Meetings.Where(x => !x.IsDeleted && x.UserId == userId).Include(x => x.User);
-            return await meeting.ToListAsync();
+            var meeting = await GetAsync(
+                 x =>
+                 !x.IsDeleted && x.UserId == userId,
+                 o => o.OrderBy(x => x.Id),
+                 i => i.User);
+            return meeting;
         }
     }
 }

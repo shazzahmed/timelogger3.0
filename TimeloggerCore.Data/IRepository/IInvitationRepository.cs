@@ -8,8 +8,7 @@ namespace TimeloggerCore.Data.IRepository
 {
     public interface IInvitationRepository : IBaseRepository<Invitation, int>
     {
-        List<Invitation> GetActiveProjects(string userId);
+        Task<List<Invitation>> GetActiveProjects(string userId);
         Task<List<Invitation>> GetInvitationsList(string userId);
-        List<ClientWorker> GetClientActiveProjects(string userId);
     }
 }

@@ -19,9 +19,9 @@ namespace TimeloggerCore.Services
         {
             _timeLogRepository = timeLogRepository;
         }
-        public Task<TimeLog> AddTimelog(TimeLog timeLog)
+        public Task<TimeLogModel> AddTimelog(TimeLogModel timeLogModel)
         {
-            return _timeLogRepository.AddTimelog(timeLog);
+            return Add(timeLogModel);
         }
 
         public Task<TimeLog> GetActiveProject(string userId)

@@ -9,14 +9,12 @@ namespace TimeloggerCore.Data.IRepository
 {
     public interface IProjectRepository : IBaseRepository<Project, int>
     {
+        Task<Project> GetProject(int projectId);
         Task<List<Project>> FreelancerProjects(string userId);
         Task<List<Project>> ProjectsWithCompanies();
         Task<List<Project>> AllProjects(string userRole);
         Task<Project> GetUserProjects(string Id);
         Task<List<Project>> GetAgencyProjecList(string userId);
         Task<List<Project>> GetUserProjecList(string userId);
-        Task<List<ClientWorker>> GetProjectInvitation(string workerId, WorkerType workerType);
-        Task<List<ClientWorker>> GetUserProjecInviationtList(string Id, WorkerType invitationType);
-        Task<int> PostProject(Project project);
     }
 }

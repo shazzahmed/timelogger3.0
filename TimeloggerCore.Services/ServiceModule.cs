@@ -42,6 +42,9 @@ namespace TimeloggerCore.Services.ServicesDependencyResolutions
             services.AddScoped<IWorkerService, WorkerService>();
             services.AddScoped<IWorkSessionService, WorkSessionService>();
             services.AddScoped<IPreviousPasswordService, PreviousPasswordService>();
+            services.AddScoped<IClientWorkerService, ClientWorkerService>();
+            services.AddScoped<IFeedbackService, FeedbackService>();
+            services.AddScoped<IInvitationService, InvitationService>();
         }
     }
 }

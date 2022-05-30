@@ -16,24 +16,23 @@ namespace TimeloggerCore.Data.Repository
         public InvitationRepository(ISqlServerDbContext context) : base(context)
         {
         }
-        public List<Invitation> GetActiveProjects(string userId)
+        public async Task<List<Invitation>> GetActiveProjects(string userId)
         {
             var test = DbContext.Invitations.ToList();
-            var invitations = DbContext.Invitations.Include(x => x.Project).Include(x => x.User).Where(i => i.ClientID == userId && i.Status == MemberStatus.Active).ToList();
+            var invitations = await GetAsync(
+                 x =>
+                 x.ClientID == userId && x.Status == MemberStatus.Active,
+                 null,
+                 i => i.Project, i => i.User);
             return invitations;
         }
-        public List<ClientWorker> GetClientActiveProjects(string userId)
-        {
-            var invitations = DbContext.ClientWorker.Include(x => x.Project).Include(x => x.Worker).Where(i => i.ProjectsInvitation.AgencyId == userId && i.Status == MemberStatus.Active).Include(x => x.ProjectsInvitation)
-                .Include(x => x.Worker).ToList();
-
-            //var invitations = context.Invitations.Include(x=>x.Project).Include(x => x.User).Where(i => i.ClientID == userId && i.Status == MemberStatus.Active).ToList();
-            return invitations;
-        }
-
         public async Task<List<Invitation>> GetInvitationsList(string userId)
         {
-            var invitationList = await DbContext.Invitations.Where(x => x.ClientID == userId).Include(x => x.User).Include(x => x.Project).ToListAsync();
+            var invitationList = await GetAsync(
+                 x =>
+                 x.ClientID == userId,
+                 null,
+                 i => i.Project, i => i.User);
             return invitationList;
         }
     }

@@ -33,17 +33,6 @@ namespace TimeloggerCore.Services
         {
             return _projectRepository.GetAgencyProjecList(userId);
         }
-
-        public Task<List<ClientWorker>> GetProjectInvitation(string workerId, WorkerType workerType)
-        {
-            return _projectRepository.GetProjectInvitation(workerId, workerType);
-        }
-
-        public Task<List<ClientWorker>> GetUserProjecInviationtList(string Id, WorkerType invitationType)
-        {
-            return _projectRepository.GetUserProjecInviationtList(Id, invitationType);
-        }
-
         public Task<List<Project>> GetUserProjecList(string userId)
         {
             return _projectRepository.GetUserProjecList(userId);
@@ -52,11 +41,6 @@ namespace TimeloggerCore.Services
         public Task<Project> GetUserProjects(string Id)
         {
             return _projectRepository.GetUserProjects(Id);
-        }
-
-        public Task<int> PostProject(Project project)
-        {
-            return _projectRepository.PostProject(project);
         }
 
         public Task<List<Project>> ProjectsWithCompanies()

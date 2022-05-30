@@ -14,7 +14,5 @@ namespace TimeloggerCore.Data.IRepository
         Task<List<ClientAgency>> GetAgencyClients(string userId);
         Task<ClientAgency> GetSingleClientAgencies(int Id);
         Task<ClientAgency> GetClientAgency(ClientAgencyModel clientAgencyModel);
-        Task<List<ApplicationUser>> GetAgencyEmployee(string AgencyId);
-        Task<List<ApplicationUser>> GetAllWorker();
     }
 }

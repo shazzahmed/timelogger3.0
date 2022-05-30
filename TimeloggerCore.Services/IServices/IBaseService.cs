@@ -10,12 +10,28 @@ namespace TimeloggerCore.Services.IService
     public interface IBaseService<TBusinessModel, TEntity, TKey>
     {
         Task<bool> Any(Expression<Func<TEntity, bool>> where = null);
-        Task<TBusinessModel> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> where = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, params Expression<Func<TEntity, object>>[] includeProperties);
+        Task<TBusinessModel> FirstOrDefaultAsync(
+            Expression<Func<TEntity, bool>> where = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            params Expression<Func<TEntity, object>>[] includeProperties);
         Task<List<TBusinessModel>> Get();
         Task<TBusinessModel> Get(TKey id);
-        Task<List<TBusinessModel>> Get(Expression<Func<TEntity, bool>> where = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, params Expression<Func<TEntity, object>>[] includeProperties);
-        List<TBusinessModel> Get(out int count, Expression<Func<TEntity, bool>> where = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, params Expression<Func<TEntity, object>>[] includePropertie);
-        List<TBusinessModel> Get(out int count, int pageNamber = 1, int pageSize = 20, Expression<Func<TEntity, bool>> where = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, params Expression<Func<TEntity, object>>[] includeProperties);
+        Task<List<TBusinessModel>> Get(
+            Expression<Func<TEntity, bool>> where = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            params Expression<Func<TEntity, object>>[] includeProperties);
+        List<TBusinessModel> Get(
+            out int count,
+            Expression<Func<TEntity, bool>> where = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            params Expression<Func<TEntity, object>>[] includePropertie);
+        List<TBusinessModel> Get(
+            out int count,
+            int pageNamber = 1,
+            int pageSize = 20,
+            Expression<Func<TEntity, bool>> where = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            params Expression<Func<TEntity, object>>[] includeProperties);
         Task<List<TBusinessModel>> Search(Expression<Func<TEntity, bool>> searchExprn);
         Task<TBusinessModel> Add(TBusinessModel entity);
         Task<List<TBusinessModel>> AddRange(List<TBusinessModel> businessEntities);

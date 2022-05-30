@@ -17,28 +17,29 @@ namespace TimeloggerCore.Data.Repository
         public InvitationRequestRepository(ISqlServerDbContext context) : base(context)
         {
         }
-
         public async Task<InvitationRequest> GetClientAgency(AgencyAlreadyExitModel agencyAlreadyExit)
         {
-
-            var clientAgency = await DbContext.InvitationRequest.Where(x => x.FromUserId == agencyAlreadyExit.UserId && x.InvitationSentTo.Email == agencyAlreadyExit.AgencyEmail).FirstOrDefaultAsync();
+            var clientAgency = await FirstOrDefaultAsync(
+                 x =>
+                 x.FromUserId == agencyAlreadyExit.UserId && x.InvitationSentTo.Email == agencyAlreadyExit.AgencyEmail);
             return clientAgency;
         }
         public async Task<List<InvitationRequest>> GetClientAgencies(AgencyAlreadyExitModel agencyAlreadyExit)
         {
-
-            var clientAgency = await DbContext.InvitationRequest.Where(x => x.FromUserId == agencyAlreadyExit.UserId && x.InvitationType == InvitationType.ClientToAgency).ToListAsync();
+            var clientAgency = await GetAsync(
+                 x =>
+                 x.FromUserId == agencyAlreadyExit.UserId && x.InvitationSentTo.Email == agencyAlreadyExit.AgencyEmail);
             return clientAgency;
         }
         public async Task<List<InvitationRequest>> GetOnlyClientAgencies(string userId)
         {
-            var clientAgency = await DbContext.InvitationRequest
-                .Where(x => (x.FromUserId == userId || x.ToUserId == userId) && (x.InvitationType == InvitationType.ClientToAgency || x.InvitationType == InvitationType.AgencyToClient))
-                .Include(x => x.InvitationSentFrom)
-                .Include(x => x.InvitationSentTo)
-                .Include(x => x.InvitationSentTo.UserRoles)
-                .Include(x => x.InvitationSentFrom.UserRoles)
-                .ToListAsync();
+            var clientAgency = await GetAsync(
+                 x =>
+                 (x.FromUserId == userId || x.ToUserId == userId)
+                 && 
+                 (x.InvitationType == InvitationType.ClientToAgency || x.InvitationType == InvitationType.AgencyToClient),
+                 o => o.OrderBy(x => x.Id),
+                 i => i.InvitationSentFrom, i => i.InvitationSentTo, i => i.InvitationSentTo.UserRoles, i => i.InvitationSentFrom.UserRoles);
             return clientAgency;
         }
     }

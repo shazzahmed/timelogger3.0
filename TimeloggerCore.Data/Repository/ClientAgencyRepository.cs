@@ -18,54 +18,39 @@ namespace TimeloggerCore.Data.Repository
         }
         public async Task<List<ClientAgency>> GetClientAgencies(string userId)
         {
-            var clientAgencies = await DbContext.ClientAgency
-                .Where(x => !x.IsDeleted && x.ClientId == userId)
-                .Include(x => x.Agency)
-                .ToListAsync();
+            var clientAgencies = await GetAsync(
+                 x =>
+                 !x.IsDeleted && x.ClientId == userId,
+                 null,
+                 i => i.Agency);
             return clientAgencies;
         }
         public async Task<List<ClientAgency>> GetAgencyClients(string userId)
         {
-            var clientAgencies = await DbContext.ClientAgency
-                .Where(x => !x.IsDeleted && x.AgencyId == userId && x.IsAgencyAccepted)
-                .Include(x => x.Client)
-                .ToListAsync();
+            var clientAgencies = await GetAsync(
+                 x =>
+                 !x.IsDeleted && x.AgencyId == userId && x.IsAgencyAccepted,
+                 null,
+                 i => i.Client);
             return clientAgencies;
         }
         public async Task<ClientAgency> GetSingleClientAgencies(int Id)
         {
-            var singleClientAgency = await DbContext.ClientAgency
-                .Where(x => x.Id == Id)
-                .Include(x => x.Agency)
-                .Include(x => x.Client)
-                .FirstOrDefaultAsync();
+            var singleClientAgency = await FirstOrDefaultAsync(
+                 x =>
+                 x.Id == Id,
+                 null,
+                 i => i.Agency, i => i.Client);
             return singleClientAgency;
         }
         public async Task<ClientAgency> GetClientAgency(ClientAgencyModel clientAgencyModel)
         {
-            var clientAgency = await DbContext.ClientAgency
-                .Where(x => x.ClientId == clientAgencyModel.ClientId && x.AgencyId == clientAgencyModel.AgencyId)
-                .Include(x => x.Agency)
-                .Include(x => x.Client)
-                .FirstOrDefaultAsync();
+            var clientAgency = await FirstOrDefaultAsync(
+                 x =>
+                 x.ClientId == clientAgencyModel.ClientId && x.AgencyId == clientAgencyModel.AgencyId,
+                 null,
+                 i => i.Agency, i => i.Client);
             return clientAgency;
-        }
-        public async Task<List<ApplicationUser>> GetAgencyEmployee(string AgencyId)
-        {
-            var agencyWorker = await DbContext.User
-                .Where(x => x.AgencyId == AgencyId && x.IsWorkerHasAgency && x.IsAgencyApproved)
-                .ToListAsync();
-            //&& x.IsWorkerHasAgency&&x.IsAgencyApproved
-            return agencyWorker;
-
-        }
-
-        public async Task<List<ApplicationUser>> GetAllWorker()
-        {
-            var worker = await DbContext.User
-                .Where(x => !x.IsWorkerHasAgency)
-                .ToListAsync();
-            return worker;
         }
     }
 }

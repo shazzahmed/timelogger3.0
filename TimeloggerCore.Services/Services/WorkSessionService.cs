@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using TimeloggerCore.Common.Models;
+using System.Threading.Tasks;
 
 namespace TimeloggerCore.Services
 {
@@ -22,22 +23,23 @@ namespace TimeloggerCore.Services
             _workSessionRepository.DeleteSessions(sessions);
         }
 
-        public WorkSession GetLastWorkSession(int logId)
+        public Task<WorkSession> GetLastWorkSession(int logId)
         {
             return _workSessionRepository.GetLastWorkSession(logId);
         }
 
-        public List<WorkSession> GetWorkSessions(DateTime date)
+        public Task<List<WorkSession>> GetWorkSessions(DateTime date)
         {
             return _workSessionRepository.GetWorkSessions(date);
         }
 
-        public List<WorkSession> InsertList(List<WorkSession> lstworkSessions)
+        public async Task<List<WorkSessionModel>> InsertList(List<WorkSessionModel> lstworkSessions)
         {
-            return _workSessionRepository.InsertList(lstworkSessions);
+            return await AddRange(lstworkSessions);
+            //return _workSessionRepository.InsertList(lstworkSessions);
         }
 
-        public List<WorkSession> WorkSessionsList(int[] timelogIds)
+        public Task<List<WorkSession>> WorkSessionsList(int[] timelogIds)
         {
             return _workSessionRepository.WorkSessionsList(timelogIds);
         }

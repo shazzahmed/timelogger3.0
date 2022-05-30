@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace TimeloggerCore.Data.Repository
 {
@@ -14,46 +15,38 @@ namespace TimeloggerCore.Data.Repository
         public WorkSessionRepository(ISqlServerDbContext context) : base(context)
         {
         }
-        public List<WorkSession> InsertList(List<WorkSession> lstworkSessions)
+        //public async List<WorkSession> InsertList(List<WorkSession> lstworkSessions)
+        //{
+
+        //    var aa =await AddAsync(lstworkSessions);
+        //    return lstworkSessions;
+
+        //}
+
+        public Task<List<WorkSession>> GetWorkSessions(DateTime date)
         {
-
-            Add(lstworkSessions);
-            return lstworkSessions;
-
+            return GetAsync(w => w.StartTime.Date == date.Date);
         }
 
-        public List<WorkSession> GetWorkSessions(DateTime date)
+        public async Task<WorkSession> GetLastWorkSession(int logId)
         {
-            return DbContext.WorkSession.ToList().Where(w => w.StartTime.Date == date.Date).ToList();
-        }
-
-        public WorkSession GetLastWorkSession(int logId)
-        {
-            return DbContext.WorkSession.Where(w => w.TimeLogId == logId).OrderByDescending(w => w.Id).ToList().LastOrDefault();
+            return await FirstOrDefaultAsync(x => x.TimeLogId == logId, x=> x.OrderByDescending(x=> x.Id));
         }
 
         public void DeleteSessions(List<WorkSession> sessions)
         {
             DbContext.Entry(sessions).State = EntityState.Modified;
         }
-        public List<WorkSession> WorkSessionsList(int[] timelogIds)
+        public async Task<List<WorkSession>> WorkSessionsList(int[] timelogIds)
         {
-            List<WorkSession> workSessions = new List<WorkSession>();
-            try
-            {
                 int[] ids = timelogIds.ToArray();
-                workSessions = DbContext.WorkSession.Include(x => x.TimeLog.Project)
-                .Where(x => ids.Contains(x.TimeLogId)).ToList();
-                if (workSessions.Count() != 0)
-                    workSessions.ForEach(x => {
-                        if (x.TimeLog != null)
-                            x.TimeLog.WorkSessions = null;
-                    });
-            }
-            catch (Exception ex)
-            {
-
-            }
+            var workSessions = await GetAsync(x => ids.Contains(x.TimeLogId), null, x => x.TimeLog.Project);
+            if (workSessions.Count() != 0)
+                workSessions.ForEach(x =>
+                {
+                    if (x.TimeLog != null)
+                        x.TimeLog.WorkSessions = null;
+                });
             return workSessions;
         }
     }

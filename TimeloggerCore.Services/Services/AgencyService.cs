@@ -19,14 +19,16 @@ namespace TimeloggerCore.Services
     public class AgencyService : BaseService<ClientAgencyModel, ClientAgency, int>, IAgencyService
     {
         private readonly IClientAgencyRepository _clientAgencyRepository;
+        private readonly IUserRepository _userRepository;
         private readonly ISecurityService _securityService;
         private readonly INotificationTemplateService _notificationTemplateService;
         private readonly ICommunicationService _communicationService;
         private readonly TimeloggerCoreOptions _timeloggerCoreOptions;
 
-        public AgencyService(IMapper mapper, IClientAgencyRepository clientAgencyRepository, ISecurityService securityService, INotificationTemplateService notificationTemplateService, ICommunicationService communicationService, IOptionsSnapshot<TimeloggerCoreOptions> timeloggerCoreOptions, IUnitOfWork unitOfWork) : base(mapper, clientAgencyRepository, unitOfWork)
+        public AgencyService(IMapper mapper, IClientAgencyRepository clientAgencyRepository, IUserRepository userRepository, ISecurityService securityService, INotificationTemplateService notificationTemplateService, ICommunicationService communicationService, IOptionsSnapshot<TimeloggerCoreOptions> timeloggerCoreOptions, IUnitOfWork unitOfWork) : base(mapper, clientAgencyRepository, unitOfWork)
         {
             _clientAgencyRepository = clientAgencyRepository;
+            _userRepository = userRepository;
             _securityService = securityService;
             _notificationTemplateService = notificationTemplateService;
             _communicationService = communicationService;
@@ -45,7 +47,7 @@ namespace TimeloggerCore.Services
 
         public async Task<BaseModel> GetAgencyEmployee(string AgencyId)
         {
-            var result = await _clientAgencyRepository.GetAgencyEmployee(AgencyId);
+            var result = await _userRepository.GetAgencyEmployee(AgencyId);
             return new BaseModel
             {
                 Success = true,
@@ -55,7 +57,7 @@ namespace TimeloggerCore.Services
 
         public async Task<BaseModel> GetAllWorker()
         {
-            var result = await _clientAgencyRepository.GetAllWorker();
+            var result = await _userRepository.GetAllWorker();
             return new BaseModel
             {
                 Success = true,

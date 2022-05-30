@@ -78,6 +78,7 @@ namespace TimeloggerCore.RestApi.Controllers
         {
             try
             {
+                await _agencyService.Add(clientAgencyModel);
                 var result = await _agencyService.AddClientAgency(clientAgencyModel);
                 return new OkObjectResult(result);
             }

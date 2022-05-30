@@ -10,9 +10,6 @@ namespace TimeloggerCore.Data.IRepository
     {
         Task<List<Payment>> GetUserInvoice(string userId);
         Task<Payment> GetUserSingleInvoice(int InvoiceId);
-        Task<ApplicationUser> UserInfo(string userId);
-        Task<bool> AgencyApproved(string workerId, string agencyId);
-        Task<ApplicationUser> GetUserByEmail(string email);
         Task<List<Payment>> GetAllPayment();
         Task<Payment> CurrentActivePayment(string UserId);
         Task<Payment> CurrentNonActivePayment(string UserId);

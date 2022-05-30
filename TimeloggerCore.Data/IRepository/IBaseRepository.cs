@@ -15,7 +15,8 @@ namespace TimeloggerCore.Data.IRepository
         /// <param name="where"></param>
         /// <param name="orderBy"></param>
         /// <param name="includeProperties"></param>
-        Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> where = null,
+        Task<TEntity> FirstOrDefaultAsync(
+            Expression<Func<TEntity, bool>> where = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             params Expression<Func<TEntity, object>>[] includeProperties);
 
@@ -39,7 +40,8 @@ namespace TimeloggerCore.Data.IRepository
         /// <param name="orderBy"></param>
         /// <param name="includeProperties"></param>
         /// <returns></returns>
-        Task<List<TEntity>> GetAsync(Expression<Func<TEntity, bool>> where = null,
+        Task<List<TEntity>> GetAsync(
+            Expression<Func<TEntity, bool>> where = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             params Expression<Func<TEntity, object>>[] includeProperties);
 

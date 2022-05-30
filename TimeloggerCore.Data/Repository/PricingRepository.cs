@@ -16,8 +16,8 @@ namespace TimeloggerCore.Data.Repository
         }
         public async Task<List<CountryCode>> GetAllCountryCode()
         {
-            var countryCode = DbContext.CountryCodes;
-            return await countryCode.ToListAsync();
+            var countryCode = await GetAsync();
+            return countryCode;
         }
     }
 }
