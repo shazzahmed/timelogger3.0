@@ -6,17 +6,17 @@ using static TimeloggerCore.Common.Utility.Enums;
 
 namespace TimeloggerCore.Common.Models
 {
-    public class ProjectsInvitationModel
+    public class ProjectsInvitationModel : BaseClass
     {
         public int Id { get; set; }
         [ForeignKey("Project")]
         public int ProjectId { get; set; }
         [ForeignKey("Agency")]
         public string AgencyId { get; set; }
-        public InvitationType InvitationType { get; set; }
         public string EmailAddress { get; set; }
         public bool IsAccepted { get; set; }
         public bool ExistingUser { get; set; }
+        public InvitationType InvitationType { get; set; }
         public ApplicationUserModel Agency { get; set; }
         public ProjectModel Project { get; set; }
     }

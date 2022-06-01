@@ -9,6 +9,6 @@ namespace TimeloggerCore.Services.IService
 {
     public interface IWorkerService : IBaseService<ProjectWorkersModel, ProjectWorkers, int>
     {
-        Task<List<ProjectWorkersModel>> GetProjectWorkers(int ProjectId);
+        Task<BaseModel> GetProjectWorkers(int ProjectId);
     }
 }

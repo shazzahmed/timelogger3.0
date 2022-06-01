@@ -16,7 +16,10 @@ namespace TimeloggerCore.Services
         private readonly IAgencyService _agencyService;
 
         public InvitationRequestService(
-            IMapper mapper, IInvitationRequestRepository invitationRequestRepository, IUnitOfWork unitOfWork, IAgencyService agencyService
+            IMapper mapper, 
+            IInvitationRequestRepository invitationRequestRepository, 
+            IUnitOfWork unitOfWork, 
+            IAgencyService agencyService
             ) : base(mapper, invitationRequestRepository, unitOfWork)
         {
             _invitationRequestRepository = invitationRequestRepository;

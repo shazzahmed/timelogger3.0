@@ -13,7 +13,11 @@ namespace TimeloggerCore.Services
     {
         private readonly IPermissionRepository permissionRepository;
 
-        public PermissionService(IMapper mapper, IPermissionRepository permissionRepository, IUnitOfWork unitOfWork) : base(mapper, permissionRepository, unitOfWork)
+        public PermissionService(
+            IMapper mapper, 
+            IPermissionRepository permissionRepository, 
+            IUnitOfWork unitOfWork
+            ) : base(mapper, permissionRepository, unitOfWork)
         {
             this.permissionRepository = permissionRepository;
         }

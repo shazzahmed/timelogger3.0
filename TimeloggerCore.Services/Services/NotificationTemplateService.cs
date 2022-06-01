@@ -16,7 +16,11 @@ namespace TimeloggerCore.Services
     {
         private readonly INotificationTemplateRepository _notificationTemplateRepository;
 
-        public NotificationTemplateService(IMapper mapper, INotificationTemplateRepository notificationTemplateRepository, IUnitOfWork unitOfWork) : base(mapper, notificationTemplateRepository, unitOfWork)
+        public NotificationTemplateService(
+            IMapper mapper, 
+            INotificationTemplateRepository notificationTemplateRepository, 
+            IUnitOfWork unitOfWork
+            ) : base(mapper, notificationTemplateRepository, unitOfWork)
         {
             _notificationTemplateRepository = notificationTemplateRepository;
         }

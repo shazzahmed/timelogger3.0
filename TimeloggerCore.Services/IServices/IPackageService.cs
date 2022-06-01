@@ -9,6 +9,7 @@ namespace TimeloggerCore.Services.IService
 {
     public interface IPackageService : IBaseService<PackageModel, Package, int>
     {
-        Task<Package> GetAllPackage(string userId);
+        Task<BaseModel> GetAllPackage(string userId);
+        Task<BaseModel> GetAllNonPackage(string userId);
     }
 }

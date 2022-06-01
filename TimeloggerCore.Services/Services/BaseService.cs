@@ -19,7 +19,11 @@ namespace TimeloggerCore.Services
         protected readonly IBaseRepository<TEntity, TKey> repository;
         protected readonly IUnitOfWork unitOfWork;
         protected readonly IMapper mapper;
-        public BaseService(IMapper mapper, IBaseRepository<TEntity, TKey> baseRepository, IUnitOfWork unitOfWork)
+        public BaseService(
+            IMapper mapper, 
+            IBaseRepository<TEntity, TKey> baseRepository, 
+            IUnitOfWork unitOfWork
+            )
         {
             this.repository = baseRepository;
             this.unitOfWork = unitOfWork;

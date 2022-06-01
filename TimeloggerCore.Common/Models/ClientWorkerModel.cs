@@ -6,7 +6,7 @@ using static TimeloggerCore.Common.Utility.Enums;
 
 namespace TimeloggerCore.Common.Models
 {
-    public class ClientWorkerModel
+    public class ClientWorkerModel : BaseClass
     {
         public int Id { get; set; }
 

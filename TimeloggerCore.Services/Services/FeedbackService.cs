@@ -13,7 +13,11 @@ namespace TimeloggerCore.Services
     {
         private readonly IFeedbackRepository feedbackRepository;
 
-        public FeedbackService(IMapper mapper, IFeedbackRepository feedbackRepository, IUnitOfWork unitOfWork) : base(mapper, feedbackRepository, unitOfWork)
+        public FeedbackService(
+            IMapper mapper, 
+            IFeedbackRepository feedbackRepository, 
+            IUnitOfWork unitOfWork
+            ) : base(mapper, feedbackRepository, unitOfWork)
         {
             this.feedbackRepository = feedbackRepository;
         }

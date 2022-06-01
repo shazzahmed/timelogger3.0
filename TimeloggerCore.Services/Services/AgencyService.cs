@@ -25,7 +25,16 @@ namespace TimeloggerCore.Services
         private readonly ICommunicationService _communicationService;
         private readonly TimeloggerCoreOptions _timeloggerCoreOptions;
 
-        public AgencyService(IMapper mapper, IClientAgencyRepository clientAgencyRepository, IUserRepository userRepository, ISecurityService securityService, INotificationTemplateService notificationTemplateService, ICommunicationService communicationService, IOptionsSnapshot<TimeloggerCoreOptions> timeloggerCoreOptions, IUnitOfWork unitOfWork) : base(mapper, clientAgencyRepository, unitOfWork)
+        public AgencyService(
+            IMapper mapper,
+            IClientAgencyRepository clientAgencyRepository,
+            IUserRepository userRepository, 
+            ISecurityService securityService, 
+            INotificationTemplateService notificationTemplateService, 
+            ICommunicationService communicationService, 
+            IOptionsSnapshot<TimeloggerCoreOptions> timeloggerCoreOptions, 
+            IUnitOfWork unitOfWork
+            ) : base(mapper, clientAgencyRepository, unitOfWork)
         {
             _clientAgencyRepository = clientAgencyRepository;
             _userRepository = userRepository;
@@ -85,9 +94,9 @@ namespace TimeloggerCore.Services
             };
         }
 
-        public async Task<BaseModel> GetSingleClientAgencies(int Id)
+        public async Task<BaseModel> GetSingleClientAgencies(string userId)
         {
-            var result = await _clientAgencyRepository.GetSingleClientAgencies(Id);
+            var result = await _clientAgencyRepository.GetSingleClientAgencies(userId);
             return new BaseModel
             {
                 Success = true,
@@ -97,6 +106,7 @@ namespace TimeloggerCore.Services
         public async Task<BaseModel> AddClientAgency(ClientAgencyModel clientAgencyModel)
         {
             ClientAgency clientAgency = await _clientAgencyRepository.GetClientAgency(clientAgencyModel);
+            string message = "Invalid request.";
             if (clientAgency == null)
             {
                 var isUserExit = await _securityService.GetUserDetail(clientAgencyModel.AgencyId);
@@ -106,6 +116,7 @@ namespace TimeloggerCore.Services
                 var userCreated = await Add(clientAgencyModel);
                 if (userCreated.Id > 1)
                 {
+                    message = "Successfully sent invitation to agency.";
                     var template = await _notificationTemplateService.GetNotificationTemplate(NotificationTemplates.ConfirmClientAgency, NotificationTypes.Email);
                     var emailMessage = template.MessageBody.Replace("#Name", $"{userInfo.FirstName} { userInfo.LastName}")
                                                             .Replace("#Link", $"{_timeloggerCoreOptions.ApiUrl}?{clientAgencyModel.Id}")
@@ -116,16 +127,64 @@ namespace TimeloggerCore.Services
                     {
                         Success = true,
                         Data = userCreated,
-                        Message = "Successfully sent invitation to agency."
+                        Message = message
 
                     };
                 }
+            }
+            else if (clientAgency != null)
+            {
+                message = "Already sent invitation to agency.";
             }
             return new BaseModel
             {
                 Success = true,
                 Data = clientAgency,
-                Message = "Already Exist."
+                Message = message
+            };
+        }
+        public async Task<BaseModel> ConfirmAgency(string AgencyId)
+        {
+            var clientAgency = await _clientAgencyRepository.GetSingleClientAgencies(AgencyId);
+            string message = "Not Exist.";
+            if (clientAgency != null)
+            {
+                clientAgency.IsAgencyAccepted = true;
+                await Update(mapper.Map<ClientAgency, ClientAgencyModel>(clientAgency));
+                return new BaseModel
+                {
+                    Success = true,
+                    Data = clientAgency,
+                    Message = "Successful"
+                };
+            }
+            return new BaseModel
+            {
+                Success = false,
+                Data = clientAgency,
+                Message = message
+            };
+        }
+        public async Task<BaseModel> ConfirmWorker(string AgencyId)
+        {
+            var clientAgency = await _clientAgencyRepository.GetSingleClientAgencies(AgencyId);
+            string message = "Not Exist.";
+            if (clientAgency != null)
+            {
+                clientAgency.IsAgencyAccepted = true;
+                await Update(mapper.Map<ClientAgency, ClientAgencyModel>(clientAgency));
+                return new BaseModel
+                {
+                    Success = true,
+                    Data = clientAgency,
+                    Message = "Successful"
+                };
+            }
+            return new BaseModel
+            {
+                Success = false,
+                Data = clientAgency,
+                Message = message
             };
         }
     }

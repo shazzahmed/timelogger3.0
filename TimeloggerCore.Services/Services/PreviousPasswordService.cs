@@ -14,7 +14,11 @@ namespace TimeloggerCore.Services
     {
         protected readonly IPreviousPasswordsRepository _previousPasswordsRepository;
 
-        public PreviousPasswordService(IMapper mapper, IPreviousPasswordsRepository previousPasswordsRepository, IUnitOfWork unitOfWork) : base(mapper, previousPasswordsRepository, unitOfWork)
+        public PreviousPasswordService(
+            IMapper mapper, 
+            IPreviousPasswordsRepository previousPasswordsRepository, 
+            IUnitOfWork unitOfWork
+            ) : base(mapper, previousPasswordsRepository, unitOfWork)
         {
             this._previousPasswordsRepository = previousPasswordsRepository;
         }

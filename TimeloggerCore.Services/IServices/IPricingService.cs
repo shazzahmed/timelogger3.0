@@ -9,6 +9,6 @@ namespace TimeloggerCore.Services.IService
 {
     public interface IPricingService : IBaseService<CountryCodeModel, CountryCode, int>
     {
-        Task<List<CountryCode>> GetAllCountryCode();
+        Task<BaseModel> GetAllCountryCode();
     }
 }

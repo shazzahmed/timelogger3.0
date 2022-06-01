@@ -13,7 +13,11 @@ namespace TimeloggerCore.Services
     {
         private readonly IAddressRepository addressRepository;
 
-        public AddressService(IMapper mapper, IAddressRepository addressRepository, IUnitOfWork unitOfWork) : base(mapper, addressRepository, unitOfWork)
+        public AddressService(
+            IMapper mapper, 
+            IAddressRepository addressRepository, 
+            IUnitOfWork unitOfWork
+            ) : base(mapper, addressRepository, unitOfWork)
         {
             this.addressRepository = addressRepository;
         }

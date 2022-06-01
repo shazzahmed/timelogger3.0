@@ -14,13 +14,22 @@ namespace TimeloggerCore.Services
     {
         private readonly IMeetingRepository _meetingRepository;
 
-        public MeetingService(IMapper mapper, IMeetingRepository meetingRepository, IUnitOfWork unitOfWork) : base(mapper, meetingRepository, unitOfWork)
+        public MeetingService(
+            IMapper mapper, 
+            IMeetingRepository meetingRepository, 
+            IUnitOfWork unitOfWork
+            ) : base(mapper, meetingRepository, unitOfWork)
         {
             _meetingRepository = meetingRepository;
         }
-        public Task<List<Meeting>> GetAllMeeting(string userId)
+        public async Task<BaseModel> GetAllMeeting(string userId)
         {
-            return _meetingRepository.GetAllMeeting(userId);
+            var result = await _meetingRepository.GetAllMeeting(userId);
+            return new BaseModel
+            {
+                Success = true,
+                Data = mapper.Map<List<Meeting>, List<MeetingModel>>(result)
+            };
         }
     }
 }

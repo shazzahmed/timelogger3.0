@@ -14,13 +14,31 @@ namespace TimeloggerCore.Services
     {
         private readonly IPackageRepository _packageRepository;
 
-        public PackageService(IMapper mapper, IPackageRepository packageRepository, IUnitOfWork unitOfWork) : base(mapper, packageRepository, unitOfWork)
+        public PackageService(
+            IMapper mapper, 
+            IPackageRepository packageRepository, 
+            IUnitOfWork unitOfWork
+            ) : base(mapper, packageRepository, unitOfWork)
         {
             _packageRepository = packageRepository;
         }
-        public Task<Package> GetAllPackage(string userId)
+        public async Task<BaseModel> GetAllPackage(string userId)
         {
-            return _packageRepository.GetAllPackage(userId);
+            var result = await _packageRepository.GetAllPackage(userId);
+            return new BaseModel
+            {
+                Success = true,
+                Data = mapper.Map<Package, PackageModel>(result)
+            };
+        }
+        public async Task<BaseModel> GetAllNonPackage(string userId)
+        {
+            var result = await _packageRepository.GetAllNonPackage(userId);
+            return new BaseModel
+            {
+                Success = true,
+                Data = mapper.Map<Package, PackageModel>(result)
+            };
         }
     }
 }

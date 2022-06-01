@@ -14,13 +14,22 @@ namespace TimeloggerCore.Services
     {
         private readonly IPricingRepository _pricingRepository;
 
-        public PricingService(IMapper mapper, IPricingRepository pricingRepository, IUnitOfWork unitOfWork) : base(mapper, pricingRepository, unitOfWork)
+        public PricingService(
+            IMapper mapper, 
+            IPricingRepository pricingRepository, 
+            IUnitOfWork unitOfWork
+            ) : base(mapper, pricingRepository, unitOfWork)
         {
             _pricingRepository = pricingRepository;
         }
-        public Task<List<CountryCode>> GetAllCountryCode()
+        public async Task<BaseModel> GetAllCountryCode()
         {
-            return _pricingRepository.GetAllCountryCode();
+            var result = await _pricingRepository.GetAllCountryCode();
+            return new BaseModel
+            {
+                Success = true,
+                Data = mapper.Map<List<CountryCode>, List<CountryCodeModel>>(result)
+            };
         }
     }
 }

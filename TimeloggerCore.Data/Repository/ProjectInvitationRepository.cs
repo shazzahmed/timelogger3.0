@@ -23,7 +23,8 @@ namespace TimeloggerCore.Data.Repository
                  && x.InvitationType == invitationType
                  && !x.IsDeleted,
                  null,
-                 i => i.Agency);
+                 i => i.Agency,
+                 i => i.Project);
             return projectInvitation;
         }
     }

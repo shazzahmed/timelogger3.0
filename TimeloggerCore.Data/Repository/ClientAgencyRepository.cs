@@ -34,11 +34,11 @@ namespace TimeloggerCore.Data.Repository
                  i => i.Client);
             return clientAgencies;
         }
-        public async Task<ClientAgency> GetSingleClientAgencies(int Id)
+        public async Task<ClientAgency> GetSingleClientAgencies(string userId)
         {
             var singleClientAgency = await FirstOrDefaultAsync(
                  x =>
-                 x.Id == Id,
+                 x.ClientId == userId,
                  null,
                  i => i.Agency, i => i.Client);
             return singleClientAgency;

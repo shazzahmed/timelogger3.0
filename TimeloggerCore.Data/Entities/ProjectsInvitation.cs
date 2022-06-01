@@ -16,12 +16,9 @@ namespace TimeloggerCore.Data.Entities
         public string EmailAddress { get; set; }
         public bool IsAccepted { get; set; }
         public bool ExistingUser { get; set; }
-        
         public InvitationType InvitationType { get; set; }
-        
         [ForeignKey("AgencyId")]
         public virtual ApplicationUser Agency { get; set; }
-        
         [ForeignKey("ProjectId")]
         public virtual Project Project { get; set; }
     }

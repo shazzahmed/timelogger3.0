@@ -274,6 +274,7 @@ namespace TimeloggerCore.Data.Repository
                 && (x.WorkerType == invitationType || x.WorkerType == WorkerType.AgencyWorker)
                 && x.IsAccepted,
                 null,
+                null,
                 i => i.ProjectsInvitation, i => i.Worker);
             return projectInvitation;
         }

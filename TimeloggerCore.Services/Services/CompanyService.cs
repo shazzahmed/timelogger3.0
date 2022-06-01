@@ -13,7 +13,11 @@ namespace TimeloggerCore.Services
     {
         private readonly ICompanyRepository companyRepository;
 
-        public CompanyService(IMapper mapper, ICompanyRepository companyRepository, IUnitOfWork unitOfWork) : base(mapper, companyRepository, unitOfWork)
+        public CompanyService(
+            IMapper mapper, 
+            ICompanyRepository companyRepository, 
+            IUnitOfWork unitOfWork
+            ) : base(mapper, companyRepository, unitOfWork)
         {
             this.companyRepository = companyRepository;
         }

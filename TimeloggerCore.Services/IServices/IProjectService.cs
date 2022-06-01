@@ -10,11 +10,12 @@ namespace TimeloggerCore.Services.IService
 {
     public interface IProjectService : IBaseService<ProjectModel, Project, int>
     {
-        Task<List<Project>> FreelancerProjects(string userId);
-        Task<List<Project>> ProjectsWithCompanies();
-        Task<List<Project>> AllProjects(string userRole);
-        Task<Project> GetUserProjects(string Id);
-        Task<List<Project>> GetAgencyProjecList(string userId);
-        Task<List<Project>> GetUserProjecList(string userId);
+        Task<BaseModel> GetProject(int projectId);
+        Task<BaseModel> FreelancerProjects(string userId);
+        Task<BaseModel> ProjectsWithCompanies();
+        Task<BaseModel> AllProjects(string userRole);
+        Task<BaseModel> GetUserProjects(string Id);
+        Task<BaseModel> GetAgencyProjecList(string userId);
+        Task<BaseModel> GetUserProjecList(string userId);
     }
 }

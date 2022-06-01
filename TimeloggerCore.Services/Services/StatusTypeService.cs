@@ -13,7 +13,11 @@ namespace TimeloggerCore.Services
     {
         private readonly IStatusTypeRepository statusTypeRepository;
 
-        public StatusTypeService(IMapper mapper, IStatusTypeRepository statusTypeRepository, IUnitOfWork unitOfWork) : base(mapper, statusTypeRepository, unitOfWork)
+        public StatusTypeService(
+            IMapper mapper, 
+            IStatusTypeRepository statusTypeRepository, 
+            IUnitOfWork unitOfWork
+            ) : base(mapper, statusTypeRepository, unitOfWork)
         {
             this.statusTypeRepository = statusTypeRepository;
         }

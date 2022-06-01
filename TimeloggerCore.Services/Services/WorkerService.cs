@@ -14,13 +14,22 @@ namespace TimeloggerCore.Services
     {
         private readonly IProjectWorkersRepository _projectWorkersRepository;
 
-        public WorkerService(IMapper mapper, IProjectWorkersRepository projectWorkersRepository, IUnitOfWork unitOfWork) : base(mapper, projectWorkersRepository, unitOfWork)
+        public WorkerService(
+            IMapper mapper, 
+            IProjectWorkersRepository projectWorkersRepository, 
+            IUnitOfWork unitOfWork
+            ) : base(mapper, projectWorkersRepository, unitOfWork)
         {
             _projectWorkersRepository = projectWorkersRepository;
         }
-        public Task<List<ProjectWorkersModel>> GetProjectWorkers(int ProjectId)
+        public async Task<BaseModel> GetProjectWorkers(int ProjectId)
         {
-            return _projectWorkersRepository.GetProjectWorkers(ProjectId);
+            var result = await _projectWorkersRepository.GetProjectWorkers(ProjectId);
+            return new BaseModel
+            {
+                Success = true,
+                Data = mapper.Map<List<ProjectWorkersModel>, List<ProjectWorkers>>(result)
+            };
         }
     }
 }

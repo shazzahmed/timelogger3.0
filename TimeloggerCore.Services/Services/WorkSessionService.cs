@@ -14,7 +14,11 @@ namespace TimeloggerCore.Services
     {
         private readonly IWorkSessionRepository _workSessionRepository;
 
-        public WorkSessionService(IMapper mapper, IWorkSessionRepository workSessionRepository, IUnitOfWork unitOfWork) : base(mapper, workSessionRepository, unitOfWork)
+        public WorkSessionService(
+            IMapper mapper, 
+            IWorkSessionRepository workSessionRepository, 
+            IUnitOfWork unitOfWork
+            ) : base(mapper, workSessionRepository, unitOfWork)
         {
             _workSessionRepository = workSessionRepository;
         }

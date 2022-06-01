@@ -15,88 +15,173 @@ namespace TimeloggerCore.Services
     {
         private readonly ITimeLogRepository _timeLogRepository;
 
-        public TimeLogService(IMapper mapper, ITimeLogRepository timeLogRepository, IUnitOfWork unitOfWork) : base(mapper, timeLogRepository, unitOfWork)
+        public TimeLogService(
+            IMapper mapper, 
+            ITimeLogRepository timeLogRepository, 
+            IUnitOfWork unitOfWork
+            ) : base(mapper, timeLogRepository, unitOfWork)
         {
             _timeLogRepository = timeLogRepository;
         }
-        public Task<TimeLogModel> AddTimelog(TimeLogModel timeLogModel)
+        public async Task<BaseModel> AddTimelog(TimeLogModel timeLogModel)
         {
-            return Add(timeLogModel);
+            var result = await Add(timeLogModel);
+            return new BaseModel
+            {
+                Success = true,
+                Data = mapper.Map<TimeLogModel, TimeLog>(result)
+            };
         }
 
-        public Task<TimeLog> GetActiveProject(string userId)
+        public async Task<BaseModel> GetActiveProject(string userId)
         {
-            return _timeLogRepository.GetActiveProject(userId);
+            var result = await _timeLogRepository.GetActiveProject(userId);
+            return new BaseModel
+            {
+                Success = true,
+                Data = mapper.Map<TimeLog, TimeLogModel>(result)
+            };
         }
 
-        public Task<List<TimeLog>> GetActiveProjects(List<string> users)
+        public async Task<BaseModel> GetActiveProjects(List<string> users)
         {
-            return _timeLogRepository.GetActiveProjects(users);
+            var result = await _timeLogRepository.GetActiveProjects(users);
+            return new BaseModel
+            {
+                Success = true,
+                Data = mapper.Map<List<TimeLog>, List<TimeLogModel>>(result)
+            };
+            
         }
 
-        public Task<List<TimeLog>> GetAllWorkerProjectTimeLogs(string[] workerIds, int Type)
+        public async Task<BaseModel> GetAllWorkerProjectTimeLogs(string[] workerIds, int Type)
         {
-            return _timeLogRepository.GetAllWorkerProjectTimeLogs(workerIds, Type);
+            var result = await _timeLogRepository.GetAllWorkerProjectTimeLogs(workerIds, Type);
+            return new BaseModel
+            {
+                Success = true,
+                Data = mapper.Map<List<TimeLog>, List<TimeLogModel>>(result)
+            };
         }
 
-        public Task<List<TimeLog>> GetLastWeekLogs()
+        public async Task<BaseModel> GetLastWeekLogs()
         {
-            return _timeLogRepository.GetLastWeekLogs();
+            var result = await _timeLogRepository.GetLastWeekLogs();
+            return new BaseModel
+            {
+                Success = true,
+                Data = mapper.Map<List<TimeLog>, List<TimeLogModel>>(result)
+            };
         }
 
-        public Task<List<TimeLog>> GetLogs()
+        public async Task<BaseModel> GetLogs()
         {
-            return _timeLogRepository.GetLogs();
+            var result = await _timeLogRepository.GetLogs();
+            return new BaseModel
+            {
+                Success = true,
+                Data = mapper.Map<List<TimeLog>, List<TimeLogModel>>(result)
+            };
         }
 
-        public Task<List<TimeLog>> GetLogs(string userId)
+        public async Task<BaseModel> GetLogs(string userId)
         {
-            return _timeLogRepository.GetLogs(userId);
+            var result = await _timeLogRepository.GetLogs(userId);
+            return new BaseModel
+            {
+                Success = true,
+                Data = mapper.Map<List<TimeLog>, List<TimeLogModel>>(result)
+            };
         }
 
-        public Task<List<TimeLog>> GetLogsForProject(int projectId)
+        public async Task<BaseModel> GetLogsForProject(int projectId)
         {
-            return _timeLogRepository.GetLogsForProject(projectId);
+            var result = await _timeLogRepository.GetLogsForProject(projectId);
+            return new BaseModel
+            {
+                Success = true,
+                Data = mapper.Map<List<TimeLog>, List<TimeLogModel>>(result)
+            };
         }
 
-        public Task<List<TimeLog>> GetProgress(int day)
+        public async Task<BaseModel> GetProgress(int day)
         {
-            return _timeLogRepository.GetProgress(day);
+            var result = await _timeLogRepository.GetProgress(day);
+            return new BaseModel
+            {
+                Success = true,
+                Data = mapper.Map<List<TimeLog>, List<TimeLogModel>>(result)
+            };
         }
 
-        public Task<List<TimeLog>> GetProjectTimeLogs()
+        public async Task<BaseModel> GetProjectTimeLogs()
         {
-            return _timeLogRepository.GetProjectTimeLogs();
+            var result = await _timeLogRepository.GetProjectTimeLogs();
+            return new BaseModel
+            {
+                Success = true,
+                Data = mapper.Map<List<TimeLog>, List<TimeLogModel>>(result)
+            };
         }
 
-        public Task<List<TimeLog>> GetReport(TimeSheetModel model)
+        public async Task<BaseModel> GetReport(TimeSheetModel model)
         {
-            return _timeLogRepository.GetReport(model);
+            var result = await _timeLogRepository.GetReport(model);
+            return new BaseModel
+            {
+                Success = true,
+                Data = mapper.Map<List<TimeLog>, List<TimeLogModel>>(result)
+            };
         }
 
-        public Task<List<TimeLog>> GetTeamWorkerTime(string teamleadId)
+        public async Task<BaseModel> GetTeamWorkerTime(string teamleadId)
         {
-            return _timeLogRepository.GetTeamWorkerTime(teamleadId);
+            var result = await _timeLogRepository.GetTeamWorkerTime(teamleadId);
+            return new BaseModel
+            {
+                Success = true,
+                Data = mapper.Map<List<TimeLog>, List<TimeLogModel>>(result)
+            };
         }
 
-        public Task<List<TimeLog>> GetTimelogReport(Expression<Func<TimeLog, bool>> dateSelect, Expression<Func<TimeLog, bool>> userSelect, Expression<Func<TimeLog, bool>> projectSelect)
+        public async Task<BaseModel> GetTimelogReport(Expression<Func<TimeLog, bool>> dateSelect, Expression<Func<TimeLog, bool>> userSelect, Expression<Func<TimeLog, bool>> projectSelect)
         {
-            return _timeLogRepository.GetTimelogReport(dateSelect, userSelect, projectSelect);
+            var result = await _timeLogRepository.GetTimelogReport(dateSelect, userSelect, projectSelect);
+            return new BaseModel
+            {
+                Success = true,
+                Data = mapper.Map<List<TimeLog>, List<TimeLogModel>>(result)
+            };
         }
 
-        public Task<List<TimeLog>> GetToday()
+        public async Task<BaseModel> GetToday()
         {
-            return _timeLogRepository.GetToday();
+            var result = await _timeLogRepository.GetToday();
+            return new BaseModel
+            {
+                Success = true,
+                Data = mapper.Map<List<TimeLog>, List<TimeLogModel>>(result)
+            };
         }
 
-        public Task<List<TimeLog>> GetTodayTimeLogs(int[] projectIds, string[] workerIds)
+        public async Task<BaseModel> GetTodayTimeLogs(int[] projectIds, string[] workerIds)
         {
-            return _timeLogRepository.GetTodayTimeLogs(projectIds, workerIds);
+            var result = await _timeLogRepository.GetTodayTimeLogs(projectIds, workerIds);
+            return new BaseModel
+            {
+                Success = true,
+                Data = mapper.Map<List<TimeLog>, List<TimeLogModel>>(result)
+            };
         }
 
-        public Task<List<TimeLog>> GetWorkSession(Expression<Func<TimeLog, bool>> workSession)
+        public async Task<BaseModel> GetWorkSession(Expression<Func<TimeLog, bool>> workSession)
         {
-            return _timeLogRepository.GetWorkSession(workSession);
+            var result = await _timeLogRepository.GetWorkSession(workSession);
+            return new BaseModel
+            {
+                Success = true,
+                Data = mapper.Map<List<TimeLog>, List<TimeLogModel>>(result)
+            };
         }
     }
 }

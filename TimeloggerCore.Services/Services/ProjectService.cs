@@ -15,37 +15,76 @@ namespace TimeloggerCore.Services
     {
         private readonly IProjectRepository _projectRepository;
 
-        public ProjectService(IMapper mapper, IProjectRepository projectRepository, IUnitOfWork unitOfWork) : base(mapper, projectRepository, unitOfWork)
+        public ProjectService(
+            IMapper mapper, 
+            IProjectRepository projectRepository, 
+            IUnitOfWork unitOfWork
+            ) : base(mapper, projectRepository, unitOfWork)
         {
             _projectRepository = projectRepository;
         }
-        public Task<List<Project>> AllProjects(string userRole)
+        public async Task<BaseModel> GetProject(int projectId)
         {
-            return _projectRepository.AllProjects(userRole);
+            var result = await _projectRepository.GetProject(projectId);
+            return new BaseModel
+            {
+                Success = true,
+                Data = mapper.Map<Project, ProjectModel>(result)
+            };
         }
-
-        public Task<List<Project>> FreelancerProjects(string userId)
+        public async Task<BaseModel> AllProjects(string userRole)
         {
-            return _projectRepository.FreelancerProjects(userId);
+            var result = await _projectRepository.AllProjects(userRole);
+            return new BaseModel
+            {
+                Success = true,
+                Data = mapper.Map<List<Project>, List<ProjectModel>>(result)
+            };
         }
-
-        public Task<List<Project>> GetAgencyProjecList(string userId)
+        public async Task<BaseModel> FreelancerProjects(string userId)
         {
-            return _projectRepository.GetAgencyProjecList(userId);
+            var result = await _projectRepository.FreelancerProjects(userId);
+            return new BaseModel
+            {
+                Success = true,
+                Data = mapper.Map<List<Project>, List<ProjectModel>>(result)
+            };
         }
-        public Task<List<Project>> GetUserProjecList(string userId)
+        public async Task<BaseModel> GetAgencyProjecList(string userId)
         {
-            return _projectRepository.GetUserProjecList(userId);
+            var result = await _projectRepository.GetAgencyProjecList(userId);
+            return new BaseModel
+            {
+                Success = true,
+                Data = mapper.Map<List<Project>, List<ProjectModel>>(result)
+            };
         }
-
-        public Task<Project> GetUserProjects(string Id)
+        public async Task<BaseModel> GetUserProjecList(string userId)
         {
-            return _projectRepository.GetUserProjects(Id);
+            var result = await _projectRepository.GetUserProjecList(userId);
+            return new BaseModel
+            {
+                Success = true,
+                Data = mapper.Map<List<Project>, List<ProjectModel>>(result)
+            };
         }
-
-        public Task<List<Project>> ProjectsWithCompanies()
+        public async Task<BaseModel> GetUserProjects(string Id)
         {
-            return _projectRepository.ProjectsWithCompanies();
+            var result = await _projectRepository.GetUserProjects(Id);
+            return new BaseModel
+            {
+                Success = true,
+                Data = mapper.Map<Project, ProjectModel>(result)
+            };
+        }
+        public async Task<BaseModel> ProjectsWithCompanies()
+        {
+            var result = await _projectRepository.ProjectsWithCompanies();
+            return new BaseModel
+            {
+                Success = true,
+                Data = mapper.Map<List<Project>, List<ProjectModel>>(result)
+            };
         }
     }
 }

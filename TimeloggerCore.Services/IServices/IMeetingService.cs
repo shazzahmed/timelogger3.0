@@ -9,6 +9,6 @@ namespace TimeloggerCore.Services.IService
 {
     public interface IMeetingService : IBaseService<MeetingModel, Meeting, int>
     {
-        Task<List<Meeting>> GetAllMeeting(string userId);
+        Task<BaseModel> GetAllMeeting(string userId);
     }
 }

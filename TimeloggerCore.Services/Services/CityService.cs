@@ -13,7 +13,11 @@ namespace TimeloggerCore.Services
     {
         private readonly ICityRepository cityRepository;
 
-        public CityService(IMapper mapper, ICityRepository cityRepository, IUnitOfWork unitOfWork) : base(mapper, cityRepository, unitOfWork)
+        public CityService(
+            IMapper mapper, 
+            ICityRepository cityRepository, 
+            IUnitOfWork unitOfWork
+            ) : base(mapper, cityRepository, unitOfWork)
         {
             this.cityRepository = cityRepository;
         }
