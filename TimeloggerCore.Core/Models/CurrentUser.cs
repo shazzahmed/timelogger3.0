@@ -4,7 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using TimeloggerCore.Common.Models;
 
-namespace TimeloggerCore.RestApi.Models
+namespace TimeloggerCore.Core.Models
 {
     public class CurrentUser
     {

@@ -9,6 +9,10 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TimeZone = TimeloggerCore.Data.Entities.TimeZone;
+using Microsoft.AspNetCore.Http;
+using System.Linq;
+using IdentityModel;
+using System.Security.Claims;
 
 namespace TimeloggerCore.Data.Database
 {
@@ -17,11 +21,13 @@ namespace TimeloggerCore.Data.Database
     IdentityRoleClaim<string>, IdentityUserToken<string>>, ISqlServerDbContext
     {
         private readonly IConfiguration configuration;
-        public SqlServerDbContext(DbContextOptions<SqlServerDbContext> options, IConfiguration configuration) 
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public SqlServerDbContext(DbContextOptions<SqlServerDbContext> options, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
             : base(options)
         {
             ChangeTracker.LazyLoadingEnabled = false;
             this.configuration = configuration;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public SqlServerDbContext() : base()
@@ -127,7 +133,7 @@ namespace TimeloggerCore.Data.Database
         {
             var entries = ChangeTracker.Entries();
             var now = DateTime.UtcNow;
-            //var user = GetCurrentUser();
+            var user = GetCurrentUser();
 
             foreach (var entry in entries)
             {
@@ -139,14 +145,14 @@ namespace TimeloggerCore.Data.Database
                             entry.Property("CreatedAt").IsModified = false;
                             entry.Property("CreatedBy").IsModified = false;
                             baseEntity.UpdatedAt = now;
-                            //baseEntity.UpdatedBy = user;
+                            baseEntity.UpdatedBy = user;
                             break;
 
                         case EntityState.Added:
                             baseEntity.CreatedAt = now;
-                            //baseEntity.CreatedBy = user;
+                            baseEntity.CreatedBy = user;
                             baseEntity.UpdatedAt = now;
-                            //baseEntity.UpdatedBy = user;
+                            baseEntity.UpdatedBy = user;
                             break;
                     }
                 }
@@ -185,7 +191,7 @@ namespace TimeloggerCore.Data.Database
         public virtual DbSet<ProjectsInvitation> ProjectsInvitations { get; set; }
         public virtual DbSet<ClientWorker> ClientWorker { get; set; }
         public virtual DbSet<ProjectWorkers> ProjectWorkers { get; set; }
-        //private string GetCurrentUser() => $"{GetContextClaims(Roles1) ?? string.Empty} : {GetContextClaims(Roles1) ?? "<unknown>"}";
-        //private string GetContextClaims(string typeName) => httpContextAccessor?.HttpContext?.User?.Claims?.FirstOrDefault(c => c?.Type == typeName)?.Value;
+        private string GetCurrentUser() => $"{GetContextClaims(JwtClaimTypes.Name) ?? string.Empty} : {GetContextClaims(ClaimTypes.Role) ?? "<unknown>"}";
+        private string GetContextClaims(string typeName) => _httpContextAccessor?.HttpContext?.User?.Claims?.FirstOrDefault(c => c?.Type == typeName)?.Value;
     }
 }

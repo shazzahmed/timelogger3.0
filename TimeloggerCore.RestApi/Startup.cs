@@ -36,9 +36,6 @@ namespace TimeloggerCore.RestApi
         {
             services.Configure(Configuration, ApplicationType.CoreApi);
             services.AddServices(Configuration);
-
-            //Local dependencies
-            services.AddScoped<CurrentUser>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

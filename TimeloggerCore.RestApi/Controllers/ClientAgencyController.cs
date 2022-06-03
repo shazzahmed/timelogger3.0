@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TimeloggerCore.Common.Extensions;
 using TimeloggerCore.Common.Filters;
 using TimeloggerCore.Common.Models;
 using TimeloggerCore.Core.ISecurity;
@@ -76,6 +77,8 @@ namespace TimeloggerCore.RestApi.Controllers
         {
             try
             {
+                var testid = User.GetUserId();
+                var testrole = User.GetUserRole();
                 //await _agencyService.Add(clientAgencyModel);
                 var result = await _agencyService.AddClientAgency(clientAgencyModel);
                 return new OkObjectResult(result);

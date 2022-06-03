@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using TimeloggerCore.Core.Models;
 
 namespace TimeloggerCore.Core.DependencyResolutions
 {
@@ -15,6 +16,7 @@ namespace TimeloggerCore.Core.DependencyResolutions
     {
         internal static void RegisterServices(IServiceCollection services, Microsoft.Extensions.Configuration.IConfiguration configuration, ApplicationType applicationType)
         {
+            services.AddScoped<CurrentUser>();
             // AddCors must be before AddMvc
             services.AddCors(options =>
             {

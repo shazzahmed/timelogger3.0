@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IdentityModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -16,7 +17,7 @@ namespace TimeloggerCore.Common.Extensions
         public static string GetUserId(this ClaimsPrincipal principal)
         {
             return principal.Claims
-                            .FirstOrDefault(c => c.Type == ClaimTypes.Sid)?.Value;
+                            .FirstOrDefault(c => c.Type == JwtClaimTypes.Id)?.Value;
         }
 
         public static string GetName(this ClaimsPrincipal principal)
@@ -58,6 +59,11 @@ namespace TimeloggerCore.Common.Extensions
         {
             return principal.Claims
                             .FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value;
+        }
+        public static string GetUserRole(this ClaimsPrincipal principal)
+        {
+            return principal.Claims
+                            .FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
         }
 
         public static bool UserIsInRole(this ClaimsPrincipal principal, string role)
