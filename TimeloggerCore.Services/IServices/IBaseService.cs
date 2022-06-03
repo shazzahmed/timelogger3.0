@@ -37,6 +37,7 @@ namespace TimeloggerCore.Services.IService
         Task<List<TBusinessModel>> AddRange(List<TBusinessModel> businessEntities);
         Task Update(TBusinessModel entity);
         Task Delete(TBusinessModel entity);
+        Task SoftDelete(TBusinessModel entity);
         Task Delete(TKey id);
         Task DeleteRange(Expression<Func<TEntity, bool>> deleteExpression);
     }

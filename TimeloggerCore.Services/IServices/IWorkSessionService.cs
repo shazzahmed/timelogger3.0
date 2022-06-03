@@ -9,10 +9,10 @@ namespace TimeloggerCore.Services.IService
 {
     public interface IWorkSessionService : IBaseService<WorkSessionModel, WorkSession, int>
     {
-        Task<List<WorkSessionModel>> InsertList(List<WorkSessionModel> lstworkSessions);
-        Task<List<WorkSession>> GetWorkSessions(DateTime date);
-        Task<WorkSession> GetLastWorkSession(int logId);
+        Task<BaseModel> InsertList(List<WorkSessionModel> lstworkSessions);
+        Task<BaseModel> GetWorkSessions(DateTime date);
+        Task<BaseModel> GetLastWorkSession(int logId);
         void DeleteSessions(List<WorkSession> sessions);
-        Task<List<WorkSession>> WorkSessionsList(int[] timelogIds);
+        Task<BaseModel> WorkSessionsList(int[] timelogIds);
     }
 }

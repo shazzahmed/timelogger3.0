@@ -9,7 +9,7 @@ namespace TimeloggerCore.Services.IService
 {
     public interface IInvitationRequestService : IBaseService<InvitationRequestModel, InvitationRequest, int>
     {
-        Task<BaseModel> AddInvitation(InvitationRequestModel dd, string transactionCode);
+        Task<BaseModel> AddInvitation(InvitationRequestModel invitationRequestModel);
         Task<BaseModel> GetClientAgency(InvitationRequestModel invitationRequest);
         Task<BaseModel> GetClientAgencies(InvitationRequestModel invitationRequest);
         Task<BaseModel> GetOnlyClientAgencies(string userId);

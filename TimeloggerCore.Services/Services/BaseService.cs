@@ -124,6 +124,18 @@ namespace TimeloggerCore.Services
             await repository.DeleteAsync(dataEntity);
             await SaveChanges();
         }
+        public virtual async Task SoftDelete(TBusinessModel businessEntity)
+        {
+            var dataEntity = mapper.Map<TBusinessModel, TEntity>(businessEntity);
+            var property = dataEntity.GetType().GetProperty("IsDeleted");
+            var propertyValue = (bool?)property.GetValue(dataEntity);
+            if (!propertyValue.HasValue)
+            {
+                property.SetValue(dataEntity, true);
+                await repository.UpdateAsync(dataEntity);
+                await SaveChanges();
+            }
+        }
         public virtual async Task Delete(TKey id)
         {
             await repository.DeleteAsync(id);

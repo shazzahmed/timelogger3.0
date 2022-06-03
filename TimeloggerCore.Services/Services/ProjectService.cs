@@ -8,20 +8,24 @@ using System.Text;
 using TimeloggerCore.Common.Models;
 using System.Threading.Tasks;
 using static TimeloggerCore.Common.Utility.Enums;
+using System.Linq;
 
 namespace TimeloggerCore.Services
 {
     public class ProjectService : BaseService<ProjectModel, Project, int>, IProjectService
     {
         private readonly IProjectRepository _projectRepository;
+        private readonly IClientWorkerService _clientWorkerService;
 
         public ProjectService(
-            IMapper mapper, 
-            IProjectRepository projectRepository, 
-            IUnitOfWork unitOfWork
+            IMapper mapper,
+            IProjectRepository projectRepository,
+            IUnitOfWork unitOfWork, 
+            IClientWorkerService clientWorkerService
             ) : base(mapper, projectRepository, unitOfWork)
         {
             _projectRepository = projectRepository;
+            _clientWorkerService = clientWorkerService;
         }
         public async Task<BaseModel> GetProject(int projectId)
         {
@@ -66,6 +70,23 @@ namespace TimeloggerCore.Services
             {
                 Success = true,
                 Data = mapper.Map<List<Project>, List<ProjectModel>>(result)
+            };
+        }
+        public async Task<BaseModel> ProjectsWithInviation(UserProjectViewModel userProjectViewModel)
+        {
+            var projectWithInvitationViewModel = new ProjectWithInvitationModel();
+            var userProject = await _projectRepository.GetUserProjecList(userProjectViewModel.UserId);
+            var projectInviation = (List<ClientWorkerModel>)(await _clientWorkerService.GetProjectInvitation(userProjectViewModel.UserId, userProjectViewModel.WorkerInvitationType)).Data;
+            projectWithInvitationViewModel.OwnProject = mapper.Map<List<Project>, List<ProjectModel>>(userProject);
+            projectWithInvitationViewModel.ProjectInviation = projectInviation;
+            if (projectInviation != null)
+            {
+                projectWithInvitationViewModel.UserProjectInvitation = projectInviation.Where(x => x.IsAccepted && !x.IsDeleted).Select(x => x.Project).ToList();
+            }
+            return new BaseModel
+            {
+                Success = true,
+                Data = projectWithInvitationViewModel
             };
         }
         public async Task<BaseModel> GetUserProjects(string Id)

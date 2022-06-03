@@ -13,6 +13,7 @@ namespace TimeloggerCore.Common.Models
 {
     public class ApplicationUserModel
     {
+        public string Id { get; set; }
         [MaxLength(60)]
         public string FirstName { get; set; }
         [MaxLength(60)]
@@ -509,6 +510,8 @@ namespace TimeloggerCore.Common.Models
         public string Picture { get; set; }
         public string PhoneNumber { get; set; }
         public string NicNumber { get; set; }
+        public bool IsWorkerHasAgency { get; set; }
+        public bool IsAgencyApproved { get; set; }
         public List<string> Roles { get; set; }
     }
     public class UserDetailModel

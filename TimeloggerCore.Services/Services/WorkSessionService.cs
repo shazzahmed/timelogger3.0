@@ -26,26 +26,42 @@ namespace TimeloggerCore.Services
         {
             _workSessionRepository.DeleteSessions(sessions);
         }
-
-        public Task<WorkSession> GetLastWorkSession(int logId)
+        
+        public async Task<BaseModel> GetLastWorkSession(int logId)
         {
-            return _workSessionRepository.GetLastWorkSession(logId);
+            var result = await _workSessionRepository.GetLastWorkSession(logId);
+            return new BaseModel
+            {
+                Success = true,
+                Data = mapper.Map<WorkSession, WorkSessionModel>(result)
+            };
         }
-
-        public Task<List<WorkSession>> GetWorkSessions(DateTime date)
+        public async Task<BaseModel> GetWorkSessions(DateTime date)
         {
-            return _workSessionRepository.GetWorkSessions(date);
+            var result = await _workSessionRepository.GetWorkSessions(date);
+            return new BaseModel
+            {
+                Success = true,
+                Data = mapper.Map<List<WorkSession>, List<WorkSessionModel>>(result)
+            };
         }
-
-        public async Task<List<WorkSessionModel>> InsertList(List<WorkSessionModel> lstworkSessions)
+        public async Task<BaseModel> InsertList(List<WorkSessionModel> lstworkSessions)
         {
-            return await AddRange(lstworkSessions);
-            //return _workSessionRepository.InsertList(lstworkSessions);
+            var result = await AddRange(lstworkSessions);
+            return new BaseModel
+            {
+                Success = true,
+                Data = mapper.Map<List<WorkSessionModel>, List<WorkSession>>(result)
+            };
         }
-
-        public Task<List<WorkSession>> WorkSessionsList(int[] timelogIds)
+        public async Task<BaseModel> WorkSessionsList(int[] timelogIds)
         {
-            return _workSessionRepository.WorkSessionsList(timelogIds);
+            var result = await _workSessionRepository.WorkSessionsList(timelogIds);
+            return new BaseModel
+            {
+                Success = true,
+                Data = mapper.Map<List<WorkSession>, List<WorkSessionModel>>(result)
+            };
         }
     }
 }

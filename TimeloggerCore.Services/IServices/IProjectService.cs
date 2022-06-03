@@ -17,5 +17,6 @@ namespace TimeloggerCore.Services.IService
         Task<BaseModel> GetUserProjects(string Id);
         Task<BaseModel> GetAgencyProjecList(string userId);
         Task<BaseModel> GetUserProjecList(string userId);
+        Task<BaseModel> ProjectsWithInviation(UserProjectViewModel userProjectViewModel);
     }
 }

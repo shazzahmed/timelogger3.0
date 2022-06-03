@@ -17,6 +17,7 @@ using static TimeloggerCore.Common.Utility.Enums;
 
 namespace TimeloggerCore.RestApi.Controllers
 {
+    [Authorize]
     [Route("api/WorkerClient")]
     [ApiController]
     public class ClientWorkerController : BaseController
@@ -52,7 +53,6 @@ namespace TimeloggerCore.RestApi.Controllers
 
         // POST: Api/WorkerClient/GetAgencyEnrollWorkers
         [HttpPost]
-        [Authorize]
         [ActionName("GetClientWorkers")]
         [Route("GetAgencyEnrollWorkers")]
         [Produces("application/json", Type = typeof(BaseModel))]
@@ -71,7 +71,6 @@ namespace TimeloggerCore.RestApi.Controllers
         }
         // POST: Api/WorkerClient/DeleteAgencyEnrollWorkers
         [HttpPost]
-        [Authorize]
         [ActionName("DeleteAgencyEnrollWorkers")]
         [Route("DeleteAgencyEnrollWorkers")]
         [Produces("application/json", Type = typeof(BaseModel))]
@@ -90,7 +89,6 @@ namespace TimeloggerCore.RestApi.Controllers
         }
         // POST: Api/WorkerClient/WorkerClientAdd
         [HttpPost]
-        [Authorize]
         [ActionName("WorkerClientAdd")]
         [Route("WorkerClientAdd")]
         [Produces("application/json", Type = typeof(BaseModel))]
@@ -99,7 +97,7 @@ namespace TimeloggerCore.RestApi.Controllers
             try
             {
                 var userId = GetUserId();
-                var result = await _projectInvitationService.ProjectAssign(userId,clientWorkerModel, InvitationType.Worker);
+                var result = await _projectInvitationService.ProjectAssign(userId, clientWorkerModel, InvitationType.Worker);
                 return new OkObjectResult(result);
             }
             catch (Exception ex)
@@ -110,7 +108,6 @@ namespace TimeloggerCore.RestApi.Controllers
         }
         // GET: Api/WorkerClient/ResendWorkerEmail/{WorkerInvitationId}
         [HttpGet]
-        [Authorize]
         [ActionName("ResendWorkerEmail")]
         [Route("ResendWorkerEmail/{WorkerInvitationId}")]
         [Produces("application/json", Type = typeof(BaseModel))]
@@ -136,7 +133,6 @@ namespace TimeloggerCore.RestApi.Controllers
         }
         // POST: Api/WorkerClient/WorkerClientAdd
         [HttpPost]
-        [Authorize]
         [ActionName("PutInvitation")]
         [Route("UpdateWorkerClient")]
         [ServiceFilter(typeof(ValidateModelState))]
@@ -170,7 +166,6 @@ namespace TimeloggerCore.RestApi.Controllers
         }
         // GET: Api/WorkerClient/GetClientAgencyWorker
         [HttpGet]
-        [Authorize]
         [ActionName("GetClientAgencyWorker")]
         [Route("GetClientAgencyWorker")]
         [Produces("application/json", Type = typeof(BaseModel))]
@@ -189,7 +184,6 @@ namespace TimeloggerCore.RestApi.Controllers
         }
         // GET: Api/WorkerClient/GetClientAgencyWorkerInvitation
         [HttpGet]
-        [Authorize]
         [ActionName("GetClientAgencyWorkerInvitation")]
         [Route("GetClientAgencyWorkerInvitation")]
         [Produces("application/json", Type = typeof(BaseModel))]
@@ -208,7 +202,6 @@ namespace TimeloggerCore.RestApi.Controllers
         }
         // GET: Api/WorkerClient/GetClientAgencyWorkerProject
         [HttpGet]
-        [Authorize]
         [ActionName("GetClientAgencyWorkerProject")]
         [Route("GetClientAgencyWorkerProject")]
         [Produces("application/json", Type = typeof(BaseModel))]
@@ -227,7 +220,6 @@ namespace TimeloggerCore.RestApi.Controllers
         }
         // GET: Api/WorkerClient/GetClientProjects
         [HttpGet]
-        [Authorize]
         [ActionName("GetClientProjects")]
         [Route("GetClientProjects")]
         [Produces("application/json", Type = typeof(BaseModel))]
@@ -246,7 +238,6 @@ namespace TimeloggerCore.RestApi.Controllers
         }
         // GET: Api/WorkerClient/GetClientIndividualWorker
         [HttpGet]
-        [Authorize]
         [ActionName("GetClientIndividualWorker")]
         [Route("GetClientIndividualWorker")]
         [Produces("application/json", Type = typeof(BaseModel))]
@@ -265,7 +256,6 @@ namespace TimeloggerCore.RestApi.Controllers
         }
         // POST: Api/WorkerClient/AddClientWorker
         [HttpPost]
-        [Authorize]
         [ActionName("AddClientWorker")]
         [Route("AddClientWorker")]
         [ServiceFilter(typeof(ValidateModelState))]
@@ -291,7 +281,6 @@ namespace TimeloggerCore.RestApi.Controllers
         }
         // POST: Api/WorkerClient/AddWorkerClient
         [HttpPost]
-        [Authorize]
         [ActionName("AddWorkerClient")]
         [Route("AddWorkerClient")]
         [ServiceFilter(typeof(ValidateModelState))]
@@ -301,8 +290,8 @@ namespace TimeloggerCore.RestApi.Controllers
             try
             {
                 var userId = GetUserId();
-                    var projectAssign = await _projectInvitationService.ProjectAssign(userId, clientWorkerModel, InvitationType.WorkerToClient);
-                    return new OkObjectResult(projectAssign);
+                var projectAssign = await _projectInvitationService.ProjectAssign(userId, clientWorkerModel, InvitationType.WorkerToClient);
+                return new OkObjectResult(projectAssign);
             }
             catch (Exception ex)
             {
@@ -310,7 +299,7 @@ namespace TimeloggerCore.RestApi.Controllers
                 throw;
             }
         }
-        public async Task<bool> UserPackageCheck(ClientWorkersModel clientWorkerModel)
+        private async Task<bool> UserPackageCheck(ClientWorkersModel clientWorkerModel)
         {
             List<ClientWorkerModel> projectInviation = new List<ClientWorkerModel>();
             List<string> workerIds = new List<string>();
@@ -338,7 +327,7 @@ namespace TimeloggerCore.RestApi.Controllers
                 }
             }
             return isUserPackageExceed;
-            
+
         }
         private async Task<bool> WorkerClientExists(int id)
         {

@@ -6,12 +6,13 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using TimeloggerCore.Common.Models;
+using System.Threading.Tasks;
 
 namespace TimeloggerCore.Services
 {
     public class CompanyService : BaseService<CompanyModel, Company, int>, ICompanyService
     {
-        private readonly ICompanyRepository companyRepository;
+        private readonly ICompanyRepository _companyRepository;
 
         public CompanyService(
             IMapper mapper, 
@@ -19,7 +20,25 @@ namespace TimeloggerCore.Services
             IUnitOfWork unitOfWork
             ) : base(mapper, companyRepository, unitOfWork)
         {
-            this.companyRepository = companyRepository;
+            _companyRepository = companyRepository;
+        }
+        public async Task<BaseModel> GetbyUserId(string userId)
+        {
+            var result = await _companyRepository.GetbyUserId(userId);
+            return new BaseModel
+            {
+                Success = true,
+                Data = mapper.Map<Company, CompanyModel>(result)
+            };
+        }
+        public async Task<BaseModel> GetCompaniesWithProjects()
+        {
+            var result = await _companyRepository.GetCompaniesWithProjects();
+            return new BaseModel
+            {
+                Success = true,
+                Data = mapper.Map<List<Company>,List<CompanyModel>>(result)
+            };
         }
     }
 }

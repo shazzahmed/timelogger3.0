@@ -28,7 +28,7 @@ namespace TimeloggerCore.Services
             return new BaseModel
             {
                 Success = true,
-                Data = mapper.Map<List<ProjectWorkersModel>, List<ProjectWorkers>>(result)
+                Data = result
             };
         }
     }

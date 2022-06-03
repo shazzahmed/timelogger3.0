@@ -15,7 +15,8 @@ namespace TimeloggerCore.Services.IService
         Task<BaseModel> GetAllPayment();
         Task<BaseModel> GetAllRecurringPayment();
         Task<BaseModel> CurrentActivePayment(string UserId);
-        Task<BaseModel> GetActivePayment(int paymentId);
+        Task<BaseModel> GetActivePayment(PaymentInfoModel paymentInfoModel);
+        Task<BaseModel> GetActivePayment(PaymentInquiryModel paymentInquiryModel);
         Task<BaseModel> GetAllActiveClient();
         Task<BaseModel> GetAllPendingClient();
         Task<BaseModel> CurrentNonActivePayment(string UserId);

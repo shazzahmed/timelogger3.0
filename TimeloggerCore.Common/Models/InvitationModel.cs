@@ -6,7 +6,7 @@ using static TimeloggerCore.Common.Utility.Enums;
 
 namespace TimeloggerCore.Common.Models
 {
-    public class InvitationModel
+    public class InvitationModel : BaseClass
     {
         public int ID { get; set; }
         public ProjectModel Project { get; set; }
@@ -36,7 +36,7 @@ namespace TimeloggerCore.Common.Models
         public bool IsActive { get; set; }
     }
 
-    public class InvitationRequestModel
+    public class InvitationRequestModel : BaseClass
     {
         public int Id { get; set; }
         public string FromUserId { get; set; }
@@ -44,8 +44,8 @@ namespace TimeloggerCore.Common.Models
         public bool IsAccepted { get; set; }
         public bool ExistingUser { get; set; }
         public InvitationType InvitationType { get; set; }
-        public ApplicationUserModel InvitationSentFrom { get; set; }
-        public ApplicationUserModel InvitationSentTo { get; set; }
+        public UserInfo InvitationSentFrom { get; set; }
+        public UserInfo InvitationSentTo { get; set; }
         //public IList<string> Roles { get; set; }
     }
     public class InvitationsModel

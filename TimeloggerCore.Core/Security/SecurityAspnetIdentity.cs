@@ -314,11 +314,12 @@ namespace TimeloggerCore.Core.Security
             var userInfo = new UserInfo
             {
                 Id = user.Id,
-                //FirstName = appUser.FirstName,
-                //LastName = appUser.LastName,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
                 UserName = user.UserName,
                 Email = user.Email,
-                PhoneNumber = user.PhoneNumber
+                PhoneNumber = user.PhoneNumber,
+                IsWorkerHasAgency = user.IsWorkerHasAgency
             };
             return new BaseModel { Success = true, Data = userInfo };
         }

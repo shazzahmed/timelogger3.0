@@ -6,7 +6,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using TimeloggerCore.Common.Filters;
 using TimeloggerCore.Common.Models;
-using TimeloggerCore.Core.ISecurity;
 using TimeloggerCore.Services.IService;
 
 namespace TimeloggerCore.RestApi.Controllers
@@ -14,49 +13,27 @@ namespace TimeloggerCore.RestApi.Controllers
     [Authorize]
     [Route("Api/[controller]")]
     [ApiController]
-    public class ClientAgencyController : BaseController
+    public class PaymentController : BaseController
     {
-        private readonly IInvitationRequestService _invitationRequestService;
-        private readonly IAgencyService _agencyService;
+        private readonly IPaymentService _paymentService;
 
-        public ClientAgencyController(
-            IInvitationRequestService invitationRequestService,
-            IAgencyService agencyService
-            )
+        public PaymentController(
+            IPaymentService paymentService)
         {
-            _invitationRequestService = invitationRequestService;
-            _agencyService = agencyService;
+            _paymentService = paymentService;
         }
 
-        // GET: Api/ClientAgency/GetClientAgency/id
-        [HttpGet]
-        [ActionName("GetClientAgency")]
-        [Route("GetClientAgency/{userId}")]
-        [Produces("application/json", Type = typeof(BaseModel))]
-        public async Task<IActionResult> GetClientAgency(string userId)
-        {
-            try
-            {
-                var result = await _invitationRequestService.GetOnlyClientAgencies(userId);
-                return new OkObjectResult(result);
-            }
-            catch (Exception ex)
-            {
-                return new BadRequestObjectResult(BaseModel.Failed(message: "There was an error processing your request, please try again. " + ex.Message));
-                throw;
-            }
-        }
 
-        // GET: Api/ClientAgency/GetAgencyClients/{id}
+        // GET: Api/Payment/AddPayment
         [HttpGet]
-        [ActionName("GetAgencyClients")]
-        [Route("GetAgencyClients/{userId}")]
+        [ActionName("AddPayment")]
+        [Route("AddPayment")]
         [Produces("application/json", Type = typeof(BaseModel))]
-        public async Task<IActionResult> GetAgencyClients(string userId)
+        public async Task<IActionResult> AddPayment(PaymentModel paymentModel)
         {
             try
             {
-                var result = await _agencyService.GetAgencyClients(userId);
+                var result = await _paymentService.Add(paymentModel);
                 return new OkObjectResult(result);
             }
             catch (Exception ex)
@@ -65,38 +42,16 @@ namespace TimeloggerCore.RestApi.Controllers
                 throw;
             }
         }
-
-        // Post: Api/ClientAgency/AddClientAgency
-        [HttpPost]
-        [ActionName("AddClientAgency")]
-        [Route("AddClientAgency")]
-        [ServiceFilter(typeof(ValidateModelState))]
-        [Produces("application/json", Type = typeof(BaseModel))]
-        public async Task<IActionResult> AddClientAgency(ClientAgencyModel clientAgencyModel)
-        {
-            try
-            {
-                //await _agencyService.Add(clientAgencyModel);
-                var result = await _agencyService.AddClientAgency(clientAgencyModel);
-                return new OkObjectResult(result);
-            }
-            catch (Exception ex)
-            {
-                return new BadRequestObjectResult(BaseModel.Failed(message: "There was an error processing your request, please try again. " + ex.InnerException.Message));
-                throw;
-            }
-        }
-
-        // GET: Api/ClientAgency/GetSingleClientAgencies/{id}
+        // GET: Api/Payment/UserSingleInvoice/{InvoiceId}
         [HttpGet]
-        [ActionName("GetSingleClientAgencies")]
-        [Route("GetSingleClientAgencies/{userId}")]
+        [ActionName("UserFirstInvoice")]
+        [Route("UserSingleInvoice/{InvoiceId}")]
         [Produces("application/json", Type = typeof(BaseModel))]
-        public async Task<IActionResult> GetSingleClientAgencies(string userId)
+        public async Task<IActionResult> UserFirstInvoice(int InvoiceId)
         {
             try
             {
-                var result = await _agencyService.GetSingleClientAgencies(userId);
+                var result = await _paymentService.GetUserSingleInvoice(InvoiceId);
                 return new OkObjectResult(result);
             }
             catch (Exception ex)
@@ -105,16 +60,16 @@ namespace TimeloggerCore.RestApi.Controllers
                 throw;
             }
         }
-        // GET: Api/ClientAgency/GetAgencyEmployee/{id}
+        // GET: Api/Payment/GetAllPayment
         [HttpGet]
-        [ActionName("GetAgencyEmployee")]
-        [Route("GetAgencyEmployee/{userId}")]
+        [ActionName("GetAllPayment")]
+        [Route("GetAllPayment")]
         [Produces("application/json", Type = typeof(BaseModel))]
-        public async Task<IActionResult> GetAgencyEmployee(string agencyId)
+        public async Task<IActionResult> GetAllPayment()
         {
             try
             {
-                var result = await _agencyService.GetAgencyEmployee(agencyId);
+                var result = await _paymentService.GetAllPayment();
                 return new OkObjectResult(result);
             }
             catch (Exception ex)
@@ -123,16 +78,16 @@ namespace TimeloggerCore.RestApi.Controllers
                 throw;
             }
         }
-        // GET: Api/ClientAgency/GetAllWorker/{id}
+        // GET: Api/Payment/PaymentVerifyRequest
         [HttpGet]
-        [ActionName("GetAllWorker")]
-        [Route("GetAllWorker/{userId}")]
+        [ActionName("PaymentVerifyRequest")]
+        [Route("PaymentVerifyRequest")]
         [Produces("application/json", Type = typeof(BaseModel))]
-        public async Task<IActionResult> GetAllWorker()
+        public async Task<IActionResult> PaymentVerifyRequest(PaymentInfoModel paymentInfoModel)
         {
             try
             {
-                var result = await _agencyService.GetAllWorker();
+                var result = await _paymentService.GetActivePayment(paymentInfoModel);
                 return new OkObjectResult(result);
             }
             catch (Exception ex)
@@ -141,34 +96,16 @@ namespace TimeloggerCore.RestApi.Controllers
                 throw;
             }
         }
-        // GET: Api/ClientAgency/ConfirmAgency/{id}
+        // GET: Api/Payment/EnquiryRequest
         [HttpGet]
-        [ActionName("ConfirmAgency")]
-        [Route("ConfirmAgency/{userId}")]
+        [ActionName("EnquiryRequest")]
+        [Route("EnquiryRequest")]
         [Produces("application/json", Type = typeof(BaseModel))]
-        public async Task<IActionResult> ConfirmAgency(string userId)
+        public async Task<IActionResult> EnquiryRequest(PaymentInquiryModel paymentInquiryModel)
         {
             try
             {
-                    var result = await _agencyService.ConfirmAgency(userId);
-                    return new OkObjectResult(result);
-            }
-            catch (Exception ex)
-            {
-                return new BadRequestObjectResult(BaseModel.Failed(message: "There was an error processing your request, please try again. " + ex.Message));
-                throw;
-            }
-        }
-        // GET: Api/ClientAgency/ConfirmWorker/{id}
-        [HttpGet]
-        [ActionName("ConfirmWorker")]
-        [Route("ConfirmWorker/{userId}")]
-        [Produces("application/json", Type = typeof(BaseModel))]
-        public async Task<IActionResult> ConfirmWorker(string userId)
-        {
-            try
-            {
-                var result = await _agencyService.ConfirmWorker(userId);
+                var result = await _paymentService.GetActivePayment(paymentInquiryModel);
                 return new OkObjectResult(result);
             }
             catch (Exception ex)
@@ -177,16 +114,53 @@ namespace TimeloggerCore.RestApi.Controllers
                 throw;
             }
         }
-        // GET: Api/ClientAgency/AgencyClientFound
+        // GET: Api/Payment/PaypalRecurringPayment
         [HttpGet]
-        [ActionName("AgencyClientFound")]
-        [Route("AgencyClientFound")]
+        [AllowAnonymous]
+        [ActionName("PaypalRecurringPayment")]
+        [Route("PaypalRecurringPayment")]
         [Produces("application/json", Type = typeof(BaseModel))]
-        public async Task<IActionResult> AgencyClientFound(ClientAgencyModel clientAgencyModel)
+        public async Task<IActionResult> PaypalRecurringPayment()
         {
             try
             {
-                var result = await _agencyService.GetClientAgency(clientAgencyModel);
+                var result = await _paymentService.GetAllRecurringPayment();
+                return new OkObjectResult(result);
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestObjectResult(BaseModel.Failed(message: "There was an error processing your request, please try again. " + ex.Message));
+                throw;
+            }
+        }
+        // GET: Api/Payment/InvoiceGenerate
+        [HttpGet]
+        [ActionName("InvoiceGenerate")]
+        [Route("InvoiceGenerate")]
+        [Produces("application/json", Type = typeof(BaseModel))]
+        public async Task<IActionResult> InvoiceGenerate()
+        {
+            try
+            {
+                var result = await _paymentService.GetAllActiveClient();
+                return new OkObjectResult(result);
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestObjectResult(BaseModel.Failed(message: "There was an error processing your request, please try again. " + ex.Message));
+                throw;
+            }
+        }
+        // GET: Api/Payment/ReminderEmail
+        [HttpGet]
+        [ActionName("ReminderEmail")]
+        [Route("ReminderEmail")]
+        [Produces("application/json", Type = typeof(BaseModel))]
+        public async Task<IActionResult> ReminderEmail()
+        {
+            try
+            {
+                var result = await _paymentService.GetAllPendingClient();
                 return new OkObjectResult(result);
             }
             catch (Exception ex)

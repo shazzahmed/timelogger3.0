@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using TimeloggerCore.Common.Models;
 using System.Threading.Tasks;
+using TimeloggerCore.Core.ISecurity;
 
 namespace TimeloggerCore.Services
 {
@@ -14,20 +15,32 @@ namespace TimeloggerCore.Services
     {
         private readonly IInvitationRequestRepository _invitationRequestRepository;
         private readonly IAgencyService _agencyService;
+        private readonly ISecurityService _securityService;
 
         public InvitationRequestService(
-            IMapper mapper, 
-            IInvitationRequestRepository invitationRequestRepository, 
-            IUnitOfWork unitOfWork, 
-            IAgencyService agencyService
+            IMapper mapper,
+            IInvitationRequestRepository invitationRequestRepository,
+            IUnitOfWork unitOfWork,
+            IAgencyService agencyService,
+            ISecurityService securityService
             ) : base(mapper, invitationRequestRepository, unitOfWork)
         {
             _invitationRequestRepository = invitationRequestRepository;
             _agencyService = agencyService;
+            _securityService = securityService;
         }
-        public Task<BaseModel> AddInvitation(InvitationRequestModel dd, string transactionCode)
+        public async Task<BaseModel> AddInvitation(InvitationRequestModel invitationRequestModel)
         {
-            throw new NotImplementedException();
+            var isUserExit = await _securityService.GetUserDetail(invitationRequestModel.ToUserId);
+            var userInfo = (UserInfo)isUserExit.Data;
+            invitationRequestModel.ToUserId = userInfo.Id;
+            invitationRequestModel.IsActive = false;
+            var result = await Add(invitationRequestModel);
+            return new BaseModel
+            {
+                Success = true,
+                Data = result
+            };
         }
 
         public async Task<BaseModel> GetClientAgency(InvitationRequestModel invitationRequest)
