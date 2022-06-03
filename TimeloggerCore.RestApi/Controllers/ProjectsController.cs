@@ -237,7 +237,7 @@ namespace TimeloggerCore.RestApi.Controllers
                 }
                 else if (User.IsInRole("Client"))
                 {
-                    //clientInvitation = await _projectService.GetProjectInvitation(userId, WorkerType.WorkerClient);
+                    clientInvitation = (List<ClientWorkerModel>)(await _clientWorkerService.GetProjectInvitation(userId, WorkerType.WorkerClient)).Data;
                     projects = projects.Where(x => x.UserId == userId).ToList();
                     //     invitations = Mapper.Map<List<Invitation>>(projectsInvitation.Where(x=>x.IsAccepted).ToList());
                     //invitations = await _invitationRepository.Get(includeProperties: "User");
@@ -250,10 +250,10 @@ namespace TimeloggerCore.RestApi.Controllers
                 }
                 else if (User.IsInRole("Agency"))
                 {
-                    //clientInvitation = await _projectRepository.GetProjectInvitation(userId, WorkerType.AgencyWorker);
+                    clientInvitation = (List<ClientWorkerModel>)(await _clientWorkerService.GetProjectInvitation(userId, WorkerType.AgencyWorker)).Data;
                     projects = projects.Where(x => x.UserId == userId).ToList();
                 }
-                //var model = new ProjectInvitationViewModel { CurrentUser = currentUser, WorkerInvitation = clientInvitation, Projects = Mapper.Map<List<ProjectViewModel>>(projects), Invitations = Mapper.Map<List<InvitationViewModel>>(invitations) };
+                var model = new ProjectInvitationModel { CurrentUser = currentUser, WorkerInvitation = clientInvitation, Projects = projects, Invitations = invitations };
 
                 var result = await _projectService.FreelancerProjects(userId);
                 return new OkObjectResult(result);

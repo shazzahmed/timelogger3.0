@@ -25,6 +25,6 @@ namespace TimeloggerCore.Common.Models
         public List<ProjectModel> Projects { get; set; }
         public List<InvitationModel> Invitations { get; set; }
         public List<ClientWorkerModel> WorkerInvitation { get; set; }
-        public ApplicationUserModel CurrentUser { get; set; }
+        public UserInfo CurrentUser { get; set; }
     }
 }
