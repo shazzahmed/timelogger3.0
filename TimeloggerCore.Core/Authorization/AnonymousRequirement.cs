@@ -1,10 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="AnonymousRequirement.cs" company="Playtertainment">
-// Copyright (c) Playtertainment. All rights reserved.
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace TimeloggerCore.Mobile.API.Middleware
+﻿namespace TimeloggerCore.Core.Authorization
 {
     using System;
     using System.Security.Claims;
@@ -13,15 +7,22 @@ namespace TimeloggerCore.Mobile.API.Middleware
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.Logging;
+    using TimeloggerCore.Common.Helpers;
 
     public class AnonymousRequirement : AuthorizationHandler<AnonymousRequirement>, IAuthorizationRequirement
     {
+        public string ClaimType { get; }
         private readonly IConfiguration configuration;
         private readonly IHttpContextAccessor httpContextAccessor;
         private readonly ILogger<AnonymousRequirement> logger;
 
-        public AnonymousRequirement(IConfiguration configuration, IHttpContextAccessor httpContextAccessor, ILogger<AnonymousRequirement> logger)
+        public AnonymousRequirement(
+            string claimType,
+            IConfiguration configuration, 
+            IHttpContextAccessor httpContextAccessor, 
+            ILogger<AnonymousRequirement> logger)
         {
+            ClaimType = claimType;
             this.configuration = configuration;
             this.httpContextAccessor = httpContextAccessor;
             this.logger = logger;
@@ -41,15 +42,15 @@ namespace TimeloggerCore.Mobile.API.Middleware
             {
                 string authHeader = httpContextAccessor.HttpContext.Request.Headers["Authorization"];
 
-                //if (TryGetToken(authHeader, out string token) && AuthenticationHelper.IsValidAnonymousToken(token))
-                //{
-                //    var key = configuration["Auth0:ClientSecret"];
-                //    var json = AuthenticationHelper.Decode(token, key);
+                if (TryGetToken(authHeader, out string token))
+                {
+                    //var key = configuration["Auth0:ClientSecret"];
+                    //var json = AuthenticationHelper.Decode(token, key);
 
-                //    var principal = new ClaimsPrincipal(new ClaimsIdentity(AuthenticationHelper.GetUserClaims(json)));
-                //    httpContextAccessor.HttpContext.User = principal;
-                //    context.Succeed(requirement);
-                //}
+                    //var principal = new ClaimsPrincipal(new ClaimsIdentity(AuthenticationHelper.GetUserClaims(json)));
+                    //httpContextAccessor.HttpContext.User = principal;
+                    context.Succeed(requirement);
+                }
             }
             catch (Exception ex)
             {
@@ -69,6 +70,19 @@ namespace TimeloggerCore.Mobile.API.Middleware
             }
 
             return !string.IsNullOrWhiteSpace(token);
+        }
+    }
+    public static class AuthorizationAnonPolicyBuilderExtensions
+    {
+        public static AuthorizationPolicyBuilder RequireAnonClaim(
+            this AuthorizationPolicyBuilder builder,
+            string claimType,
+            IConfiguration configuration,
+            IHttpContextAccessor httpContextAccessor,
+            ILogger<AnonymousRequirement> logger)
+        {
+            builder.AddRequirements(new AnonymousRequirement(claimType, configuration, httpContextAccessor, logger));
+            return builder;
         }
     }
 }

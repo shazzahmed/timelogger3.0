@@ -17,6 +17,7 @@ using LoginResponse = TimeloggerCore.Common.Models.LoginResponse;
 using TimeloggerCore.Services.IService;
 using TimeloggerCore.Services.ICommunication;
 using TimeloggerCore.Core.Models;
+using TimeloggerCore.Common.Utility.Constants;
 
 namespace TimeloggerCore.RestApi.Controllers
 {
@@ -320,6 +321,7 @@ namespace TimeloggerCore.RestApi.Controllers
         //
         // GET: Api/Account/GetAuthenticationDetail
         [HttpGet]
+        //[Authorize(Policy = Policies.AllowAnonymousUsers)]
         [ActionName("GetAuthenticationDetail")]
         [Route("GetAuthenticationDetail")]
         [Produces("application/json", Type = typeof(BaseModel))]

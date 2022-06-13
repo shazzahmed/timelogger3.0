@@ -17,8 +17,8 @@ namespace TimeloggerCore.Core.DependencyResolutions
         public static void Configure(this IServiceCollection services, IConfiguration configuration, ApplicationType applicationType)
         {
             InfrastructureModule.Configure(services, configuration, applicationType);
-            Securities.RegisterServices(services, configuration, applicationType);
             Middleware.RegisterServices(services, configuration, applicationType);
+            Securities.RegisterServices(services, configuration, applicationType);
         }
 
 

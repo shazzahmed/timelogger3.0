@@ -29,8 +29,7 @@ namespace TimeloggerCore.Core.DependencyResolutions
             services.AddTransient<IHttpClient, HttpClientHelper>();
 
             services.AddScoped<ValidateModelState>();
-
-            services.AddScoped<IAuthorizationHandler, CustomRequireClaimHandler>();
+            services.AddScoped<AuthorizeCustom>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddHttpContextAccessor();

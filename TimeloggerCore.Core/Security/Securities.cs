@@ -21,6 +21,10 @@ using TimeloggerCore.Common.Encryption;
 using TimeloggerCore.Common.Options;
 using static TimeloggerCore.Common.Utility.Enums;
 using TimeloggerCore.Common.Models;
+using System.IdentityModel.Tokens.Jwt;
+using TimeloggerCore.Common.Helpers;
+using TimeloggerCore.Common.Utility.Constants;
+using Microsoft.Extensions.Logging;
 
 namespace TimeloggerCore.Core.Security
 {
@@ -99,6 +103,19 @@ namespace TimeloggerCore.Core.Security
                     {
                         OnTokenValidated = async context =>
                         {
+                            if (context.SecurityToken is JwtSecurityToken token)
+                            {
+                                if (context.Principal.Identity is ClaimsIdentity identity)
+                                {
+                                    identity.AddClaim(new Claim("access_token", token.RawData));
+
+                                    // Extract roles from the token and add them (they're claims for further authorization)
+                                    foreach (var role in AuthenticationHelper.GetRoles(token))
+                                    {
+                                        identity.AddClaim(new Claim(ClaimTypes.Role, role));
+                                    }
+                                }
+                            }
                             var userService = context.HttpContext.RequestServices.GetRequiredService<ISecurityService>();
                             var email = context.Principal.Identity.Name;
                             var user = (UserClaims)(await userService.GetUser(email)).Data;
@@ -191,14 +208,29 @@ namespace TimeloggerCore.Core.Security
                 //});
 
                 // config.AddPolicy("Admin", policyBuilder => policyBuilder.RequireClaim(ClaimTypes.Role, "Admin"));
+                
+                // A bit of a cumbersome way of accessing services while still configuring the app
+                var sp = services.BuildServiceProvider();
+                var httpContextAccessor = sp.GetService<IHttpContextAccessor>();
+                var anonymousRequirementlogger = sp.GetService<ILogger<AnonymousRequirement>>();
+                var customRequireClaimlogger = sp.GetService<ILogger<CustomRequirement>>();
+                config.AddPolicy(Policies.AllowAnonymousUsers, policyBuilder =>
+                {
+                    //policy.AddRequirements(new AnonymousRequirement(Policies.AllowAnonymousUsers,configuration, httpContextAccessor, anonymousRequirementlogger));
 
-
-                config.AddPolicy("Claim.DoB", policyBuilder =>
+                    ///same as above using extension method
+                    policyBuilder.RequireAnonClaim(Policies.AllowAnonymousUsers, configuration, httpContextAccessor, anonymousRequirementlogger);
+                });
+                config.AddPolicy(Policies.AdminOnly, policyBuilder =>
+                {
+                    policyBuilder.RequireRole(Roles.Admin);
+                });
+                config.AddPolicy(Policies.AdminOnly, policyBuilder =>
                 {
                     ////policyBuilder.AddRequirements(new CustomRequireClaim(ClaimTypes.DateOfBirth));
                     
                     ///same as above using extension method
-                    policyBuilder.RequireCustomClaim(JwtClaimTypes.BirthDate);
+                    policyBuilder.RequireCustomClaim(Policies.AdminOnly, configuration, httpContextAccessor, customRequireClaimlogger);
                 });
             });
                 

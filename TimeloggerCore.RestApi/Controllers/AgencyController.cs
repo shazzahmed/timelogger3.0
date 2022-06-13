@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TimeloggerCore.Common.Extensions;
+using TimeloggerCore.Common.Filters;
 using TimeloggerCore.Common.Models;
 using TimeloggerCore.Services.IService;
 
@@ -26,11 +28,16 @@ namespace TimeloggerCore.RestApi.Controllers
 
         // GET: Api/Agency/GetAllAgency
         [HttpGet]
+        [AuthorizeCustom]
         [ActionName("GetAllAgency")]
         [Route("GetAllAgency")]
         [Produces("application/json", Type = typeof(BaseModel))]
         public async Task<IActionResult> GetAllAgency()
         {
+            if (User.TryGetExternalId(out string externalId))
+            {
+                //isAnonymous = AuthenticationHelper.IsAnonymous(externalId);
+            }
             try
             {
                 var result = await _userService.GetAllAgency();
